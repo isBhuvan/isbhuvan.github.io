@@ -1,0 +1,13 @@
+{
+  "devDependencies": {
+    "standard-version": "^9.5.0",
+    "markdownlint-cli": "^0.39.0",
+    "commitlint": "^18.0.0",
+    "@commitlint/config-conventional": "^18.0.0",
+    "htmlhint": "^1.1.4",
+    "@lhci/cli": "^0.13.0"
+  },
+  "scripts": {
+    "lighthouse": "lhci autorun"
+  }
+}
