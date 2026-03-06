@@ -27,6 +27,11 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Run Semantic Release
         run: npx standard-version
         env:

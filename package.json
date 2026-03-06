@@ -1,4 +1,7 @@
 {
+  "name": "isbhuvan.github.io",
+  "version": "1.0.0",
+  "private": true,
   "devDependencies": {
     "standard-version": "^9.5.0",
     "markdownlint-cli": "^0.39.0",
