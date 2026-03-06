@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/isBhuvan/isbhuvan.github.io/compare/v1.1.0...v1.2.0) (2026-03-06)
+
+
+### Features
+
+* update package.json to include release script and standard-version configuration ([6338fe2](https://github.com/isBhuvan/isbhuvan.github.io/commit/6338fe2de9b0829901314bfdffe8d3d265d01c4f))
+
 ## 1.1.0 (2026-03-06)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "isbhuvan.github.io",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "devDependencies": {
     "standard-version": "^9.5.0",
@@ -10,7 +10,7 @@
     "htmlhint": "^1.1.4",
     "@lhci/cli": "^0.13.0"
   },
- "scripts": {
+  "scripts": {
     "lighthouse": "lhci autorun",
     "release": "standard-version"
   },
