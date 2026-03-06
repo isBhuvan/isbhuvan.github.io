@@ -10,7 +10,18 @@
     "htmlhint": "^1.1.4",
     "@lhci/cli": "^0.13.0"
   },
-  "scripts": {
-    "lighthouse": "lhci autorun"
+ "scripts": {
+    "lighthouse": "lhci autorun",
+    "release": "standard-version"
+  },
+  "standard-version": {
+    "bumpFiles": [
+      "package.json",
+      "package-lock.json",
+      {
+        "filename": "VERSION",
+        "type": "plain-text"
+      }
+    ]
   }
 }
