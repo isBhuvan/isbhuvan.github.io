@@ -33,9 +33,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Run Semantic Release
-        run: npx standard-version
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run release
 
       - name: Push Version & Tags
         run: git push --follow-tags origin main

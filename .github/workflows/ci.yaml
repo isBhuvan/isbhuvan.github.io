@@ -39,4 +39,4 @@ jobs:
         run: npx htmlhint "**/*.html"
 
       - name: Lighthouse Check
-        run: npx lhci autorun
+        run: npm run lighthouse

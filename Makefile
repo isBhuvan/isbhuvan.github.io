@@ -46,7 +46,7 @@ lint-commit-pr: ## Check PR commit messages (override with PR_BASE_SHA/PR_HEAD_S
 	npx commitlint --from $(PR_BASE_SHA) --to $(PR_HEAD_SHA) --verbose
 
 lighthouse: ## Run Lighthouse CI checks
-	npx lhci autorun
+	npm run lighthouse
 
 check: lint-commit lint-md lint-html lighthouse ## Run all quality checks
 

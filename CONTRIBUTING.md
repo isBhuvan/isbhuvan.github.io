@@ -54,7 +54,7 @@ Before submitting a Pull Request, please ensure your code passes the local quali
 1. **Markdown Linting:** Run `make lint-md` to ensure documentation follows style guides.
 2. **Commit Linting:** Run `make lint-commit` to verify your message format.
 3. **HTML Linting:** Run `make lint-html` to validate HTML quality.
-4. **Lighthouse Check:** Run `make lighthouse` to validate performance, accessibility, best practices, and SEO thresholds.
+4. **Lighthouse Check:** Run `make lighthouse` to audit the site with Lighthouse against performance, accessibility, best practices, and SEO thresholds.
 5. **Full Local Gate:** Run `make check` to execute all checks together.
 6. **PR-style Commit Range Check (optional):** Run `make pr-check PR_BASE_SHA=<base_sha> PR_HEAD_SHA=<head_sha>`.
 7. **Security Scan:** Ensure no secrets (API keys) are included in your code.
@@ -69,7 +69,7 @@ Releases are automated using semantic versioning:
 - `fix` → Patch version bump
 - `BREAKING CHANGE` → Major version bump
 
-CHANGELOG and VERSION are updated automatically.
+Releases are created from `main` with `npm run release`, which updates `package.json`, `package-lock.json`, `CHANGELOG.md`, and `VERSION` before tagging.
 
 ---
 
