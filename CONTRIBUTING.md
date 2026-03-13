@@ -1,4 +1,4 @@
-# Contributing to My Portfolio
+# Contributing Guidelines
 
 First off, thank you for taking the time to explore my code! While this is a personal portfolio, I maintain it using professional software engineering standards.
 
@@ -8,17 +8,16 @@ This document outlines the workflow and tools used to keep this project clean, s
 
 ## 🛠️ Development Setup
 
-This project uses a **Makefile** to simplify common development tasks. To get started, ensure you have the following installed:
+This project uses a Makefile to simplify common development tasks. To get started, ensure you have the following installed:
 
-* **Git**
-* **Docker** (required for the Markdown linter)
-* **Node.js** (optional, for local linting)
+- Git
+- Node.js and npm (required for linting and Lighthouse checks)
 
 ### Quick Start
 
-1. **Clone the repo:** `git clone https://github.com/isbhuvan/isbhuvan.github.io.git`
-2. **Start a local server:** `make serve`
-3. **Run all checks:** `make lint`
+1. Clone the repo: git clone <https://github.com/isbhuvan/isbhuvan.github.io.git>
+2. Start a local server: make serve
+3. Run all checks: make check
 
 ---
 
@@ -44,6 +43,8 @@ This project enforces the **Conventional Commits** specification. This ensures t
 * `style`: Changes that do not affect the meaning of the code (formatting, CSS spacing)
 * `refactor`: A code change that neither fixes a bug nor adds a feature
 
+Commits are validated via commitlint.
+
 ---
 
 ## ✅ Quality Control Pipeline
@@ -52,16 +53,32 @@ Before submitting a Pull Request, please ensure your code passes the local quali
 
 1. **Markdown Linting:** Run `make lint-md` to ensure documentation follows style guides.
 2. **Commit Linting:** Run `make lint-commit` to verify your message format.
-3. **Security Scan:** Ensure no secrets (API keys) are included in your code.
+3. **HTML Linting:** Run `make lint-html` to validate HTML quality.
+4. **Lighthouse Check:** Run `make lighthouse` to validate performance, accessibility, best practices, and SEO thresholds.
+5. **Full Local Gate:** Run `make check` to execute all checks together.
+6. **PR-style Commit Range Check (optional):** Run `make pr-check PR_BASE_SHA=<base_sha> PR_HEAD_SHA=<head_sha>`.
+7. **Security Scan:** Ensure no secrets (API keys) are included in your code.
 
 ---
 
-## 🚀 Pull Request Process
+## 🚀 Release Process
 
-1. Create a new branch from `main`.
-2. Make your changes and test them using `make serve`.
-3. Run all linters to ensure the CI/CD pipeline won't fail.
-4. Open a Pull Request using the provided **PR Template**.
+Releases are automated using semantic versioning:
+
+* `feat` → Minor version bump
+* `fix` → Patch version bump
+* `BREAKING CHANGE` → Major version bump
+
+CHANGELOG and VERSION are updated automatically.
+
+---
+
+## 🐛 Reporting Issues
+
+Use the provided issue templates for:
+
+* Bug reports
+* Improvements
 
 ---
 
