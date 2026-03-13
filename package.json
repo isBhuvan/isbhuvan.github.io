@@ -1,0 +1,39 @@
+{
+  "name": "isbhuvan.github.io",
+  "version": "1.2.0",
+  "private": true,
+  "devDependencies": {
+    "release-it": "^19.0.4",
+    "@release-it/conventional-changelog": "^10.0.1",
+    "markdownlint-cli": "^0.39.0",
+    "@commitlint/cli": "^20.4.4",
+    "@commitlint/config-conventional": "^20.4.4",
+    "htmlhint": "^1.1.4",
+    "lighthouse": "^12.6.1"
+  },
+  "scripts": {
+    "lighthouse": "bash scripts/run-lighthouse.sh",
+    "release": "release-it --ci"
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore(release): v${version}",
+      "tagName": "v${version}"
+    },
+    "github": {
+      "release": false
+    },
+    "npm": {
+      "publish": false
+    },
+    "hooks": {
+      "after:bump": "npm install --package-lock-only --ignore-scripts && printf '%s\\n' ${version} > VERSION"
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "infile": "CHANGELOG.md",
+        "preset": "conventionalcommits"
+      }
+    }
+  }
+}

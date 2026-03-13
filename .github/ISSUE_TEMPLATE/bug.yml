@@ -1,0 +1,68 @@
+name: Bug Report
+description: Report a functional or visual issue in the portfolio
+title: "bug: "
+labels: ["bug"]
+assignees:
+  - isbhuvan
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🐛 Bug Report
+
+        Please provide clear and reproducible details.
+
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: Brief description of the issue
+      placeholder: Navigation link not working on blogs page
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Provide exact steps to reproduce the issue
+      placeholder: |
+        1. Go to blogs.html
+        2. Click on Terraform filter
+        3. Page reloads unexpectedly
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What should happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - Desktop
+        - Mobile
+        - Both
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser
+      placeholder: Chrome 122, Firefox 120, Safari, etc.
