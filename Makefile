@@ -37,7 +37,7 @@ clean: ## Remove temporary files and cache
 	@echo "Cleaned up system junk."
 
 lint-md: ## Check markdown files for formatting errors
-	npx markdownlint "**/*.md"
+	npx markdownlint "**/*.md" "#node_modules/**"
 
 lint-commit: ## Check commit messages (override with COMMIT_FROM/COMMIT_TO)
 	npx commitlint --from $(COMMIT_FROM) --to $(COMMIT_TO) --verbose

@@ -25,9 +25,9 @@ This project uses a Makefile to simplify common development tasks. To get starte
 
 I follow a simplified **Git Flow** model. Please do not commit directly to the `main` branch.
 
--  `main`: The production-ready branch. Anything here is automatically deployed to the live site.
--  `feature/feature-name`: Used for new sections, components, or styling updates.
--  `fix/bug-name`: Used for resolving issues or broken links.
+- `main`: The production-ready branch. Anything here is automatically deployed to the live site.
+- `feature/feature-name`: Used for new sections, components, or styling updates.
+- `fix/bug-name`: Used for resolving issues or broken links.
 
 ---
 
@@ -37,11 +37,11 @@ This project enforces the **Conventional Commits*-  specification. This ensures 
 
 **Format:** `<type>: <description>`
 
--  `feat`: A new feature (e.g., `feat: add project gallery section`)
--  `fix`: A bug fix (e.g., `fix: mobile navigation overlap issue`)
--  `docs`: Documentation only changes (e.g., `docs: update contributing guide`)
--  `style`: Changes that do not affect the meaning of the code (formatting, CSS spacing)
--  `refactor`: A code change that neither fixes a bug nor adds a feature
+- `feat`: A new feature (e.g., `feat: add project gallery section`)
+- `fix`: A bug fix (e.g., `fix: mobile navigation overlap issue`)
+- `docs`: Documentation only changes (e.g., `docs: update contributing guide`)
+- `style`: Changes that do not affect the meaning of the code (formatting, CSS spacing)
+- `refactor`: A code change that neither fixes a bug nor adds a feature
 
 Commits are validated via commitlint.
 
@@ -65,9 +65,9 @@ Before submitting a Pull Request, please ensure your code passes the local quali
 
 Releases are automated using semantic versioning:
 
--  `feat` → Minor version bump
--  `fix` → Patch version bump
--  `BREAKING CHANGE` → Major version bump
+- `feat` → Minor version bump
+- `fix` → Patch version bump
+- `BREAKING CHANGE` → Major version bump
 
 CHANGELOG and VERSION are updated automatically.
 
@@ -77,8 +77,8 @@ CHANGELOG and VERSION are updated automatically.
 
 Use the provided issue templates for:
 
--  Bug reports
--  Improvements
+- Bug reports
+- Improvements
 
 ---
 

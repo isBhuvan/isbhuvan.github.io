@@ -3,6 +3,9 @@ name: CI
 on:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   quality-checks:
     runs-on: ubuntu-latest
@@ -23,7 +26,7 @@ jobs:
         run: npm ci
 
       - name: Markdown Lint
-        run: npx markdownlint "**/*.md"
+        run: npx markdownlint-cli2 "**/*.md" "#node_modules/**"
 
       - name: Commit Lint
         run: |
