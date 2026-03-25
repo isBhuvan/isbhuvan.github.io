@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>isBhuvan — Azure Cloud Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════
+   TOKENS
+═══════════════════════════════════ */
+:root {
+  --bg:      #07090f;
+  --bg-2:    #0c1018;
+  --bg-3:    #111827;
+  --bg-card: #131f2e;
+  --i4:      #4a6080;
+  --i3:      #7a9ab8;
+  --i2:      #a8c4da;
+  --i1:      #cce0f0;
+  --i0:      #ddeeff;
+  --acc:     #4da6d4;
+  --acc-dim: rgba(77,166,212,.14);
+  --acc-glow:rgba(77,166,212,.22);
+  --bd:      rgba(100,150,200,.1);
+  --bd-h:    rgba(100,150,200,.22);
+  --fd: 'Cormorant Garamond', Georgia, serif;
+  --fm: 'JetBrains Mono', monospace;
+  --fb: 'DM Sans', sans-serif;
+  --ease:     cubic-bezier(.4,0,.2,1);
+  --ease-out: cubic-bezier(.16,1,.3,1);
+}
+html.light {
+  --bg:#f0f2f5; --bg-2:#e4e8ed; --bg-3:#fff; --bg-card:#fff;
+  --i4:#96a2ae; --i3:#556070; --i2:#2c3748; --i1:#1a2030; --i0:#0d121a;
+  --acc:#2980b2; --acc-dim:rgba(41,128,178,.1); --acc-glow:rgba(41,128,178,.16);
+  --bd:rgba(50,70,90,.09); --bd-h:rgba(50,70,90,.2);
+}
+html.light nav { background:rgba(240,242,245,.93) !important; }
+html.light body::before { opacity:.1; }
+html.light .marquee-track { border-color: rgba(50,70,90,.09); }
+html.light .hero-watermark { color: rgba(50,70,90,.025); }
+
+/* ═══════════════════════════════════
+   BASE
+═══════════════════════════════════ */
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background:var(--bg);
+  color:var(--i2);
+  font-family:var(--fb);
+  font-weight:300;
+  overflow-x:hidden;
+}
+body::before {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.3;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+}
+body::after {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:linear-gradient(rgba(60,120,200,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(60,120,200,.04) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+nav,section,footer,.overlay { position:relative; z-index:1; }
+a { text-decoration:none; }
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--i4); border-radius:2px; }
+
+/* ═══════════════════════════════════
+   NAV
+═══════════════════════════════════ */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1.2rem 3.5rem;
+  background:rgba(7,9,15,.88); backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--bd);
+}
+.nav-logo {
+  font-family:var(--fd); font-size:1.3rem; font-weight:600;
+  color:var(--i0); letter-spacing:.02em;
+}
+.nav-logo span { color:var(--acc); }
+.nav-links { display:flex; gap:2.2rem; list-style:none; }
+.nav-links a {
+  font-family:var(--fm); font-size:.66rem; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--i3); position:relative; transition:color .25s;
+}
+.nav-links a::after {
+  content:''; position:absolute; bottom:-3px; left:0; right:0;
+  height:1px; background:var(--acc); transform:scaleX(0); transform-origin:left; transition:transform .3s;
+}
+.nav-links a:hover { color:var(--i1); }
+.nav-links a:hover::after { transform:scaleX(1); }
+.nav-r { display:flex; align-items:center; gap:.7rem; }
+.nav-cta {
+  font-family:var(--fm); font-size:.65rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--acc); border:1px solid rgba(77,166,212,.3); padding:.48rem 1.2rem;
+  border-radius:2px; transition:background .25s,color .25s;
+}
+.nav-cta:hover { background:var(--acc); color:var(--bg); }
+.tt { display:flex; align-items:center; gap:.4rem; background:none; border:1px solid var(--bd); border-radius:20px; padding:.3rem .7rem .3rem .5rem; cursor:pointer; transition:border-color .25s; }
+.tt:hover { border-color:var(--bd-h); }
+.tt-track { width:24px; height:13px; border-radius:7px; background:var(--bd-h); position:relative; transition:background .3s; flex-shrink:0; }
+html.light .tt-track { background:var(--acc); }
+.tt-thumb { position:absolute; top:1px; left:1px; width:11px; height:11px; border-radius:50%; background:#fff; transition:transform .3s; box-shadow:0 1px 3px rgba(0,0,0,.3); }
+html.light .tt-thumb { transform:translateX(11px); }
+.tt-lbl { font-family:var(--fm); font-size:.55rem; letter-spacing:.1em; text-transform:uppercase; color:var(--i4); }
+.search-btn {
+  display:flex; align-items:center; gap:.4rem;
+  background:none; border:1px solid var(--bd); border-radius:20px;
+  padding:.3rem .8rem .3rem .55rem; cursor:pointer;
+  font-family:var(--fm); font-size:.57rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--i4); transition:border-color .25s,color .25s;
+}
+.search-btn:hover { border-color:var(--bd-h); color:var(--i2); }
+.s-kbd {
+  font-size:.5rem; background:rgba(188,204,218,.07); border:1px solid var(--bd);
+  padding:.08rem .3rem; border-radius:3px; margin-left:.15rem;
+}
+
+/* ═══════════════════════════════════
+   HERO
+═══════════════════════════════════ */
+.hero {
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1fr 480px;
+  padding:0 3.5rem;
+  align-items:center;
+  position:relative;
+  overflow:hidden;
+  gap:4rem;
+}
+.hero::before {
+  content:''; position:absolute;
+  top:-20%; left:-10%; width:70vw; height:80vh;
+  background:radial-gradient(ellipse at 30% 40%, rgba(40,100,200,.07) 0%, transparent 65%);
+  pointer-events:none;
+}
+.hero-watermark {
+  position:absolute; right:-1rem; bottom:-4rem;
+  font-family:var(--fd); font-weight:300; letter-spacing:-.04em;
+  font-size:clamp(11rem,22vw,22rem); line-height:1;
+  color:rgba(100,150,200,.028); pointer-events:none; user-select:none;
+}
+.hero-left { padding-top:5rem; }
+.hero-kicker {
+  display:flex; align-items:center; gap:.8rem;
+  font-family:var(--fm); font-size:.6rem; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--acc); margin-bottom:2rem;
+  opacity:0; animation:up .6s var(--ease) forwards .15s;
+}
+.hero-kicker::before { content:''; width:28px; height:1px; background:var(--acc); }
+.hero-h1 {
+  font-family:var(--fd);
+  font-size:clamp(4.5rem,9vw,8.5rem);
+  font-weight:300; color:var(--i0);
+  line-height:.95; letter-spacing:-.03em;
+  opacity:0; animation:up .8s var(--ease) forwards .25s;
+}
+.hero-h1 em { font-style:italic; color:var(--i3); display:block; font-size:.78em; margin-top:.1em; }
+.hero-h1 .acc { color:var(--acc); }
+.hero-stack {
+  margin-top:2rem;
+  display:flex; flex-wrap:wrap; gap:.5rem;
+  opacity:0; animation:up .7s var(--ease) forwards .4s;
+}
+.hero-pill {
+  font-family:var(--fm); font-size:.58rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--i3); border:1px solid var(--bd); padding:.3rem .75rem; border-radius:2px;
+  transition:border-color .25s,color .25s;
+}
+.hero-pill:hover { border-color:var(--bd-h); color:var(--i1); }
+.hero-pill.hi { color:var(--acc); border-color:rgba(77,166,212,.3); background:var(--acc-dim); }
+.hero-desc {
+  margin-top:2rem; max-width:440px;
+  font-size:1rem; line-height:1.82; color:var(--i3);
+  opacity:0; animation:up .7s var(--ease) forwards .5s;
+}
+.hero-ctas {
+  margin-top:2.4rem; display:flex; gap:1rem; align-items:center;
+  opacity:0; animation:up .7s var(--ease) forwards .62s;
+}
+.btn-solid {
+  font-family:var(--fm); font-size:.68rem; letter-spacing:.12em; text-transform:uppercase;
+  background:var(--i1); color:var(--bg); padding:.85rem 2rem;
+  border-radius:2px; font-weight:500; transition:background .25s,transform .2s;
+}
+.btn-solid:hover { background:var(--i0); transform:translateY(-2px); }
+.btn-ghost {
+  font-family:var(--fm); font-size:.68rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--i3); display:flex; align-items:center; gap:.4rem; transition:color .25s;
+}
+.btn-ghost::after { content:'→'; transition:transform .25s; }
+.btn-ghost:hover { color:var(--i0); }
+.btn-ghost:hover::after { transform:translateX(4px); }
+.hero-stats {
+  margin-top:3.5rem; padding-top:2rem; border-top:1px solid var(--bd);
+  display:grid; grid-template-columns:repeat(4,1fr); gap:0;
+  opacity:0; animation:fadein .9s var(--ease) forwards .7s;
+}
+.hstat { padding:.6rem 1rem .6rem 0; border-right:1px solid var(--bd); }
+.hstat:last-child { border-right:none; }
+.hstat-num {
+  font-family:var(--fd); font-size:2.6rem; font-weight:300;
+  color:var(--i0); line-height:1; letter-spacing:-.02em;
+}
+.hstat-num span { color:var(--acc); font-size:1.4rem; }
+.hstat-lbl { font-family:var(--fm); font-size:.54rem; letter-spacing:.14em; text-transform:uppercase; color:var(--i4); margin-top:.3rem; }
+.hero-right {
+  padding-top:5rem;
+  opacity:0; animation:fadein 1s var(--ease) forwards .5s;
+}
+.terminal {
+  background:var(--bg-2); border:1px solid var(--bd); border-radius:10px;
+  overflow:hidden; box-shadow:0 40px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(100,150,200,.06);
+  position:relative;
+}
+.terminal::before {
+  content:''; position:absolute; top:-60px; right:-60px;
+  width:220px; height:220px; border-radius:50%;
+  background:radial-gradient(circle, var(--acc-glow) 0%, transparent 70%);
+  pointer-events:none;
+}
+.terminal-bar {
+  display:flex; align-items:center; gap:.5rem;
+  padding:.75rem 1rem; background:var(--bg-3); border-bottom:1px solid var(--bd);
+}
+.t-dot { width:10px; height:10px; border-radius:50%; }
+.t-dot.red   { background:#ff5f57; }
+.t-dot.amber { background:#febc2e; }
+.t-dot.green { background:#28c840; }
+.terminal-file {
+  font-family:var(--fm); font-size:.58rem; color:var(--i4);
+  letter-spacing:.08em; margin-left:.5rem;
+}
+.terminal-body {
+  padding:1.6rem 1.8rem;
+  font-family:var(--fm); font-size:.78rem; line-height:2;
+  overflow-x:auto;
+}
+.t-c   { color:#55616e; }
+.t-k   { color:#c792ea; }
+.t-s   { color:#c3e88d; }
+.t-n   { color:#f78c6c; }
+.t-a   { color:var(--acc); }
+.t-ok  { color:#c3e88d; }
+.t-p   { color:var(--acc); font-weight:500; }
+.t-cur {
+  display:inline-block; width:8px; height:.9em;
+  background:var(--acc); vertical-align:middle; margin-left:2px;
+  animation:blink 1.1s step-end infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.terminal-status {
+  padding:.65rem 1.8rem; background:rgba(77,166,212,.04);
+  border-top:1px solid var(--bd);
+  display:flex; align-items:center; gap:1.2rem;
+}
+.t-badge {
+  font-family:var(--fm); font-size:.54rem; letter-spacing:.1em;
+  text-transform:uppercase; padding:.18rem .55rem; border-radius:2px;
+}
+.t-badge.ok  { color:#6fcf97; background:rgba(111,207,151,.1); border:1px solid rgba(111,207,151,.2); }
+.t-badge.inf { color:var(--acc); background:var(--acc-dim); border:1px solid rgba(77,166,212,.2); }
+
+/* ═══════════════════════════════════
+   MARQUEE
+═══════════════════════════════════ */
+.marquee-track {
+  overflow:hidden; border-top:1px solid var(--bd); border-bottom:1px solid var(--bd);
+  background:var(--bg-2); padding:.85rem 0; position:relative;
+}
+.marquee-track::before,.marquee-track::after {
+  content:''; position:absolute; top:0; bottom:0; width:80px; z-index:2; pointer-events:none;
+}
+.marquee-track::before { left:0; background:linear-gradient(90deg,var(--bg-2),transparent); }
+.marquee-track::after  { right:0; background:linear-gradient(-90deg,var(--bg-2),transparent); }
+.marquee-inner {
+  display:flex; gap:0; white-space:nowrap;
+  animation:marquee 28s linear infinite;
+}
+.marquee-inner:hover { animation-play-state:paused; }
+.marquee-item {
+  display:inline-flex; align-items:center; gap:.6rem;
+  padding:0 2.2rem;
+  font-family:var(--fm); font-size:.62rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--i3); border-right:1px solid var(--bd); flex-shrink:0;
+  transition:color .2s;
+}
+.marquee-item:hover { color:var(--acc); }
+.marquee-dot { width:5px; height:5px; border-radius:50%; background:var(--acc); opacity:.5; flex-shrink:0; }
+@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* ═══════════════════════════════════
+   SECTION SHARED
+═══════════════════════════════════ */
+.sec-inner { max-width:1200px; margin:0 auto; padding:0 3.5rem; }
+.sec-eyebrow {
+  font-family:var(--fm); font-size:.58rem; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--acc); margin-bottom:.8rem;
+  display:flex; align-items:center; gap:.65rem;
+}
+.sec-eyebrow::before { content:''; width:20px; height:1px; background:var(--acc); }
+.sec-title {
+  font-family:var(--fd); font-size:clamp(2.2rem,4vw,3.5rem);
+  font-weight:300; color:var(--i0); line-height:1.1; letter-spacing:-.02em;
+}
+.sec-title em { font-style:italic; color:var(--i3); }
+.sec-hdr { display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:end; margin-bottom:3rem; }
+.sec-intro { font-size:.96rem; line-height:1.8; color:var(--i3); }
+.sec-link {
+  font-family:var(--fm); font-size:.62rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--acc); display:inline-flex; align-items:center; gap:.4rem; transition:gap .25s;
+}
+.sec-link::after { content:'→'; }
+.sec-link:hover { gap:.7rem; }
+.reveal { opacity:0; transform:translateY(20px); transition:opacity .65s var(--ease),transform .65s var(--ease); }
+.reveal.on { opacity:1; transform:none; }
+
+/* ═══════════════════════════════════
+   PROJECTS
+═══════════════════════════════════ */
+.projects-sec { padding:7rem 0; }
+.projects-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  grid-template-rows:auto auto; gap:1px;
+  background:var(--bd); border:1px solid var(--bd); border-radius:8px; overflow:hidden;
+}
+.proj-card {
+  background:var(--bg-2); padding:2.2rem 2.4rem;
+  position:relative; overflow:hidden; display:flex; flex-direction:column;
+  transition:background .3s;
+}
+.proj-card:hover { background:var(--bg-3); }
+.proj-card.featured { grid-row:1/3; border-right:1px solid var(--bd); padding:3rem 3.2rem; }
+.proj-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,transparent,var(--pc,var(--acc)),transparent);
+  transform:scaleX(0); transform-origin:left; transition:transform .4s;
+}
+.proj-card:hover::before { transform:scaleX(1); }
+.proj-num { font-family:var(--fd); font-size:4rem; font-weight:300; color:rgba(188,204,218,.06); line-height:1; margin-bottom:auto; padding-bottom:1.5rem; }
+.proj-featured-label {
+  font-family:var(--fm); font-size:.54rem; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--acc); background:var(--acc-dim); border:1px solid rgba(77,166,212,.2);
+  padding:.18rem .55rem; border-radius:2px; display:inline-block; margin-bottom:1.5rem; width:fit-content;
+}
+.proj-title { font-family:var(--fd); font-size:1.85rem; font-weight:400; color:var(--i0); line-height:1.2; margin-bottom:.8rem; }
+.proj-card.featured .proj-title { font-size:2.5rem; }
+.proj-desc { font-size:.88rem; line-height:1.72; color:var(--i3); margin-bottom:1.4rem; flex:1; }
+.proj-tags { display:flex; flex-wrap:wrap; gap:.35rem; margin-bottom:1.4rem; }
+.proj-tag { font-family:var(--fm); font-size:.52rem; letter-spacing:.08em; text-transform:uppercase; color:var(--i4); border:1px solid var(--bd); padding:.16rem .5rem; border-radius:2px; }
+.proj-arrow { font-family:var(--fm); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase; color:var(--acc); display:inline-flex; align-items:center; gap:.4rem; transition:gap .25s; width:fit-content; }
+.proj-arrow::after { content:'→'; }
+.proj-card:hover .proj-arrow { gap:.7rem; }
+.proj-diagram { border:1px solid var(--bd); border-radius:6px; background:var(--bg); padding:1.4rem; margin-bottom:1.6rem; overflow:hidden; }
+
+/* ═══════════════════════════════════
+   SKILLS
+═══════════════════════════════════ */
+.skills-sec { padding:5rem 0; background:var(--bg-2); border-top:1px solid var(--bd); border-bottom:1px solid var(--bd); }
+.skills-domains {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+  background:var(--bd); border:1px solid var(--bd); border-radius:8px; overflow:hidden; margin-top:2.8rem;
+}
+.skill-domain { background:var(--bg-card); padding:2rem 2.2rem; transition:background .3s; }
+.skill-domain:hover { background:var(--bg-3); }
+.sd-icon { font-size:1.5rem; margin-bottom:1.1rem; display:block; filter:grayscale(40%); transition:filter .3s; }
+.skill-domain:hover .sd-icon { filter:grayscale(0%); }
+.sd-name { font-family:var(--fd); font-size:1.3rem; font-weight:400; color:var(--i0); margin-bottom:.4rem; }
+.sd-tools { font-family:var(--fm); font-size:.58rem; color:var(--i4); line-height:1.8; letter-spacing:.04em; }
+.sd-level { margin-top:1.2rem; height:2px; background:var(--bd); border-radius:2px; overflow:hidden; }
+.sd-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,var(--dc,var(--acc)),color-mix(in srgb,var(--dc,var(--acc)) 60%,white)); width:0; transition:width 1.2s cubic-bezier(.16,1,.3,1); }
+.sd-fill.go { width:var(--w); }
+
+/* ═══════════════════════════════════
+   WRITING
+═══════════════════════════════════ */
+.writing-sec { padding:7rem 0; }
+.posts-grid {
+  display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:1px;
+  background:var(--bd); border:1px solid var(--bd); border-radius:8px; overflow:hidden; margin-top:2.8rem;
+}
+.post-card { background:var(--bg-2); padding:2.2rem; display:flex; flex-direction:column; position:relative; overflow:hidden; transition:background .3s; }
+.post-card:hover { background:var(--bg-3); }
+.post-card.hero-post { padding:2.8rem; }
+.post-cat { font-family:var(--fm); font-size:.54rem; letter-spacing:.16em; text-transform:uppercase; color:var(--acc); margin-bottom:.9rem; display:inline-block; }
+.post-series { font-family:var(--fm); font-size:.52rem; letter-spacing:.1em; text-transform:uppercase; color:var(--i4); background:rgba(188,204,218,.05); border:1px solid var(--bd); padding:.15rem .5rem; border-radius:2px; display:inline-block; margin-bottom:.6rem; }
+.post-title { font-family:var(--fd); font-size:1.45rem; font-weight:400; color:var(--i0); line-height:1.25; margin-bottom:.7rem; }
+.post-card.hero-post .post-title { font-size:1.9rem; }
+.post-excerpt { font-size:.86rem; line-height:1.72; color:var(--i3); flex:1; margin-bottom:1.2rem; }
+.post-meta { display:flex; align-items:center; gap:1rem; font-family:var(--fm); font-size:.55rem; color:var(--i4); letter-spacing:.06em; padding-top:1rem; border-top:1px solid var(--bd); margin-top:auto; }
+.post-dot { width:3px; height:3px; border-radius:50%; background:var(--i4); }
+.post-arrow { font-family:var(--fm); font-size:.58rem; letter-spacing:.1em; text-transform:uppercase; color:var(--acc); display:inline-flex; align-items:center; gap:.35rem; transition:gap .25s; margin-top:1rem; width:fit-content; }
+.post-arrow::after { content:'→'; }
+.post-card:hover .post-arrow { gap:.6rem; }
+
+/* ═══════════════════════════════════
+   CONNECT
+═══════════════════════════════════ */
+.connect-sec { padding:8rem 0 7rem; text-align:center; position:relative; overflow:hidden; }
+.connect-sec::before {
+  content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:700px; height:700px; border-radius:50%;
+  background:radial-gradient(circle, rgba(40,100,200,.07) 0%, transparent 60%);
+  pointer-events:none;
+}
+.connect-eyebrow { font-family:var(--fm); font-size:.62rem; letter-spacing:.22em; text-transform:uppercase; color:var(--acc); margin-bottom:1.4rem; }
+.connect-h { font-family:var(--fd); font-size:clamp(3rem,7vw,6.5rem); font-weight:300; color:var(--i0); line-height:.95; letter-spacing:-.03em; margin-bottom:1.6rem; position:relative; }
+.connect-h em { font-style:italic; color:var(--i3); }
+.connect-sub { font-size:1rem; line-height:1.78; color:var(--i3); max-width:520px; margin:0 auto 3rem; }
+.connect-chips { display:flex; gap:.8rem; justify-content:center; flex-wrap:wrap; }
+.chip { display:flex; align-items:center; gap:.6rem; font-family:var(--fm); font-size:.64rem; letter-spacing:.06em; color:var(--i3); background:var(--bg-card); border:1px solid var(--bd); padding:.65rem 1.2rem; border-radius:4px; transition:border-color .25s,color .25s,transform .2s; }
+.chip:hover { border-color:var(--bd-h); color:var(--i0); transform:translateY(-2px); }
+.chip-icon { color:var(--acc); font-size:.8rem; }
+
+/* ═══════════════════════════════════
+   FOOTER
+═══════════════════════════════════ */
+footer { border-top:1px solid var(--bd); padding:2.2rem 3.5rem; display:flex; justify-content:space-between; align-items:center; }
+.ft-left { display:flex; align-items:center; gap:2rem; }
+.ft-logo { font-family:var(--fd); font-size:1.1rem; font-weight:600; color:var(--i0); }
+.ft-logo span { color:var(--acc); }
+.ft-copy { font-family:var(--fm); font-size:.58rem; color:var(--i4); letter-spacing:.06em; }
+.ft-links { display:flex; gap:1.8rem; list-style:none; }
+.ft-links a { font-family:var(--fm); font-size:.6rem; color:var(--i4); transition:color .2s; letter-spacing:.06em; }
+.ft-links a:hover { color:var(--i2); }
+
+/* ═══════════════════════════════════
+   SEARCH OVERLAY
+═══════════════════════════════════ */
+.search-overlay {
+  position:fixed; inset:0; z-index:500;
+  background:rgba(7,9,15,.88); backdrop-filter:blur(16px);
+  display:flex; flex-direction:column; align-items:center;
+  padding:8rem 2rem 4rem;
+  opacity:0; pointer-events:none; transition:opacity .25s;
+}
+.search-overlay.open { opacity:1; pointer-events:all; }
+.search-box-wrap {
+  width:100%; max-width:660px;
+  background:var(--bg-card); border:1px solid rgba(188,204,218,.15);
+  border-radius:10px; overflow:hidden; box-shadow:0 32px 80px rgba(0,0,0,.6);
+  transform:translateY(-16px); transition:transform .3s var(--ease-out);
+}
+.search-overlay.open .search-box-wrap { transform:translateY(0); }
+.search-row { display:flex; align-items:center; padding:.9rem 1.2rem; border-bottom:1px solid var(--bd); gap:.8rem; }
+.search-icon { color:var(--i4); font-size:1rem; flex-shrink:0; }
+.search-input { flex:1; background:none; border:none; outline:none; font-family:var(--fb); font-size:1rem; color:var(--i1); font-weight:300; }
+.search-input::placeholder { color:var(--i4); }
+.search-esc { font-family:var(--fm); font-size:.52rem; color:var(--i4); background:rgba(188,204,218,.07); border:1px solid var(--bd); padding:.1rem .35rem; border-radius:3px; }
+.search-results { max-height:380px; overflow-y:auto; }
+.search-result { display:flex; align-items:center; gap:1rem; padding:.85rem 1.2rem; cursor:pointer; transition:background .15s; border-bottom:1px solid rgba(188,204,218,.04); text-decoration:none; }
+.search-result:hover { background:rgba(188,204,218,.05); }
+.sr-icon { font-size:.85rem; width:28px; flex-shrink:0; text-align:center; }
+.sr-title { font-size:.88rem; color:var(--i1); flex:1; }
+.sr-cat { font-family:var(--fm); font-size:.52rem; letter-spacing:.1em; text-transform:uppercase; color:var(--i4); }
+.search-footer { padding:.6rem 1.2rem; border-top:1px solid var(--bd); display:flex; gap:1.5rem; }
+.sf-hint { font-family:var(--fm); font-size:.52rem; color:var(--i4); display:flex; align-items:center; gap:.3rem; }
+.sf-key { background:rgba(188,204,218,.07); border:1px solid var(--bd); padding:.08rem .35rem; border-radius:3px; }
+
+/* ═══════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════ */
+@keyframes up      { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
+@keyframes fadein  { from{opacity:0} to{opacity:1} }
+body,nav,section,.proj-card,.post-card,.skill-domain,.chip,footer
+{ transition:background-color .35s,border-color .35s,color .35s; }
+
+/* ═══════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════ */
+@media(max-width:1024px) {
+  .hero { grid-template-columns:1fr; padding:0 2rem; }
+  .hero-right { display:none; }
+  .hero-h1 { font-size:clamp(3.5rem,10vw,6rem); }
+  .hero-stats { grid-template-columns:repeat(4,1fr); }
+  .sec-inner { padding:0 2rem; }
+  .projects-grid { grid-template-columns:1fr; }
+  .proj-card.featured { grid-row:auto; border-right:none; }
+  .skills-domains { grid-template-columns:1fr 1fr; }
+  .posts-grid { grid-template-columns:1fr; }
+  footer { flex-direction:column; gap:1.2rem; text-align:center; padding:2rem; }
+  .ft-left { flex-direction:column; gap:.5rem; }
+}
+@media(max-width:700px) {
+  nav { padding:1rem 1.5rem; }
+  .nav-links { display:none; }
+  .hero { padding:0 1.5rem; }
+  .hero-stats { grid-template-columns:1fr 1fr; }
+  .hstat { border-right:none; border-bottom:1px solid var(--bd); padding:.8rem 0; }
+  .skills-domains { grid-template-columns:1fr; }
+  .sec-hdr { grid-template-columns:1fr; gap:1rem; }
+  .connect-chips { flex-direction:column; align-items:center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <a class="nav-logo" href="index.html">is<span>B</span>huvan</a>
+  <ul class="nav-links">
+    <li><a href="about.html">About</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="resume.html">Résumé</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-r">
+    <button class="search-btn" onclick="openSearch()" aria-label="Search">
+      <span>⌕</span> Search <span class="s-kbd">⌘K</span>
+    </button>
+    <button class="tt" onclick="toggleTheme()" aria-label="Toggle theme">
+      <div class="tt-track"><div class="tt-thumb"></div></div>
+      <span class="tt-lbl" id="ttLbl">Dark</span>
+    </button>
+    <a class="nav-cta" href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-watermark" aria-hidden="true">Azure</div>
+  <div class="hero-left">
+    <div class="hero-kicker">isBhuvan · Bengaluru, India</div>
+    <h1 class="hero-h1">
+      Azure<br>
+      <em>Cloud</em><br>
+      <span class="acc">Engineer.</span>
+    </h1>
+    <div class="hero-stack">
+      <span class="hero-pill hi">AKS</span>
+      <span class="hero-pill hi">Terraform</span>
+      <span class="hero-pill hi">GitHub Actions</span>
+      <span class="hero-pill hi">Golang</span>
+      <span class="hero-pill">Cilium</span>
+      <span class="hero-pill">ArgoCD</span>
+      <span class="hero-pill">Prometheus</span>
+      <span class="hero-pill">OPA</span>
+    </div>
+    <p class="hero-desc">
+      Building cloud-native infrastructure on Azure — Kubernetes platforms, Terraform module registries, GitOps pipelines, and Go-based operators. Writing about what I learn at <strong style="color:var(--i1)">isBhuvan</strong>.
+    </p>
+    <div class="hero-ctas">
+      <a href="projects.html" class="btn-solid">View Projects</a>
+      <a href="blog.html" class="btn-ghost">Read the Blog</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat">
+        <div class="hstat-num">7<span>+</span></div>
+        <div class="hstat-lbl">Yrs on Azure</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">40<span>+</span></div>
+        <div class="hstat-lbl">Projects</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">9</div>
+        <div class="hstat-lbl">Certs</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">20<span>+</span></div>
+        <div class="hstat-lbl">Articles</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="t-dot red"></div>
+        <div class="t-dot amber"></div>
+        <div class="t-dot green"></div>
+        <span class="terminal-file">main.tf — prod-aks</span>
+      </div>
+      <div class="terminal-body">
+<span class="t-c"># Azure AKS · Terraform</span><br>
+<br>
+<span class="t-k">resource</span> <span class="t-s">"azurerm_kubernetes_cluster"</span> <span class="t-s">"prod"</span> {<br>
+&nbsp;&nbsp;<span class="t-a">name</span>                = <span class="t-s">"prod-aks-eastus"</span><br>
+&nbsp;&nbsp;<span class="t-a">resource_group_name</span> = <span class="t-k">var</span>.rg_name<br>
+&nbsp;&nbsp;<span class="t-a">location</span>            = <span class="t-s">"eastus"</span><br>
+&nbsp;&nbsp;<span class="t-a">kubernetes_version</span>  = <span class="t-s">"1.29"</span><br>
+<br>
+&nbsp;&nbsp;<span class="t-k">default_node_pool</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-a">name</span>       = <span class="t-s">"system"</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-a">node_count</span> = <span class="t-n">3</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-a">vm_size</span>    = <span class="t-s">"Standard_D4s_v5"</span><br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="t-k">identity</span> { <span class="t-a">type</span> = <span class="t-s">"SystemAssigned"</span> }<br>
+}<br>
+<br>
+<span class="t-p">$</span> terraform apply -auto-approve<br>
+<span class="t-ok">✓ azurerm_kubernetes_cluster.prod created</span><br>
+<span class="t-ok">✓ 32 resources · 4m 18s</span><br>
+<span class="t-p">$</span> <span class="t-cur"></span>
+      </div>
+      <div class="terminal-status">
+        <span class="t-badge ok">3 Nodes Ready</span>
+        <span class="t-badge inf">AKS 1.29</span>
+        <span class="t-badge inf">Cilium CNI</span>
+        <span class="t-badge ok">GitOps Active</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MARQUEE ══ -->
+<div class="marquee-track">
+  <div class="marquee-inner">
+    <span class="marquee-item"><span class="marquee-dot"></span>Azure AKS</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Terraform</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>GitHub Actions</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Go / Golang</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>ArgoCD</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Cilium eBPF</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Prometheus</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Grafana</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>OpenTelemetry</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>OPA / Rego</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Flux CD</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Helm 3</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Azure Policy</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Entra ID</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Key Vault</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Azure Monitor</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Azure AKS</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Terraform</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>GitHub Actions</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Go / Golang</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>ArgoCD</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Cilium eBPF</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Prometheus</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Grafana</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>OpenTelemetry</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>OPA / Rego</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Flux CD</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Helm 3</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Azure Policy</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Entra ID</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Key Vault</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Azure Monitor</span>
+  </div>
+</div>
+
+<!-- ══ SELECTED WORK ══ -->
+<section class="projects-sec">
+  <div class="sec-inner">
+    <div class="sec-hdr reveal">
+      <div>
+        <div class="sec-eyebrow">Selected Work</div>
+        <h2 class="sec-title">Infrastructure<br><em>at production scale</em></h2>
+      </div>
+      <div>
+        <p class="sec-intro">A selection of Azure platform engineering projects — AKS clusters, Terraform module registries, GitOps platforms, and Go-based tooling.</p>
+        <a href="projects.html" class="sec-link" style="margin-top:1.2rem;display:inline-flex">View All Projects</a>
+      </div>
+    </div>
+
+    <div class="projects-grid reveal">
+      <!-- Featured -->
+      <div class="proj-card featured" style="--pc:#4da6d4">
+        <div class="proj-num">01</div>
+        <span class="proj-featured-label">Featured Project</span>
+        <div class="proj-diagram">
+          <svg viewBox="0 0 420 180" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;opacity:.85">
+            <g stroke="rgba(77,166,212,.12)" stroke-width=".5">
+              <line x1="0" y1="60" x2="420" y2="60"/><line x1="0" y1="120" x2="420" y2="120"/>
+              <line x1="105" y1="0" x2="105" y2="180"/><line x1="210" y1="0" x2="210" y2="180"/><line x1="315" y1="0" x2="315" y2="180"/>
+            </g>
+            <rect x="8" y="70" width="72" height="40" rx="4" stroke="rgba(77,166,212,.5)" stroke-width="1" fill="rgba(77,166,212,.06)"/>
+            <text x="44" y="87" text-anchor="middle" fill="rgba(77,166,212,.9)" font-size="7" font-family="JetBrains Mono">INTERNET</text>
+            <text x="44" y="100" text-anchor="middle" fill="rgba(77,166,212,.5)" font-size="5.5" font-family="JetBrains Mono">Traffic</text>
+            <rect x="113" y="65" width="82" height="50" rx="4" stroke="rgba(133,201,154,.6)" stroke-width="1" fill="rgba(133,201,154,.07)"/>
+            <text x="154" y="87" text-anchor="middle" fill="rgba(133,201,154,.9)" font-size="7" font-family="JetBrains Mono">AZURE</text>
+            <text x="154" y="98" text-anchor="middle" fill="rgba(133,201,154,.9)" font-size="7" font-family="JetBrains Mono">FRONT DOOR</text>
+            <text x="154" y="109" text-anchor="middle" fill="rgba(133,201,154,.5)" font-size="5" font-family="JetBrains Mono">WAF + CDN</text>
+            <rect x="218" y="50" width="88" height="80" rx="4" stroke="rgba(77,166,212,.7)" stroke-width="1.5" fill="rgba(77,166,212,.08)"/>
+            <text x="262" y="73" text-anchor="middle" fill="rgba(77,166,212,.9)" font-size="8" font-family="JetBrains Mono" font-weight="500">AKS</text>
+            <text x="262" y="85" text-anchor="middle" fill="rgba(77,166,212,.6)" font-size="5.5" font-family="JetBrains Mono">prod-aks-eastus</text>
+            <circle cx="240" cy="100" r="8" stroke="rgba(77,166,212,.5)" stroke-width="1" fill="rgba(77,166,212,.1)"/>
+            <circle cx="262" cy="100" r="8" stroke="rgba(77,166,212,.5)" stroke-width="1" fill="rgba(77,166,212,.1)"/>
+            <circle cx="284" cy="100" r="8" stroke="rgba(77,166,212,.5)" stroke-width="1" fill="rgba(77,166,212,.1)"/>
+            <text x="240" y="103" text-anchor="middle" fill="rgba(77,166,212,.7)" font-size="5" font-family="JetBrains Mono">N1</text>
+            <text x="262" y="103" text-anchor="middle" fill="rgba(77,166,212,.7)" font-size="5" font-family="JetBrains Mono">N2</text>
+            <text x="284" y="103" text-anchor="middle" fill="rgba(77,166,212,.7)" font-size="5" font-family="JetBrains Mono">N3</text>
+            <text x="262" y="122" text-anchor="middle" fill="rgba(77,166,212,.4)" font-size="5.5" font-family="JetBrains Mono">Cilium · KEDA</text>
+            <rect x="330" y="45" width="80" height="36" rx="4" stroke="rgba(217,176,110,.5)" stroke-width="1" fill="rgba(217,176,110,.06)"/>
+            <text x="370" y="59" text-anchor="middle" fill="rgba(217,176,110,.9)" font-size="6.5" font-family="JetBrains Mono">COSMOS DB</text>
+            <text x="370" y="71" text-anchor="middle" fill="rgba(217,176,110,.5)" font-size="5" font-family="JetBrains Mono">multi-region</text>
+            <rect x="330" y="95" width="80" height="36" rx="4" stroke="rgba(168,125,212,.5)" stroke-width="1" fill="rgba(168,125,212,.06)"/>
+            <text x="370" y="109" text-anchor="middle" fill="rgba(168,125,212,.9)" font-size="6.5" font-family="JetBrains Mono">AZ MONITOR</text>
+            <text x="370" y="121" text-anchor="middle" fill="rgba(168,125,212,.5)" font-size="5" font-family="JetBrains Mono">+ Prometheus</text>
+            <line x1="80" y1="90" x2="113" y2="90" stroke="rgba(77,166,212,.35)" stroke-width="1" stroke-dasharray="4 3"/>
+            <line x1="195" y1="90" x2="218" y2="90" stroke="rgba(77,166,212,.35)" stroke-width="1" stroke-dasharray="4 3"/>
+            <line x1="306" y1="75" x2="330" y2="63" stroke="rgba(217,176,110,.25)" stroke-width="1" stroke-dasharray="4 3"/>
+            <line x1="306" y1="105" x2="330" y2="113" stroke="rgba(168,125,212,.25)" stroke-width="1" stroke-dasharray="4 3"/>
+            <polygon points="113,87 107,90 113,93" fill="rgba(77,166,212,.4)"/>
+            <polygon points="218,87 212,90 218,93" fill="rgba(77,166,212,.4)"/>
+          </svg>
+        </div>
+        <h3 class="proj-title">Multi-Region AKS Platform with GitOps</h3>
+        <p class="proj-desc">Production-grade AKS cluster spanning two Azure regions — Cilium CNI, KEDA autoscaling, ArgoCD GitOps, Cosmos DB multi-region writes, and full OpenTelemetry observability. 99.99% uptime across 18 months.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">AKS</span><span class="proj-tag">Terraform</span><span class="proj-tag">ArgoCD</span>
+          <span class="proj-tag">Cilium</span><span class="proj-tag">KEDA</span><span class="proj-tag">Cosmos DB</span>
+        </div>
+        <a href="projects.html" class="proj-arrow">Explore Project</a>
+      </div>
+
+      <div class="proj-card" style="--pc:#85c99a">
+        <div class="proj-num">02</div>
+        <h3 class="proj-title">Terraform Module Registry</h3>
+        <p class="proj-desc">Internal registry of 50+ reusable Terraform modules standardising Azure provisioning across 12 product teams. OPA policy guardrails, automated testing with Terratest, and cost estimation via Infracost.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">Terraform</span><span class="proj-tag">OPA</span><span class="proj-tag">Terratest</span><span class="proj-tag">Infracost</span>
+        </div>
+        <a href="projects.html" class="proj-arrow">View Details</a>
+      </div>
+
+      <div class="proj-card" style="--pc:#d9b06e">
+        <div class="proj-num">03</div>
+        <h3 class="proj-title">Zero-Trust AKS with Cilium + Entra ID</h3>
+        <p class="proj-desc">End-to-end zero-trust networking on AKS — Cilium network policies, Entra ID Workload Identity, Key Vault CSI driver, and OPA admission controllers replacing traditional perimeter security.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">Cilium</span><span class="proj-tag">Entra ID</span><span class="proj-tag">OPA</span><span class="proj-tag">Key Vault</span>
+        </div>
+        <a href="projects.html" class="proj-arrow">View Details</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SKILLS ══ -->
+<section class="skills-sec">
+  <div class="sec-inner">
+    <div class="sec-hdr reveal">
+      <div>
+        <div class="sec-eyebrow">Expertise</div>
+        <h2 class="sec-title">Cloud-native<br><em>at every layer</em></h2>
+      </div>
+      <div>
+        <p class="sec-intro">Azure-first stack — from cluster provisioning to application delivery, observability, security, and developer tooling.</p>
+        <a href="about.html#skillsNav" class="sec-link" style="margin-top:1.2rem;display:inline-flex">Full Skills Breakdown</a>
+      </div>
+    </div>
+    <div class="skills-domains" id="skillsDomains">
+      <div class="skill-domain reveal"><span class="sd-icon">☁</span><div class="sd-name">Azure Platform</div><div class="sd-tools">AKS · Entra ID · Azure Monitor<br>Key Vault · Azure Policy · Front Door<br>Cosmos DB · Service Bus · Defender</div><div class="sd-level"><div class="sd-fill" style="--w:94%;--dc:#4da6d4"></div></div></div>
+      <div class="skill-domain reveal"><span class="sd-icon">⎈</span><div class="sd-name">Kubernetes</div><div class="sd-tools">Helm · ArgoCD · Flux CD · Cilium<br>KEDA · Argo Rollouts · Crossplane<br>cert-manager · Gateway API</div><div class="sd-level"><div class="sd-fill" style="--w:88%;--dc:#85c99a"></div></div></div>
+      <div class="skill-domain reveal"><span class="sd-icon">◩</span><div class="sd-name">Infrastructure as Code</div><div class="sd-tools">Terraform · Terratest · OPA / Rego<br>Terragrunt · Atlantis · Checkov<br>Infracost · Bicep · OpenTofu</div><div class="sd-level"><div class="sd-fill" style="--w:92%;--dc:#d9b06e"></div></div></div>
+      <div class="skill-domain reveal"><span class="sd-icon">◎</span><div class="sd-name">Observability</div><div class="sd-tools">Prometheus · Grafana · Loki<br>OpenTelemetry · Jaeger · Tempo<br>Alertmanager · Azure Monitor</div><div class="sd-level"><div class="sd-fill" style="--w:88%;--dc:#d97070"></div></div></div>
+      <div class="skill-domain reveal"><span class="sd-icon">⚙</span><div class="sd-name">CI / CD</div><div class="sd-tools">GitHub Actions · ArgoCD · Flux<br>Argo Rollouts · Azure Pipelines<br>Cosign · Trivy · Kaniko</div><div class="sd-level"><div class="sd-fill" style="--w:89%;--dc:#a87dd4"></div></div></div>
+      <div class="skill-domain reveal"><span class="sd-icon">⌨</span><div class="sd-name">Languages</div><div class="sd-tools">Go / Golang · HCL · Bash<br>Python · YAML · Rego<br>client-go · controller-runtime</div><div class="sd-level"><div class="sd-fill" style="--w:90%;--dc:#cabb5e"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WRITING ══ -->
+<section class="writing-sec">
+  <div class="sec-inner">
+    <div class="sec-hdr reveal">
+      <div>
+        <div class="sec-eyebrow">isBhuvan — Writing</div>
+        <h2 class="sec-title">Technical writing<br><em>from the trenches</em></h2>
+      </div>
+      <div>
+        <p class="sec-intro">Deep-dives into Azure, Kubernetes internals, Terraform patterns, and Golang tooling — written for engineers who want to understand, not just copy.</p>
+        <a href="blog.html" class="sec-link" style="margin-top:1.2rem;display:inline-flex">All Articles</a>
+      </div>
+    </div>
+    <div class="posts-grid">
+      <div class="post-card hero-post reveal">
+        <span class="post-series">Kubernetes Internals · Part 4</span>
+        <span class="post-cat">Kubernetes · Observability</span>
+        <h3 class="post-title">eBPF Observability on AKS: A Production Deep Dive</h3>
+        <p class="post-excerpt">How we replaced Istio sidecars with Cilium's eBPF-based observability on a 40-node AKS cluster — 60% lower overhead, richer network telemetry, and no more sidecar injection nightmares. Everything you need to actually do this in production.</p>
+        <a href="blog-post.html" class="post-arrow">Read Article</a>
+        <div class="post-meta">
+          <span>March 14, 2025</span><span class="post-dot"></span>
+          <span>12 min read</span><span class="post-dot"></span>
+          <span>AKS · eBPF · Cilium</span>
+        </div>
+      </div>
+      <div class="post-card reveal">
+        <span class="post-series">IaC at Scale · Part 2</span>
+        <span class="post-cat">Terraform · Azure</span>
+        <h3 class="post-title">Terraform Module Registries at Scale on Azure</h3>
+        <p class="post-excerpt">Building an internal registry of reusable Terraform modules — versioning strategy, OPA policy guardrails, Terratest patterns, and how we onboarded 12 teams without chaos.</p>
+        <a href="blog.html" class="post-arrow">Read Article</a>
+        <div class="post-meta"><span>Feb 28, 2025</span><span class="post-dot"></span><span>9 min read</span></div>
+      </div>
+      <div class="post-card reveal">
+        <span class="post-cat">Security · Networking</span>
+        <h3 class="post-title">Zero-Trust Networking with Cilium and Entra Workload Identity</h3>
+        <p class="post-excerpt">Replacing traditional perimeter security on AKS with Cilium network policies, Entra ID Workload Identity, and OPA admission controllers — a step-by-step production playbook.</p>
+        <a href="blog.html" class="post-arrow">Read Article</a>
+        <div class="post-meta"><span>Feb 10, 2025</span><span class="post-dot"></span><span>11 min read</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONNECT ══ -->
+<section class="connect-sec">
+  <div class="connect-eyebrow reveal">Let's Talk</div>
+  <h2 class="connect-h reveal">Talk cloud<br><em>engineering.</em></h2>
+  <p class="connect-sub reveal">Writing about Azure, Kubernetes, Terraform, and Golang at isBhuvan. If you want to discuss cloud engineering, collaborate on open source, or talk about an article — reach out.</p>
+  <div class="connect-chips reveal">
+    <a href="mailto:bhuvan@isbhuvan.dev" class="chip"><span class="chip-icon">✉</span>bhuvan@isbhuvan.dev</a>
+    <a href="https://github.com/isBhuvan" target="_blank" class="chip"><span class="chip-icon">⌥</span>github.com/isBhuvan</a>
+    <a href="https://isbhuvan.dev" class="chip"><span class="chip-icon">◎</span>isbhuvan.dev</a>
+    <a href="contact.html" class="chip"><span class="chip-icon">✦</span>@isBhuvan</a>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="ft-left">
+    <div class="ft-logo">is<span>B</span>huvan</div>
+    <span class="ft-copy">© 2025 Bhuvaneshwaran S · Azure Cloud Engineer · Bengaluru</span>
+  </div>
+  <ul class="ft-links">
+    <li><a href="about.html">About</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="resume.html">Résumé</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</footer>
+
+<!-- ══ SEARCH OVERLAY ══ -->
+<div class="search-overlay overlay" id="searchOverlay" onclick="closeSearch(event)">
+  <div class="search-box-wrap" onclick="event.stopPropagation()">
+    <div class="search-row">
+      <span class="search-icon">⌕</span>
+      <input class="search-input" id="searchInput" placeholder="Search pages, projects, articles…" oninput="doSearch(this.value)" autocomplete="off">
+      <span class="search-esc">ESC</span>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+    <div class="search-footer">
+      <span class="sf-hint"><span class="sf-key">↑↓</span> navigate</span>
+      <span class="sf-hint"><span class="sf-key">↵</span> open</span>
+      <span class="sf-hint"><span class="sf-key">ESC</span> close</span>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Scroll Reveal ── */
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('on'), i * 70);
+      revObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+setTimeout(() => document.querySelectorAll('.reveal:not(.on)').forEach(el => el.classList.add('on')), 900);
+
+/* ── Skill bar animation ── */
+const barObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.sd-fill').forEach(b => b.classList.add('go'));
+      barObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.2 });
+document.querySelectorAll('.skills-domains').forEach(el => barObs.observe(el));
+
+/* ── Search ── */
+const PAGES = [
+  { title:'About — Bhuvaneshwaran S',        url:'about.html',       icon:'◎', cat:'Page' },
+  { title:'Projects — Azure Platform Work',   url:'projects.html',    icon:'◈', cat:'Page' },
+  { title:'Blog — isBhuvan Writing',          url:'blog.html',        icon:'✦', cat:'Page' },
+  { title:'Résumé',                           url:'resume.html',      icon:'◩', cat:'Page' },
+  { title:'Contact',                          url:'contact.html',     icon:'✉', cat:'Page' },
+  { title:'eBPF Observability on AKS',        url:'blog-post.html',   icon:'✍', cat:'Article' },
+  { title:'Terraform Module Registries',      url:'blog.html',        icon:'✍', cat:'Article' },
+  { title:'Zero-Trust with Cilium + Entra',   url:'blog.html',        icon:'✍', cat:'Article' },
+  { title:'GitOps Patterns: ArgoCD vs Flux',  url:'blog.html',        icon:'✍', cat:'Article' },
+  { title:'Multi-Region AKS Platform',        url:'projects.html',    icon:'⬡', cat:'Project' },
+  { title:'Terraform Module Registry',        url:'projects.html',    icon:'⬡', cat:'Project' },
+  { title:'Zero-Trust AKS Security',          url:'projects.html',    icon:'⬡', cat:'Project' },
+];
+function doSearch(q) {
+  const res = document.getElementById('searchResults');
+  if (!q.trim()) { res.innerHTML=''; return; }
+  const matches = PAGES.filter(p => p.title.toLowerCase().includes(q.toLowerCase()));
+  res.innerHTML = matches.length
+    ? matches.map(p => `<a class="search-result" href="${p.url}"><span class="sr-icon">${p.icon}</span><span class="sr-title">${p.title}</span><span class="sr-cat">${p.cat}</span></a>`).join('')
+    : `<div style="padding:1.4rem 1.2rem;font-family:var(--fm);font-size:.75rem;color:var(--i4);">No results for "${q}"</div>`;
+}
+function openSearch() {
+  document.getElementById('searchOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('searchInput').focus(), 80);
+}
+function closeSearch(e) {
+  if (!e || e.target === document.getElementById('searchOverlay'))
+    document.getElementById('searchOverlay').classList.remove('open');
+}
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
+  if (e.key === 'Escape') closeSearch();
+});
+
+/* ── Theme Toggle ── */
+function applyTheme(light) {
+  document.documentElement.classList.toggle('light', light);
+  const l = document.getElementById('ttLbl');
+  if (l) l.textContent = light ? 'Light' : 'Dark';
+}
+function toggleTheme() {
+  const now = !document.documentElement.classList.contains('light');
+  localStorage.setItem('theme', now ? 'light' : 'dark');
+  applyTheme(now);
+}
+(function () {
+  const s = localStorage.getItem('theme');
+  applyTheme(s === 'light' || (!s && matchMedia('(prefers-color-scheme:light)').matches));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,528 @@
+---
+// src/pages/404.astro
+import "../styles/global.css";
+import "../styles/blog.css";
+import Head from "../components/Head.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <Head title="404 — Page Not Found · isBhuvan" />
+  </head>
+  <body>
+    <!-- Nav -->
+    <Nav />
+
+    <!-- Main -->
+    <main class="four-main">
+      <div class="card">
+        <!-- Terminal chrome -->
+        <div class="terminal-bar">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-yellow"></span>
+          <span class="dot dot-green"></span>
+          <span class="terminal-title">bash — isbhuvan.github.io</span>
+        </div>
+
+        <div class="card-body">
+          <!-- Glitch 404 -->
+          <div class="glitch-wrap">
+            <span class="glitch">404</span>
+          </div>
+
+          <!-- Terminal output -->
+          <div class="terminal-output">
+            <span class="t-line"
+              ><span class="t-prompt">~</span>
+              <span class="t-cmd"
+                >curl https://isbhuvan.github.io<span id="path-display"
+                ></span></span
+              ></span
+            >
+            <span class="t-line"
+              ><span class="t-err">Error 404: Not Found</span></span
+            >
+            <span class="t-line"
+              ><span class="t-muted"
+                >The page you requested does not exist.</span
+              ></span
+            >
+            <span class="t-line"
+              ><span class="t-muted"
+                >It may have been moved, deleted, or never existed.</span
+              ></span
+            >
+            <span class="t-line">&nbsp;</span>
+            <span class="t-line"
+              ><span class="t-prompt">~</span>
+              <span class="t-cmd">suggest --fix</span></span
+            >
+            <span class="t-line"
+              ><span class="t-ok"
+                >✓ Try navigating home or searching the blog.</span
+              ></span
+            >
+            <span class="t-line"
+              ><span class="t-prompt">~</span>
+              <span class="cursor"></span></span
+            >
+          </div>
+
+          <h1 class="err-title">Lost in the cloud?</h1>
+          <p class="err-sub">
+            This page doesn't exist — but the rest of the blog does.<br />Pick a
+            direction and get back on track.
+          </p>
+
+          <div class="actions">
+            <a href="/blog" class="btn-primary">
+              <svg viewBox="0 0 24 24"
+                ><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+                ></path><polyline points="9 22 9 12 15 12 15 22"
+                ></polyline></svg
+              >
+              Blog Home
+            </a>
+            <a href="/blog/archive" class="btn-secondary">
+              <svg viewBox="0 0 24 24"
+                ><line x1="8" y1="6" x2="21" y2="6"></line><line
+                  x1="8"
+                  y1="12"
+                  x2="21"
+                  y2="12"></line><line x1="8" y1="18" x2="21" y2="18"
+                ></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line
+                  x1="3"
+                  y1="12"
+                  x2="3.01"
+                  y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"
+                ></line></svg
+              >
+              Browse Archive
+            </a>
+          </div>
+
+          <div class="quick-links">
+            <a href="/" class="quick-link">Portfolio</a>
+            <a href="/blog" class="quick-link">All Posts</a>
+            <a href="/blog/archive" class="quick-link">Archive</a>
+            <a href="/blog" class="quick-link">Azure</a>
+            <a href="/blog" class="quick-link">Kubernetes</a>
+            <a href="/blog" class="quick-link">Terraform</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  html {
+    height: 100%;
+  }
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-y: auto;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+    transition:
+      background 0.3s,
+      color 0.3s;
+  }
+
+  /* ── Main ── */
+  .four-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+    position: relative;
+    overflow: visible;
+  }
+  .four-main::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(
+      circle,
+      var(--border) 1px,
+      transparent 1px
+    );
+    background-size: 32px 32px;
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Card ── */
+  .card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 580px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.07);
+    animation: slideUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  [data-theme="dark"] .card {
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ── Terminal chrome ── */
+  .terminal-bar {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0.65rem 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+  }
+  .dot-red {
+    background: #ff5f57;
+  }
+  .dot-yellow {
+    background: #febc2e;
+  }
+  .dot-green {
+    background: #28c840;
+  }
+  .terminal-title {
+    flex: 1;
+    text-align: center;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Card body ── */
+  .card-body {
+    padding: 3rem 2.5rem 2.5rem;
+    text-align: center;
+  }
+
+  /* ── Glitch 404 ── */
+  .glitch-wrap {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+  .glitch {
+    font-size: clamp(5rem, 18vw, 9rem);
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    position: relative;
+    display: inline-block;
+    animation: glitch-main 4s infinite;
+  }
+  .glitch::before,
+  .glitch::after {
+    content: "404";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    overflow: hidden;
+  }
+  .glitch::before {
+    color: #ef4444;
+    animation: glitch-top 4s infinite;
+    clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%);
+  }
+  .glitch::after {
+    color: #22d3ee;
+    animation: glitch-bottom 4s infinite;
+    clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+  }
+  @keyframes glitch-main {
+    0%,
+    90%,
+    100% {
+      transform: none;
+    }
+    92% {
+      transform: translateX(-2px);
+    }
+    94% {
+      transform: translateX(2px);
+    }
+    96% {
+      transform: translateX(-1px);
+    }
+  }
+  @keyframes glitch-top {
+    0%,
+    90%,
+    100% {
+      transform: translateX(0);
+      opacity: 0;
+    }
+    92% {
+      transform: translateX(-4px);
+      opacity: 0.8;
+    }
+    94% {
+      transform: translateX(4px);
+      opacity: 0.8;
+    }
+    96% {
+      transform: translateX(0);
+      opacity: 0;
+    }
+  }
+  @keyframes glitch-bottom {
+    0%,
+    90%,
+    100% {
+      transform: translateX(0);
+      opacity: 0;
+    }
+    92% {
+      transform: translateX(4px);
+      opacity: 0.8;
+    }
+    94% {
+      transform: translateX(-4px);
+      opacity: 0.8;
+    }
+    96% {
+      transform: translateX(0);
+      opacity: 0;
+    }
+  }
+
+  /* ── Terminal output ── */
+  .terminal-output {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    text-align: left;
+    margin: 1.5rem 0 2rem;
+    font-family: "Courier New", monospace;
+  }
+  .t-line {
+    font-size: 0.78rem;
+    line-height: 1.9;
+    display: block;
+  }
+  .t-prompt {
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .t-cmd {
+    color: var(--text);
+  }
+  .t-err {
+    color: #ef4444;
+  }
+  .t-muted {
+    color: var(--muted);
+  }
+  .t-ok {
+    color: #16a34a;
+  }
+  [data-theme="dark"] .t-ok {
+    color: #4ade80;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    background: var(--accent);
+    vertical-align: middle;
+    animation: blink 1.1s step-end infinite;
+    border-radius: 1px;
+    margin-left: 2px;
+  }
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+
+  /* ── Heading & sub ── */
+  .err-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .err-sub {
+    font-size: 0.88rem;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  /* ── Buttons ── */
+  .actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    font-family: var(--font);
+    padding: 0.65rem 1.4rem;
+    border-radius: 8px;
+    border: none;
+    text-decoration: none;
+    transition:
+      background 0.2s,
+      transform 0.15s;
+  }
+  .btn-primary:hover {
+    background: var(--accent2);
+    transform: translateY(-2px);
+  }
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: var(--font);
+    padding: 0.65rem 1.4rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    transition:
+      border-color 0.2s,
+      color 0.2s,
+      transform 0.15s;
+  }
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .btn-primary svg,
+  .btn-secondary svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ── Quick links ── */
+  .quick-links {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .quick-link {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 0.28rem 0.7rem;
+    border-radius: 5px;
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    transition:
+      color 0.18s,
+      border-color 0.18s;
+  }
+  .quick-link:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  /* Footer handled by Footer component */
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .four-main {
+      padding: 1.5rem 1rem 3rem;
+      align-items: flex-start;
+    }
+    .card {
+      border-radius: 14px;
+    }
+    .card-body {
+      padding: 1.75rem 1.25rem 1.5rem;
+    }
+    .terminal-output {
+      padding: 0.75rem 0.9rem;
+      margin: 1rem 0 1.5rem;
+    }
+    .t-line {
+      font-size: 0.7rem;
+      line-height: 1.8;
+    }
+    .actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .btn-primary,
+    .btn-secondary {
+      justify-content: center;
+    }
+    .glitch {
+      font-size: clamp(3.5rem, 20vw, 5rem);
+    }
+  }
+</style>
+
+<script>
+  // Show attempted path in terminal
+  const path = window.location.pathname;
+  const el = document.getElementById("path-display");
+  if (el && path && path !== "/") el.textContent = path;
+</script>

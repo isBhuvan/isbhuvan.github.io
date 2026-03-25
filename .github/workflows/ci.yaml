@@ -3,9 +3,6 @@ name: CI
 on:
   pull_request:
 
-permissions:
-  contents: read
-
 jobs:
   quality-checks:
     runs-on: ubuntu-latest
@@ -35,8 +32,23 @@ jobs:
             --to=${{ github.event.pull_request.head.sha }} \
             --verbose
 
+      - name: Type Check
+        run: npx astro check
+
+      - name: Dependency Audit
+        run: npm audit --audit-level=high
+
+      - name: Build
+        run: npm run build
+
       - name: HTML Lint
-        run: npx htmlhint "**/*.html"
+        run: npx htmlhint "dist/**/*.html"
+
+      - name: Check Links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --no-progress --root-dir ./dist --config .lychee.toml './dist/**/*.html'
+          fail: true
 
       - name: Lighthouse Check
-        run: npm run lighthouse
+        run: npx @lhci/cli autorun

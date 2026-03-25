@@ -1,0 +1,1041 @@
+---
+// src/pages/blog/series/[slug].astro
+import BlogLayout from "../../../layouts/BlogLayout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const allSeries = await getCollection("series");
+  return allSeries.map((s) => ({
+    params: { slug: s.slug },
+    props: { entry: s },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const blogPosts = await getCollection("blog", ({ data }) => !data.draft);
+const publishedSlugs = new Set(blogPosts.map((p) => p.id.split("/").at(-1) ?? p.id));
+
+const {
+  title,
+  description,
+  level,
+  hours,
+  status,
+  statusLabel,
+  topics,
+  objectives,
+  prerequisites,
+  modules,
+  iconPath = "M4 19.5A2.5 2.5 0 0 1 6.5 17H20 M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z",
+  accentHue = "220",
+} = entry.data;
+
+const totalPosts = modules.reduce((acc, m) => acc + m.posts.length, 0);
+const donePosts = modules.reduce(
+  (acc, m) => acc + m.posts.filter((p) => publishedSlugs.has(p.slug)).length,
+  0,
+);
+
+
+const levelMeta: Record<string, { label: string; icon: string }> = {
+  beginner: {
+    label: "Beginner",
+    icon: "M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z",
+  },
+  intermediate: {
+    label: "Intermediate",
+    icon: "M13 2L3 14h9l-1 8 10-12h-9l1-8z",
+  },
+  advanced: {
+    label: "Advanced",
+    icon: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z",
+  },
+};
+const lvl = levelMeta[level] ?? levelMeta.intermediate;
+---
+
+<BlogLayout
+  title={`isBhuvan / Series / ${title}`}
+  description={description}
+  crumbs={[
+    { label: "Blog", href: "/blog" },
+    { label: "Series", href: "/blog#series" },
+    { label: title },
+  ]}
+>
+  <!-- ═══ HERO ════════════════════════════════════════════════════ -->
+  <section class="series-hero" style={`--hue: ${accentHue}`}>
+    <div class="sh-grid-bg" aria-hidden="true"></div>
+    <div class="sh-inner">
+      <div class="sh-eyebrow">
+        <svg viewBox="0 0 24 24"><path d={iconPath}></path></svg>
+        Learning Series
+      </div>
+
+      <h1 class="sh-title">{title}</h1>
+      <p class="sh-desc">{description}</p>
+
+      <!-- Stat pills -->
+      <div class="sh-stats">
+        <div class="sh-stat">
+          <svg viewBox="0 0 24 24"><path d={lvl.icon}></path></svg>
+          {lvl.label}
+        </div>
+        <div class="sh-stat-divider"></div>
+        <div class="sh-stat">
+          <svg viewBox="0 0 24 24"
+            ><circle cx="12" cy="12" r="10"></circle><polyline
+              points="12 6 12 12 16 14"></polyline></svg
+          >
+          {hours}h total
+        </div>
+        <div class="sh-stat-divider"></div>
+        <div class="sh-stat">
+          <svg viewBox="0 0 24 24"
+            ><path
+              d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20 M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+            ></path></svg
+          >
+          {totalPosts}
+          {totalPosts === 1 ? "part" : "parts"}
+        </div>
+        <div class="sh-stat-divider"></div>
+        <span class={`sh-status ${status}`}>{statusLabel}</span>
+      </div>
+
+      <!-- Topics -->
+      <div class="sh-topics">
+        {
+          topics.map((t) => (
+            <a
+              href="/blog"
+              class="sh-topic"
+            >
+              {t}
+            </a>
+          ))
+        }
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ PROGRESS BAR ═══════════════════════════════════════════ -->
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-inner">
+      <span class="progress-label">{donePosts} of {totalPosts} published</span>
+      <div class="progress-track">
+        <div
+          class="progress-fill"
+          style={`width: ${Math.round((donePosts / totalPosts) * 100)}%`}
+        >
+        </div>
+      </div>
+      <span class="progress-pct"
+        >{Math.round((donePosts / totalPosts) * 100)}%</span
+      >
+    </div>
+  </div>
+
+  <!-- ═══ MAIN BODY ════════════════════════════════════════════════ -->
+  <main class="series-main">
+    <div class="sm-wrap">
+      <div class="sm-layout">
+        <!-- ── Curriculum (left) ── -->
+        <div class="curriculum">
+          <!-- About this series (markdown body) -->
+          {
+            entry.body && entry.body.trim() !== "" && (
+              <div class="about-series reveal">
+                <div class="section-label">About this Series</div>
+                <div class="about-content">
+                  <Content />
+                </div>
+              </div>
+            )
+          }
+
+          <div class="section-label reveal">Curriculum</div>
+
+          {
+            modules.map((mod, mi) => (
+              <div class="module reveal">
+                <div class="module-header">
+                  <div class="module-num">Module {mi + 1}</div>
+                  <h2 class="module-title">{mod.heading}</h2>
+                </div>
+
+                <div class="module-posts">
+                  {mod.posts.map((post, pi) => {
+                    const globalIdx =
+                      modules
+                        .slice(0, mi)
+                        .reduce((a, m) => a + m.posts.length, 0) +
+                      pi +
+                      1;
+                    return (
+                      <a
+                        href={publishedSlugs.has(post.slug) ? `/blog/${post.slug}` : undefined}
+                        class={`module-post ${publishedSlugs.has(post.slug) ? "done" : "upcoming"}`}
+                        aria-disabled={!publishedSlugs.has(post.slug)}
+                      >
+                        <div class="mp-indicator">
+                          {publishedSlugs.has(post.slug) ? (
+                            <svg viewBox="0 0 24 24">
+                              <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                          ) : (
+                            <span>{globalIdx}</span>
+                          )}
+                        </div>
+
+                        <div class="mp-body">
+                          <div class="mp-title">{post.title}</div>
+                          <div class="mp-meta">
+                            {post.readTime && (
+                              <span class="mp-time">
+                                <svg viewBox="0 0 24 24">
+                                  <circle cx="12" cy="12" r="10" />
+                                  <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                                {post.readTime} read
+                              </span>
+                            )}
+                            {!publishedSlugs.has(post.slug) && (
+                              <span class="mp-soon">Coming soon</span>
+                            )}
+                          </div>
+                        </div>
+
+                        {publishedSlugs.has(post.slug) && (
+                          <svg class="mp-arrow" viewBox="0 0 24 24">
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
+                          </svg>
+                        )}
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+
+        <!-- ── Sidebar (right) ── -->
+        <aside class="sidebar">
+          <!-- What you'll learn -->
+          <div class="sidebar-card reveal">
+            <h3 class="sc-title">
+              <svg viewBox="0 0 24 24"
+                ><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline
+                  points="22 4 12 14.01 9 11.01"></polyline></svg
+              >
+              What you'll learn
+            </h3>
+            <ul class="objective-list">
+              {
+                objectives.map((obj) => (
+                  <li class="objective-item">
+                    <svg viewBox="0 0 24 24">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    <span>{obj}</span>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+
+          <!-- Prerequisites -->
+          {
+            prerequisites.length > 0 && (
+              <div class="sidebar-card reveal">
+                <h3 class="sc-title">
+                  <svg viewBox="0 0 24 24">
+                    <>
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="12" y1="8" x2="12" y2="12" />
+                      <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </>
+                  </svg>
+                  Prerequisites
+                </h3>
+                <ul class="prereq-list">
+                  {prerequisites.map((pre) => (
+                    <li class="prereq-item">
+                      <svg viewBox="0 0 24 24">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                      </svg>
+                      <span>{pre}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) 
+          }
+        </aside>
+      </div>
+    </div>
+  </main>
+</BlogLayout>
+
+<style>
+  /* ── Design tokens shorthand ── */
+  .series-hero {
+    --hue: 220;
+  }
+
+  /* ════════════════════════════════
+     HERO
+  ════════════════════════════════ */
+  .series-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 5rem 0 4rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .sh-grid-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.3;
+  }
+  /* Accent top-bar */
+  .series-hero::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      hsl(var(--hue), 72%, 50%),
+      hsl(var(--hue), 60%, 70%)
+    );
+  }
+
+  .sh-inner {
+    position: relative;
+    z-index: 1;
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .sh-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.25rem;
+  }
+  .sh-eyebrow svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .sh-eyebrow::before {
+    content: "";
+    display: inline-block;
+    width: 24px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  .sh-title {
+    font-size: clamp(2rem, 5.5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.07;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    margin-bottom: 1.1rem;
+    max-width: 760px;
+  }
+  .sh-desc {
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 600px;
+    margin-bottom: 2rem;
+  }
+
+  /* Stat pills */
+  .sh-stats {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+  .sh-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--muted);
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+  .sh-stat svg {
+    width: 13px;
+    height: 13px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .sh-stat-divider {
+    width: 1px;
+    height: 18px;
+    background: var(--border);
+  }
+  .sh-status {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.28rem 0.7rem;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: var(--tag-bg);
+  }
+  .sh-status.active {
+    color: #16a34a;
+    border-color: rgba(22, 163, 74, 0.3);
+    background: rgba(22, 163, 74, 0.06);
+  }
+  [data-theme="dark"] .sh-status.active {
+    color: #4ade80;
+  }
+  .sh-status.complete {
+    color: var(--accent);
+    border-color: rgba(37, 99, 235, 0.25);
+    background: rgba(37, 99, 235, 0.06);
+  }
+  [data-theme="dark"] .sh-status.complete {
+    border-color: rgba(59, 130, 246, 0.25);
+    background: rgba(59, 130, 246, 0.07);
+  }
+
+  /* Topics */
+  .sh-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 2rem;
+  }
+  .sh-topic {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.65rem;
+    border-radius: 5px;
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    text-decoration: none;
+    transition:
+      color 0.18s,
+      border-color 0.18s;
+  }
+  .sh-topic:hover {
+    color: var(--accent);
+    border-color: rgba(37, 99, 235, 0.35);
+  }
+
+  /* CTAs */
+  .sh-ctas {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .sh-cta-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.6rem;
+    border-radius: 8px;
+    background: var(--accent);
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition:
+      background 0.2s,
+      gap 0.2s;
+  }
+  .sh-cta-primary:hover {
+    background: var(--accent2);
+    gap: 0.75rem;
+  }
+  .sh-cta-primary svg {
+    width: 15px;
+    height: 15px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .sh-cta-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.73rem 1.2rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    transition:
+      border-color 0.18s,
+      color 0.18s;
+  }
+  .sh-cta-ghost:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .sh-cta-ghost svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ════════════════════════════════
+     PROGRESS BAR
+  ════════════════════════════════ */
+  .progress-bar-wrap {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0.85rem 0;
+  }
+  .progress-bar-inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .progress-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .progress-track {
+    flex: 1;
+    height: 5px;
+    border-radius: 99px;
+    background: var(--border);
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: var(--accent);
+    transition: width 0.6s ease;
+  }
+  .progress-pct {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  /* ════════════════════════════════
+     MAIN LAYOUT
+  ════════════════════════════════ */
+  .series-main {
+    padding: 3.5rem 0 6rem;
+  }
+  .sm-wrap {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  .sm-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  /* ── Section label ── */
+  .section-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .section-label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ════════════════════════════════
+     CURRICULUM
+  ════════════════════════════════ */
+  .curriculum {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  /* Module block */
+  .module {
+  }
+  .module-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  .module-num {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    white-space: nowrap;
+    padding: 0.15rem 0.55rem;
+    border-radius: 4px;
+    background: rgba(37, 99, 235, 0.07);
+    border: 1px solid rgba(37, 99, 235, 0.18);
+    flex-shrink: 0;
+  }
+  [data-theme="dark"] .module-num {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.22);
+  }
+  .module-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    line-height: 1.3;
+  }
+
+  /* Posts inside a module */
+  .module-posts {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .module-post {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.18s;
+  }
+  .module-post:last-child {
+    border-bottom: none;
+  }
+  .module-post.done:hover {
+    background: var(--bg);
+  }
+  .module-post.upcoming {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  /* Indicator (check or number) */
+  .mp-indicator {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--border);
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+  .module-post.done .mp-indicator {
+    background: var(--accent);
+    color: #fff;
+  }
+  .mp-indicator svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Post body */
+  .mp-body {
+    flex: 1;
+    min-width: 0;
+  }
+  .mp-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--muted);
+    line-height: 1.4;
+    margin-bottom: 0.25rem;
+  }
+  .module-post.done .mp-title {
+    color: var(--text);
+  }
+  .mp-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .mp-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+  }
+  .mp-time svg {
+    width: 11px;
+    height: 11px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+  .mp-soon {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.08rem 0.45rem;
+  }
+
+  /* Arrow */
+  .mp-arrow {
+    width: 14px;
+    height: 14px;
+    stroke: var(--muted);
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+    transition: stroke 0.18s;
+  }
+  .module-post.done:hover .mp-arrow {
+    stroke: var(--accent);
+  }
+
+  /* About section (markdown body) */
+  .about-series {
+    margin-top: 1rem;
+  }
+  .about-content {
+    font-size: 0.92rem;
+    color: var(--muted);
+    line-height: 1.85;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+  }
+  /* <Content /> renders markdown without CID — :global() required */
+  .about-content :global(p) {
+    margin-bottom: 1rem;
+  }
+  .about-content :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  /* ════════════════════════════════
+     SIDEBAR
+  ════════════════════════════════ */
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    position: sticky;
+    top: 80px;
+  }
+
+  .sidebar-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.4rem;
+  }
+  .sc-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    margin-bottom: 1rem;
+  }
+  .sc-title svg {
+    width: 15px;
+    height: 15px;
+    stroke: var(--accent);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+  }
+
+  /* Objectives */
+  .objective-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+  .objective-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.83rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .objective-item svg {
+    width: 14px;
+    height: 14px;
+    stroke: #16a34a;
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  [data-theme="dark"] .objective-item svg {
+    stroke: #4ade80;
+  }
+
+  /* Prerequisites */
+  .prereq-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .prereq-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.83rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .prereq-item svg {
+    width: 12px;
+    height: 12px;
+    stroke: var(--muted);
+    fill: none;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  /* At a glance */
+  .glance-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .glance-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.82rem;
+  }
+  .glance-row:last-child {
+    border-bottom: none;
+  }
+  .glance-row dt {
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .glance-row dd {
+    font-weight: 700;
+    color: var(--text);
+  }
+  .glance-status {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.16rem 0.5rem;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: var(--tag-bg);
+  }
+  .glance-status.active {
+    color: #16a34a;
+    border-color: rgba(22, 163, 74, 0.3);
+    background: rgba(22, 163, 74, 0.06);
+  }
+  [data-theme="dark"] .glance-status.active {
+    color: #4ade80;
+  }
+  .glance-status.complete {
+    color: var(--accent);
+    border-color: rgba(37, 99, 235, 0.25);
+    background: rgba(37, 99, 235, 0.06);
+  }
+
+  /* Sidebar CTA */
+  .sidebar-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.4rem;
+    border-radius: 8px;
+    background: var(--accent);
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 700;
+    transition:
+      background 0.2s,
+      gap 0.2s;
+  }
+  .sidebar-cta:hover {
+    background: var(--accent2);
+    gap: 0.75rem;
+  }
+  .sidebar-cta svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ════════════════════════════════
+     REVEAL
+  ════════════════════════════════ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 0.5s ease,
+      transform 0.5s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ════════════════════════════════
+     RESPONSIVE
+  ════════════════════════════════ */
+  @media (max-width: 960px) {
+    .sm-layout {
+      grid-template-columns: 1fr;
+    }
+    .sidebar {
+      position: static;
+    }
+  }
+  @media (max-width: 640px) {
+    .series-hero {
+      padding: 3rem 0 2.5rem;
+    }
+    .sh-title {
+      font-size: 2rem;
+    }
+    .sh-stats {
+      gap: 0.5rem;
+    }
+    .sh-stat-divider {
+      display: none;
+    }
+    .sm-wrap {
+      padding: 0 1rem;
+    }
+    .module-post {
+      padding: 0.85rem 1rem;
+    }
+  }
+</style>
+
+<script>
+  // Scroll reveal
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("visible");
+          obs.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.06 },
+  );
+  document.querySelectorAll(".reveal").forEach((el) => obs.observe(el));
+</script>

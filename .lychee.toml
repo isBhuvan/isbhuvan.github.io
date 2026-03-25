@@ -1,0 +1,19 @@
+# Lychee link checker configuration
+# https://lychee.cli.rs/usage/config/
+
+# Accept these HTTP status codes as valid (429 = rate-limited, treat as OK)
+accept = [200, 204, 206, 429]
+
+# Exclude the production site itself — local HTML files contain absolute URLs
+# pointing to the live site, which may not be deployed yet
+exclude = [
+  # Production site — may not be deployed when CI runs
+  "^https://isbhuvan\\.github\\.io",
+  # Platforms that block automated requests (403/429/999)
+  "^https://medium\\.com",
+  "^https://www\\.hashicorp\\.com",
+  "^https://linkedin\\.com",
+  "^https://www\\.linkedin\\.com",
+]
+
+exclude_loopback = false

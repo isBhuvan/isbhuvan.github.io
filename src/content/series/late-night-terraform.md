@@ -1,0 +1,82 @@
+---
+title: "Late Night Terraform"
+description: "A 16-part after-hours journey through Terraform Associate (004): from IaC fundamentals and workflow mechanics to state, imports, governance, and final exam reflections."
+level: "beginner"
+hours: 4
+status: "complete"
+statusLabel: "Complete"
+topics: ["Terraform", "IaC", "Certification", "DevOps"]
+objectives:
+  - "Build a solid Terraform Associate (004) foundation from fundamentals to advanced workflows"
+  - "Understand Terraform configuration language, core blocks, expressions, and module design"
+  - "Operate Terraform safely with lifecycle controls, state management, and import strategies"
+  - "Apply team-scale practices using remote backends, governance patterns, and HCP Terraform"
+  - "Translate certification prep into practical day-to-day infrastructure engineering habits"
+prerequisites:
+  - "Basic cloud knowledge (any provider)"
+  - "Comfort with command-line workflows"
+  - "Familiarity with version control (Git)"
+modules:
+  - heading: "Foundations"
+    posts:
+      - slug: "001-late-night-terraform-the-midnight-journal"
+        title: "Late Night Terraform: The Midnight Journal"
+        readTime: "8 min"
+      - slug: "002-late-night-terraform-the-blueprint-wall"
+        title: "Late Night Terraform: The Blueprint Wall"
+        readTime: "8 min"
+      - slug: "003-late-night-terraform-the-iac-monologue"
+        title: "Late Night Terraform: The IaC Monologue"
+        readTime: "12 min"
+      - slug: "004-late-night-terraform-the-engine-under-the-hood"
+        title: "Late Night Terraform: The Engine Under the Hood"
+        readTime: "12 min"
+  - heading: "Core Workflow & Language"
+    posts:
+      - slug: "005-late-night-terraform-hands-on-the-keyboard"
+        title: "Late Night Terraform: Hands on the Keyboard"
+        readTime: "17 min"
+      - slug: "006-late-night-terraform-the-grammar-of-infrastructure"
+        title: "Late Night Terraform: The Grammar of Infrastructure"
+        readTime: "5 min"
+      - slug: "007-late-night-terraform-the-four-pillars"
+        title: "Late Night Terraform: The Four Pillars"
+        readTime: "18 min"
+      - slug: "008-late-night-terraform-escaping-hard-coded-walls"
+        title: "Late Night Terraform: Escaping Hard-Coded Walls"
+        readTime: "17 min"
+  - heading: "Safety, State & Scale"
+    posts:
+      - slug: "009-late-night-terraform-the-logic-gate"
+        title: "Late Night Terraform: The Logic Gate"
+        readTime: "15 min"
+      - slug: "010-late-night-terraform-the-safety-net"
+        title: "Late Night Terraform: The Safety Net"
+        readTime: "15 min"
+      - slug: "011-late-night-terraform-the-vault-door"
+        title: "Late Night Terraform: The Vault Door"
+        readTime: "8 min"
+      - slug: "012-late-night-terraform-the-assembly-line"
+        title: "Late Night Terraform: The Assembly Line"
+        readTime: "18 min"
+      - slug: "013-late-night-terraform-the-source-of-truth"
+        title: "Late Night Terraform: The Source of Truth"
+        readTime: "13 min"
+      - slug: "014-late-night-terraform-adopting-the-past"
+        title: "Late Night Terraform: Adopting the Past"
+        readTime: "7 min"
+  - heading: "Team Ops & Wrap-Up"
+    posts:
+      - slug: "015-late-night-terraform-mission-control"
+        title: "Late Night Terraform: Mission Control"
+        readTime: "26 min"
+      - slug: "016-late-night-terraform-the-lights-stay-on"
+        title: "Late Night Terraform: The Lights Stay On"
+        readTime: "5 min"
+iconPath: "M4 19.5A2.5 2.5 0 0 1 6.5 17H20 M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+accentHue: "24"
+---
+
+Late Night Terraform is a practical, story-driven series built during real exam preparation windows after work and family hours. It follows the Terraform Associate (004) scope while keeping the focus on production habits: predictable workflows, safe change management, and repeatable infrastructure design.
+
+If you're revisiting Terraform fundamentals or preparing for certification, this series gives you a structured path from first principles to team-scale operations.

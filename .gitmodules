@@ -1,0 +1,6 @@
+[submodule "src/content/blog"]
+	path = src/content/blog
+	url = https://github.com/isBhuvan/isbhuvan-blog.git
+[submodule "src/content/references"]
+	path = src/content/references
+	url = https://github.com/isBhuvan/isbhuvan-docs.git
