@@ -12,6 +12,9 @@
     "@astrojs/rss": "^4.0.17",
     "astro": "^5.17.1"
   },
+  "overrides": {
+    "fast-xml-parser": "^5.5.9"
+  },
   "devDependencies": {
     "@astrojs/check": "^0.9.7",
     "@commitlint/cli": "^20.4.4",
