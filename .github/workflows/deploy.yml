@@ -18,10 +18,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout with submodules
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
+
+      - name: Init submodules
+        run: git submodule update --init --recursive
 
       - name: Setup Node
         uses: actions/setup-node@v4
