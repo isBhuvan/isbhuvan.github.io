@@ -1,0 +1,66 @@
+---
+// src/layouts/BaseLayout.astro
+import "../styles/global.css";
+import Head from "../components/Head.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import Preloader from "../components/Preloader.astro";
+import Scripts from "../components/Scripts.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Extra JSON-LD schemas to inject alongside the base Person schema */
+  jsonLd?: object[];
+}
+
+const {
+  title = "isBhuvan — Portfolio",
+  description = "Azure Cloud Engineer. Building resilient cloud infrastructure and automating everything from code to production.",
+  jsonLd: extraJsonLd = [],
+} = Astro.props;
+
+const canonicalUrl = Astro.url.href;
+const siteUrl = String(Astro.site).replace(/\/$/, "");
+const ogImage = `${siteUrl}/android-chrome-512x512.png`;
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Bhuvan",
+  url: siteUrl,
+  image: `${siteUrl}/android-chrome-512x512.png`,
+  jobTitle: "Azure Cloud Engineer",
+  description: "Azure Cloud Engineer with 10+ years building resilient infrastructure, writing Terraform modules, and automating everything from code to production.",
+  knowsAbout: ["Azure", "Kubernetes", "Terraform", "Docker", "GitOps", "ArgoCD", "Prometheus", "Platform Engineering"],
+  sameAs: [
+    "https://github.com/isbhuvan",
+    "https://linkedin.com/in/isbhuvan",
+  ],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <Head
+      title={title}
+      description={description}
+      canonicalUrl={canonicalUrl}
+      ogImage={ogImage}
+      author="Bhuvan"
+      jsonLd={[personSchema, ...extraJsonLd]}
+      devicons={true}
+    />
+  </head>
+
+  <body>
+    <Preloader />
+    <Nav />
+    <main data-pagefind-body>
+      <slot />
+    </main>
+    <Footer />
+    <Scripts revealMode="portfolio" />
+  </body>
+</html>

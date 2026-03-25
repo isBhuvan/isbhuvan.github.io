@@ -1,26 +1,52 @@
-## 📝 Description
+<!-- markdownlint-disable MD041 -->
 
-Provide a brief summary of the changes introduced by this PR.
-*Example: Added a new 'Skills' section using Bootstrap progress bars.*
+## 📌 Summary
 
-## 💡 Type of Change
+Brief description of the changes introduced.
 
-Please delete options that are not relevant.
+---
 
-- [ ] 🚀 New feature (non-breaking change which adds functionality)
-- [ ] 🎨 Style/UI update (CSS, layout, or design changes)
-- [ ] 🐞 Bug fix (non-breaking change which fixes an issue)
-- [ ] 🧹 Refactor (code cleanup or structural changes)
-- [ ] 📝 Documentation update
+## 🔍 Type of Change
 
-## 📸 Screenshots (If applicable)
+- [ ] feat (new feature)
+- [ ] fix (bug fix)
+- [ ] docs (documentation update)
+- [ ] refactor (code restructuring)
+- [ ] perf (performance improvement)
+- [ ] chore (maintenance)
 
-*Place screenshots or GIFs here to show the visual changes.*
+---
 
-## ✅ Checklist
+## 🧪 Testing
 
-- [ ] My code follows the style guidelines of this project.
-- [ ] I have performed a self-review of my own code.
-- [ ] I have commented my code, particularly in hard-to-understand areas.
-- [ ] My changes generate no new console errors or warnings.
-- [ ] (Optional) I have tested the responsiveness on mobile/tablet.
+Describe how this was tested:
+
+- [ ] Local browser testing
+- [ ] Mobile responsiveness verified
+- [ ] Lighthouse score checked
+- [ ] No console errors
+
+---
+
+## 📸 Screenshots (if UI changes)
+
+Attach before/after screenshots where applicable.
+
+---
+
+## 🚀 Release Notes
+
+If this affects versioning:
+
+- Does this introduce a feature?
+- Does this fix a bug?
+- Is this a breaking change?
+
+---
+
+## 📎 Checklist
+
+- [ ] Follows Conventional Commit format
+- [ ] No broken links introduced
+- [ ] No lint errors
+- [ ] CHANGELOG will update correctly

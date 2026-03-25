@@ -1,0 +1,1519 @@
+---
+// src/pages/blog/[slug].astro
+import BlogLayout from "../../layouts/BlogLayout.astro";
+import Giscus from "../../components/Giscus.astro";
+import { getCollection, getEntry, render } from "astro:content";
+import { Image } from "astro:assets";
+import { flatSlug, calcReadTime, fmtDate } from "../../lib/utils";
+import { resolveCover } from "../../lib/images";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((p) => ({
+    params: { slug: p.id.split("/").at(-1) ?? p.id },
+    props: { post: p },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const sorted = allPosts.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+);
+
+const currentIdx = sorted.findIndex(
+  (p) => flatSlug(p.id) === flatSlug(post.id),
+);
+const prevPost = sorted[currentIdx + 1] ?? null;
+const nextPost = sorted[currentIdx - 1] ?? null;
+
+// Related = same tags, excluding self
+const related = sorted
+  .filter(
+    (p) =>
+      flatSlug(p.id) !== flatSlug(post.id) &&
+      p.data.tags.some((t) => post.data.tags.includes(t)),
+  )
+  .slice(0, 3);
+
+const readingTime = calcReadTime(post.body, post.data.readTime);
+
+// Series context — look up the parent series if the post declares one
+const seriesEntry = post.data.series
+  ? await getEntry("series", post.data.series)
+  : null;
+// Series-ordered prev/next (only for series posts)
+const seriesAllSlugs = seriesEntry
+  ? seriesEntry.data.modules.flatMap((m) =>
+      m.posts.map((p) => flatSlug(p.slug)),
+    )
+  : [];
+const seriesIdx = seriesAllSlugs.indexOf(flatSlug(post.id));
+const seriesPrevSlug = seriesIdx > 0 ? seriesAllSlugs[seriesIdx - 1] : null;
+const seriesNextSlug =
+  seriesIdx < seriesAllSlugs.length - 1 ? seriesAllSlugs[seriesIdx + 1] : null;
+const bySlug = Object.fromEntries(allPosts.map((p) => [flatSlug(p.id), p]));
+const seriesPrevPost = seriesPrevSlug ? (bySlug[seriesPrevSlug] ?? null) : null;
+const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
+---
+
+<BlogLayout
+  title={`${post.data.title} — isBhuvan`}
+  description={post.data.description}
+  crumbs={[{ label: "Blog", href: "/blog" }, { label: post.data.title }]}
+  publishedTime={post.data.date.toISOString()}
+  updatedTime={post.data.updatedAt?.toISOString()}
+  tags={post.data.tags}
+  author={post.data.author}
+>
+  <!-- Reading progress bar -->
+  <div id="progress-bar"></div>
+
+  <!-- Scroll to top -->
+  <button id="scroll-top-btn" aria-label="Scroll to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"/>
+    </svg>
+  </button>
+
+  <!-- Post hero -->
+  <section class="post-hero">
+    <div class="post-hero-inner">
+      <div class="post-eyebrow">{post.data.tags.join(" · ")}</div>
+      <h1 class="post-title">{post.data.title}</h1>
+      {
+        post.data.description && (
+          <p class="post-subtitle">{post.data.description}</p>
+        )
+      }
+      <div class="post-meta">
+        <div class="meta-item">
+          <svg viewBox="0 0 24 24"
+            ><rect x="3" y="4" width="18" height="18" rx="2"></rect><line
+              x1="16"
+              y1="2"
+              x2="16"
+              y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line
+              x1="3"
+              y1="10"
+              x2="21"
+              y2="10"></line></svg
+          >
+          {fmtDate(post.data.date)}
+        </div>
+        <div class="meta-divider"></div>
+        <div class="meta-item">
+          <svg viewBox="0 0 24 24"
+            ><circle cx="12" cy="12" r="10"></circle><polyline
+              points="12 6 12 12 16 14"></polyline></svg
+          >
+          {readingTime} read
+        </div>
+        <div class="meta-divider"></div>
+        <div class="meta-item">
+          <svg viewBox="0 0 24 24"
+            ><circle cx="12" cy="8" r="4"></circle><path
+              d="M4 20c0-4 3.6-7 8-7s8 3 8 7"></path></svg
+          >
+          Bhuvan
+        </div>
+      </div>
+      <div class="post-tags">
+        {
+          post.data.tags.map((t) => (
+            <a
+              href="/blog"
+              class={`post-tag${t === post.data.primaryTag ? " post-tag--primary" : ""}`}
+            >
+              {t}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Cover image area -->
+  <div class="post-cover">
+    <div
+      class={`cover-img${resolveCover(post.data.cover) ? " has-photo" : ""}`}
+    >
+      {
+        resolveCover(post.data.cover) ? (
+          <Image
+            src={resolveCover(post.data.cover)!}
+            alt={post.data.title}
+            class="cover-photo"
+            width={800}
+            loading="eager"
+            fetchpriority="high"
+          />
+        ) : (
+          <>
+            <svg
+              class="cover-pattern"
+              viewBox="0 0 800 220"
+              preserveAspectRatio="xMidYMid slice"
+            >
+              <defs>
+                <pattern
+                  id="cp1"
+                  x="0"
+                  y="0"
+                  width="40"
+                  height="40"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <circle
+                    cx="20"
+                    cy="20"
+                    r="1.2"
+                    fill="currentColor"
+                    opacity="0.35"
+                  />
+                </pattern>
+              </defs>
+              <rect width="800" height="220" fill="url(#cp1)" />
+            </svg>
+            <svg class="cover-icon" viewBox="0 0 24 24">
+              <path d="M6.5 20a5.5 5.5 0 1 1 0-11 5.995 5.995 0 0 1 11.9-1A4.5 4.5 0 0 1 19.5 17H6.5z" />
+            </svg>
+          </>
+        )
+      }
+    </div>
+  </div>
+
+  <!-- Content + TOC -->
+  <div class="content-wrap">
+    <article class="article" id="article">
+      <Content />
+    </article>
+
+    <!-- Sticky TOC -->
+    <aside class="toc" id="toc">
+      <div class="toc-label">On this page</div>
+      <ul class="toc-list" id="toc-list">
+        <!-- Populated by JS -->
+      </ul>
+      {
+        post.data.crossPost &&
+          (post.data.crossPost.medium || post.data.crossPost.dev) && (
+            <div class="toc-cross-post">
+              <div class="toc-share-label">Also published on</div>
+              <div class="toc-cross-links">
+                {post.data.crossPost.medium && (
+                  <a
+                    href={post.data.crossPost.medium}
+                    class="toc-cross-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Medium"
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M13.54 12a6.8 6.8 0 0 1-6.77 6.82A6.8 6.8 0 0 1 0 12a6.8 6.8 0 0 1 6.77-6.82A6.8 6.8 0 0 1 13.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z" />
+                    </svg>
+                    Medium
+                  </a>
+                )}
+                {post.data.crossPost.dev && (
+                  <a
+                    href={post.data.crossPost.dev}
+                    class="toc-cross-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="DEV"
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M7.42 10.05c-.18-.16-.46-.23-.84-.23H6l.02 2.44.04 2.45.56-.02c.41 0 .63-.07.83-.26.24-.24.26-.36.26-2.2 0-1.91-.02-1.96-.29-2.18zM0 4.94v14.12h24V4.94H0zM8.56 15.3c-.44.58-1.06.77-2.53.77H4.71V8.53h1.4c1.67 0 2.16.18 2.6.9.27.43.29.6.32 2.57.05 2.23-.02 2.73-.47 3.3zm5.09-5.47h-2.47v1.77h1.52v1.28l-.72.04-.75.03v1.77l1.22.03 1.2.04v1.28h-1.6c-1.53 0-1.6-.01-1.87-.3l-.3-.28v-3.16c0-3.02.01-3.18.25-3.48.23-.31.25-.31 1.88-.31h1.64v1.3zm4.68 5.45c-.17.43-.64.79-1 .79-.18 0-.45-.15-.67-.39-.32-.32-.45-.63-.82-2.08l-.9-3.39-.45-1.67h.76c.4 0 .75.02.75.05 0 .06 1.16 4.54 1.26 4.83.04.15.32-.7.73-2.3l.66-2.52.74-.04c.4-.02.73 0 .73.04 0 .14-1.67 6.38-1.8 6.68z" />
+                    </svg>
+                    DEV
+                  </a>
+                )}
+              </div>
+            </div>
+          )
+      }
+      <div class="toc-share">
+        <div class="toc-share-label">Share</div>
+        <div class="share-btns">
+          <a
+            href={`https://twitter.com/intent/tweet?url=${Astro.url}`}
+            class="share-btn"
+            target="_blank"
+            title="Twitter"
+          >
+            <svg viewBox="0 0 24 24"
+              ><path
+                d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"
+              ></path></svg
+            >
+          </a>
+          <a
+            href={`https://www.linkedin.com/sharing/share-offsite/?url=${Astro.url}`}
+            class="share-btn"
+            target="_blank"
+            title="LinkedIn"
+          >
+            <svg viewBox="0 0 24 24"
+              ><path
+                d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+              ></path><rect x="2" y="9" width="4" height="12"></rect><circle
+                cx="4"
+                cy="4"
+                r="2"></circle></svg
+            >
+          </a>
+          <button class="share-btn" id="copy-link-btn" title="Copy link">
+            <svg viewBox="0 0 24 24"
+              ><path
+                d="M10 13a5 5 0 0 0 7.54 0.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+              ></path><path
+                d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+              ></path></svg
+            >
+          </button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Series nav (series posts only) -->
+  {
+    seriesEntry && (
+      <div class="post-nav">
+        <div class="post-nav-inner">
+          <div class="series-nav-heading">
+            <svg viewBox="0 0 24 24" class="series-nav-icon">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20 M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+            </svg>
+            <div>
+              <div class="series-nav-eyebrow">
+                This post is part of a series
+              </div>
+              <a
+                href={`/blog/series/${seriesEntry.slug}`}
+                class="series-nav-title"
+              >
+                {seriesEntry.data.title}
+                <svg viewBox="0 0 24 24" class="series-nav-arrow">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </a>
+            </div>
+          </div>
+          <div class="post-nav-row">
+            {seriesPrevPost ? (
+              <a
+                href={`/blog/${flatSlug(seriesPrevPost.id)}`}
+                class="post-nav-card prev"
+              >
+                <span class="post-nav-label">← Previous in series</span>
+                <span class="post-nav-title">{seriesPrevPost.data.title}</span>
+              </a>
+            ) : (
+              <div />
+            )}
+            {seriesNextPost ? (
+              <a
+                href={`/blog/${flatSlug(seriesNextPost.id)}`}
+                class="post-nav-card next"
+              >
+                <span class="post-nav-label">Next in series →</span>
+                <span class="post-nav-title">{seriesNextPost.data.title}</span>
+              </a>
+            ) : (
+              <div />
+            )}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  <!-- Related posts -->
+  {
+    related.length > 0 && (
+      <section class="related">
+        <div class="related-inner">
+          <div class="related-header">
+            <div class="related-heading">
+              <span class="related-eyebrow">Keep reading</span>
+              <h2 class="related-title">Related Posts</h2>
+            </div>
+            <a href="/blog" class="related-all-link">
+              All posts
+              <svg viewBox="0 0 24 24">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </a>
+          </div>
+
+          <div class="related-grid">
+            {related.map((p, i) => {
+              const rTime = calcReadTime(p.body, p.data.readTime);
+              const cover = resolveCover(p.data.cover);
+              return (
+                <a href={`/blog/${flatSlug(p.id)}`} class="related-card">
+                  <div class={`related-thumb${cover ? " has-photo" : ""}`}>
+                    {cover ? (
+                      <Image
+                        src={cover}
+                        alt={p.data.title}
+                        class="related-thumb-img"
+                        width={400}
+                      />
+                    ) : (
+                      <>
+                        <svg
+                          class="related-thumb-pattern"
+                          viewBox="0 0 400 160"
+                          preserveAspectRatio="xMidYMid slice"
+                        >
+                          <defs>
+                            <pattern
+                              id={`rp${i}`}
+                              x="0"
+                              y="0"
+                              width="40"
+                              height="40"
+                              patternUnits="userSpaceOnUse"
+                            >
+                              <circle
+                                cx="20"
+                                cy="20"
+                                r="1.2"
+                                fill="currentColor"
+                                opacity="0.35"
+                              />
+                            </pattern>
+                          </defs>
+                          <rect
+                            width="400"
+                            height="160"
+                            fill={`url(#rp${i})`}
+                          />
+                        </svg>
+                        <svg class="related-thumb-icon" viewBox="0 0 24 24">
+                          <path d="M6.5 20a5.5 5.5 0 1 1 0-11 5.995 5.995 0 0 1 11.9-1A4.5 4.5 0 0 1 19.5 17H6.5z" />
+                        </svg>
+                      </>
+                    )}
+                    {p.data.primaryTag && (
+                      <span class="related-thumb-badge">
+                        {p.data.primaryTag}
+                      </span>
+                    )}
+                  </div>
+                  <div class="related-body">
+                    <div class="related-meta">
+                      <span class="related-date">{fmtDate(p.data.date)}</span>
+                      <span class="related-dot" />
+                      <span class="related-read">{rTime} read</span>
+                    </div>
+                    <div class="related-card-title">{p.data.title}</div>
+                    {p.data.description && (
+                      <p class="related-excerpt">{p.data.description}</p>
+                    )}
+                    <div class="related-footer">
+                      <div class="related-tags">
+                        {p.data.tags.slice(0, 3).map((t) => (
+                          <span
+                            class={`related-tag${t === p.data.primaryTag ? " related-tag--primary" : ""}`}
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                      <div class="related-arrow">
+                        <svg viewBox="0 0 24 24">
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                          <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Comments -->
+  <Giscus />
+
+  <!-- Prev/Next (non-series posts) -->
+  {
+    !seriesEntry && (prevPost || nextPost) && (
+      <div class="post-nav">
+        <div class="post-nav-inner">
+          <div class="post-nav-row">
+            {prevPost ? (
+              <a
+                href={`/blog/${flatSlug(prevPost.id)}`}
+                class="post-nav-card prev"
+              >
+                <span class="post-nav-label">← Previous</span>
+                <span class="post-nav-title">{prevPost.data.title}</span>
+              </a>
+            ) : (
+              <div />
+            )}
+            {nextPost ? (
+              <a
+                href={`/blog/${flatSlug(nextPost.id)}`}
+                class="post-nav-card next"
+              >
+                <span class="post-nav-label">Next →</span>
+                <span class="post-nav-title">{nextPost.data.title}</span>
+              </a>
+            ) : (
+              <div />
+            )}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+</BlogLayout>
+
+<style>
+  /* ── Progress bar ── */
+  #progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 200;
+    height: 3px;
+    width: 0%;
+    background: var(--accent);
+    transition: width 0.1s linear;
+    border-radius: 0 2px 2px 0;
+  }
+
+  /* ── Post hero ── */
+  .post-hero {
+    padding: 4.5rem 0 3.5rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+  }
+  .post-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+  .post-hero-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  .post-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.25rem;
+  }
+  .post-eyebrow::before {
+    content: "";
+    width: 24px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+  .post-title {
+    font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--text);
+    letter-spacing: -0.03em;
+    margin-bottom: 1.25rem;
+  }
+  .post-subtitle {
+    font-size: 1.05rem;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.75;
+    margin-bottom: 2rem;
+  }
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--muted);
+  }
+  .meta-item svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+  .meta-divider {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+  .post-tags {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-top: 1.25rem;
+  }
+  .post-tag {
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 0.22rem 0.65rem;
+    border-radius: 4px;
+    background: var(--tag-bg);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    text-decoration: none;
+    transition:
+      border-color 0.18s,
+      color 0.18s;
+  }
+  .post-tag:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .post-tag--primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .post-tag--primary:hover {
+    color: #fff;
+    opacity: 0.9;
+  }
+
+  /* ── Cover ── */
+  .post-cover {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  .cover-img {
+    width: 100%;
+    aspect-ratio: 16/7;
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #3b82f6 100%);
+    border-radius: 0 0 16px 16px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-top: none;
+  }
+  .cover-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.12;
+    color: #ffffff;
+  }
+  .cover-icon {
+    width: 52px;
+    height: 52px;
+    stroke: rgba(255, 255, 255, 0.9);
+    fill: none;
+    stroke-width: 1;
+    position: relative;
+    z-index: 1;
+  }
+  .cover-img.has-photo {
+    background: none;
+  }
+  .cover-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ── Content layout ── */
+  .content-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 4rem 2rem 6rem;
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 4rem;
+    align-items: start;
+  }
+  .article {
+    min-width: 0;
+  }
+  /* :global() is required for all child selectors — markdown rendered by
+     <Content /> does not receive Astro's scoped CID attribute */
+  .article :global(h2) {
+    font-size: 1.45rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1.35;
+    margin: 2.75rem 0 1rem;
+    padding-top: 0.5rem;
+    border-top: 2px solid var(--border);
+  }
+  .article :global(h2:first-child) {
+    margin-top: 0;
+    border-top: none;
+    padding-top: 0;
+  }
+  .article :global(h3) {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    line-height: 1.4;
+    margin: 2rem 0 0.75rem;
+  }
+  .article :global(h2[id]),
+  .article :global(h3[id]) {
+    scroll-margin-top: 84px;
+  }
+  .article :global(p) {
+    font-size: 0.975rem;
+    color: var(--muted);
+    line-height: 1.85;
+    margin-bottom: 1.2rem;
+  }
+  .article :global(strong) {
+    color: var(--text);
+    font-weight: 700;
+  }
+  .article :global(a) {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .article :global(code) {
+    font-size: 0.85em;
+    font-family: "Courier New", monospace;
+    background: var(--code-bg);
+    color: var(--accent);
+    padding: 0.15em 0.45em;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .article :global(pre) {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 1.5rem 0;
+    /* background comes from Shiki via .astro-code */
+  }
+  .article :global(pre) :global(code) {
+    background: none !important;
+    border: none;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    display: block;
+    padding: 1.2rem 1.25rem;
+    /* color comes from Shiki token spans — do not override */
+  }
+  .article :global(ul),
+  .article :global(ol) {
+    padding-left: 1.6rem;
+    margin-bottom: 1.2rem;
+    list-style: revert;
+  }
+  .article :global(li) {
+    font-size: 0.975rem;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 0.3rem;
+  }
+  .article :global(li) :global(strong) {
+    color: var(--text);
+  }
+  .article :global(hr) {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2.5rem 0;
+  }
+  .article :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.875rem;
+  }
+  .article :global(th),
+  .article :global(td) {
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--border);
+    text-align: left;
+  }
+  .article :global(th) {
+    background: var(--bg);
+    font-weight: 700;
+    color: var(--text);
+  }
+  .article :global(td) {
+    color: var(--muted);
+  }
+  .article :global(img) {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 10px;
+    margin: 1.5rem auto;
+  }
+  .article :global(figure) {
+    max-width: 100%;
+    margin: 1.5rem 0;
+  }
+  .article :global(figure img) {
+    margin: 0 auto;
+  }
+  .article :global(figure figcaption) {
+    margin-top: 0.55rem;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  /* ── TOC ── */
+  .toc {
+    position: sticky;
+    top: 82px;
+    font-size: 0.78rem;
+  }
+  .toc-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .toc-label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .toc-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+  /* li and a are created by JS — :global() required so Astro's CID scoping doesn't block them */
+  .toc-list :global(li) :global(a) {
+    display: block;
+    padding: 0.35rem 0.6rem;
+    color: var(--muted);
+    text-decoration: none;
+    font-weight: 500;
+    border-left: 2px solid transparent;
+    border-radius: 0 4px 4px 0;
+    transition:
+      color 0.18s,
+      border-color 0.18s,
+      background 0.18s;
+    line-height: 1.4;
+  }
+  .toc-list :global(li) :global(a:hover) {
+    color: var(--text);
+    background: var(--tag-bg);
+  }
+  .toc-list :global(li) :global(a.active) {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: rgba(37, 99, 235, 0.05);
+    font-weight: 600;
+  }
+  .toc-list :global(li.h3) :global(a) {
+    padding-left: 1.25rem;
+    font-size: 0.73rem;
+  }
+  .toc-share {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  .toc-share-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+  .share-btns {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .share-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--muted);
+    text-decoration: none;
+    transition:
+      border-color 0.18s,
+      color 0.18s;
+  }
+  .share-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .share-btn svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+  }
+
+  /* ── Cross-post (sidebar) ── */
+  .toc-cross-post {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+  .toc-cross-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
+  }
+  .toc-cross-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.18s;
+  }
+  .toc-cross-link:hover {
+    color: var(--accent);
+  }
+  .toc-cross-link svg {
+    width: 13px;
+    height: 13px;
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+
+  /* ── Author ── */
+  .author-card {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 2rem 5rem;
+  }
+  .author-inner {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.75rem;
+  }
+  .author-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    flex-shrink: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(37, 99, 235, 0.15),
+      rgba(37, 99, 235, 0.05)
+    );
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .author-avatar svg {
+    width: 26px;
+    height: 26px;
+    stroke: var(--accent);
+    fill: none;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+  }
+  .author-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.15rem;
+  }
+  .author-role {
+    font-size: 0.78rem;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .author-bio {
+    font-size: 0.83rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* ── Series nav + Prev/Next ── */
+  .post-nav {
+    border-top: 1px solid var(--border);
+    padding: 2rem 0;
+    background: var(--bg);
+  }
+  .post-nav-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .series-nav-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .series-nav-icon {
+    width: 20px;
+    height: 20px;
+    stroke: var(--accent);
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .series-nav-eyebrow {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.25rem;
+  }
+  .series-nav-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+    transition: color 0.18s;
+  }
+  .series-nav-title:hover {
+    color: var(--accent);
+  }
+  .series-nav-arrow {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+  }
+  .post-nav-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .post-nav-card {
+    padding: 1rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    transition:
+      border-color 0.18s,
+      box-shadow 0.18s;
+  }
+  .post-nav-card:hover {
+    border-color: rgba(37, 99, 235, 0.4);
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.08);
+  }
+  .post-nav-card.next {
+    text-align: right;
+  }
+  .post-nav-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .post-nav-title {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.35;
+  }
+
+  /* ── Related ── */
+  .related {
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+    padding: 4rem 0 5rem;
+  }
+  .related-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* Header row */
+  .related-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .related-eyebrow {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.25rem;
+  }
+  .related-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin: 0;
+  }
+  .related-all-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: gap 0.2s;
+  }
+  .related-all-link:hover {
+    gap: 0.65rem;
+  }
+  .related-all-link svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Grid */
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  /* Card */
+  .related-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s,
+      border-color 0.2s;
+  }
+  .related-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(37, 99, 235, 0.09);
+    border-color: rgba(37, 99, 235, 0.25);
+  }
+
+  /* Thumb */
+  .related-thumb {
+    width: 100%;
+    aspect-ratio: 16 / 7;
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #3b82f6 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .related-thumb.has-photo {
+    background: none;
+  }
+  .related-thumb-pattern {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.12;
+    color: #fff;
+  }
+  .related-thumb-icon {
+    width: 28px;
+    height: 28px;
+    stroke: rgba(255, 255, 255, 0.85);
+    fill: none;
+    stroke-width: 1.2;
+    position: relative;
+    z-index: 1;
+  }
+  .related-thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .related-thumb-badge {
+    position: absolute;
+    top: 0.65rem;
+    left: 0.65rem;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.18rem 0.55rem;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    color: #fff;
+    z-index: 2;
+  }
+
+  /* Body */
+  .related-body {
+    padding: 1.15rem 1.2rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.5rem;
+  }
+  .related-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+  .related-date {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .related-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+  .related-read {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .related-card-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.35;
+    transition: color 0.18s;
+  }
+  .related-card:hover .related-card-title {
+    color: var(--accent);
+  }
+
+  .related-excerpt {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
+  }
+
+  /* Footer */
+  .related-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+  }
+  .related-tags {
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+  }
+  .related-tag {
+    font-size: 0.62rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    background: var(--tag-bg);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .related-tag--primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .related-arrow {
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    flex-shrink: 0;
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      background 0.18s,
+      border-color 0.18s;
+  }
+  .related-card:hover .related-arrow {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .related-arrow svg {
+    width: 12px;
+    height: 12px;
+    stroke: var(--muted);
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke 0.18s;
+  }
+  .related-card:hover .related-arrow svg {
+    stroke: #fff;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .content-wrap {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding-top: 2rem;
+    }
+    .toc {
+      position: static;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.1rem 1.25rem;
+      order: -1;
+    }
+    .toc-share {
+      display: none;
+    }
+    .related-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .related-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+  }
+  @media (max-width: 768px) {
+    .article :global(h2[id]),
+    .article :global(h3[id]) {
+      scroll-margin-top: 16px;
+    }
+  }
+  @media (max-width: 580px) {
+    .post-title {
+      font-size: 1.7rem;
+    }
+    .related-grid {
+      grid-template-columns: 1fr;
+    }
+    .related-title {
+      font-size: 1.15rem;
+    }
+    .author-inner {
+      flex-direction: column;
+    }
+    .post-nav-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ── Scroll to top ── */
+  #scroll-top-btn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: opacity 0.2s, transform 0.2s, background 0.18s, color 0.18s, border-color 0.18s;
+    z-index: 50;
+  }
+  #scroll-top-btn.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+  #scroll-top-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  #scroll-top-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+  @media (max-width: 768px) {
+    #scroll-top-btn {
+      bottom: 5rem;
+      left: 1rem;
+    }
+  }
+</style>
+
+<script>
+  // Reading progress
+  const bar = document.getElementById("progress-bar")!;
+  window.addEventListener(
+    "scroll",
+    () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = `${(window.scrollY / total) * 100}%`;
+    },
+    { passive: true },
+  );
+
+  // Auto-build TOC from article headings
+  const article = document.getElementById("article")!;
+  const tocList = document.getElementById("toc-list")!;
+  const headings = article.querySelectorAll<HTMLElement>("h2");
+
+  headings.forEach((h) => {
+    if (!h.id)
+      h.id = h
+        .textContent!.toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+    const li = document.createElement("li");
+    li.innerHTML = `<a href="#${h.id}">${h.textContent}</a>`;
+    tocList.appendChild(li);
+  });
+
+  // Highlight active TOC item
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        const id = e.target.id;
+        const link = tocList.querySelector<HTMLAnchorElement>(
+          `a[href="#${id}"]`,
+        );
+        if (link) link.classList.toggle("active", e.isIntersecting);
+      });
+    },
+    { rootMargin: "-10% 0px -80% 0px" },
+  );
+  headings.forEach((h) => obs.observe(h));
+
+  // Copy link
+  document.getElementById("copy-link-btn")?.addEventListener("click", () => {
+    navigator.clipboard.writeText(window.location.href);
+  });
+
+  // Scroll to top
+  const scrollBtn = document.getElementById("scroll-top-btn")!;
+  window.addEventListener("scroll", () => {
+    scrollBtn.classList.toggle("visible", window.scrollY > 400);
+  }, { passive: true });
+  scrollBtn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+</script>

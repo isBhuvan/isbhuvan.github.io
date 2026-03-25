@@ -1,39 +1,22 @@
 {
-  "name": "isbhuvan.github.io",
-  "version": "1.2.0",
-  "private": true,
+  "name": "isbhuvan-github-io",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev --force",
+    "build": "astro build && pagefind --site dist",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.17",
+    "astro": "^5.17.1"
+  },
   "devDependencies": {
-    "release-it": "^19.0.4",
-    "@release-it/conventional-changelog": "^10.0.1",
-    "markdownlint-cli": "^0.39.0",
+    "@astrojs/check": "^0.9.7",
     "@commitlint/cli": "^20.4.4",
     "@commitlint/config-conventional": "^20.4.4",
-    "htmlhint": "^1.1.4",
-    "lighthouse": "^12.6.1"
-  },
-  "scripts": {
-    "lighthouse": "bash scripts/run-lighthouse.sh",
-    "release": "release-it --ci"
-  },
-  "release-it": {
-    "git": {
-      "commitMessage": "chore(release): v${version}",
-      "tagName": "v${version}"
-    },
-    "github": {
-      "release": false
-    },
-    "npm": {
-      "publish": false
-    },
-    "hooks": {
-      "after:bump": "npm install --package-lock-only --ignore-scripts && printf '%s\\n' ${version} > VERSION"
-    },
-    "plugins": {
-      "@release-it/conventional-changelog": {
-        "infile": "CHANGELOG.md",
-        "preset": "conventionalcommits"
-      }
-    }
+    "pagefind": "^1.4.0",
+    "typescript": "^5.9.3"
   }
 }

@@ -1,0 +1,96 @@
+---
+// src/layouts/BlogLayout.astro
+import "../styles/global.css";
+import "../styles/blog.css";
+import Head from "../components/Head.astro";
+import Nav from "../components/Nav.astro";
+import Preloader from "../components/Preloader.astro";
+import Footer from "../components/Footer.astro";
+import Scripts from "../components/Scripts.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+  showTopicBar?: boolean;
+  crumbs?: { label: string; href?: string }[];
+  // Article-specific SEO (only set on blog post pages)
+  publishedTime?: string;
+  updatedTime?: string;
+  tags?: string[];
+  author?: string;
+}
+
+const {
+  title = "isBhuvan / Blog",
+  description = "Tutorials, deep-dives, and hard lessons on Azure, Kubernetes, Terraform, and platform engineering.",
+  crumbs,
+  publishedTime,
+  updatedTime,
+  tags,
+  author,
+} = Astro.props;
+
+const canonicalUrl = Astro.url.href;
+const ogImage = `${Astro.site}android-chrome-512x512.png`;
+const isArticle = !!publishedTime;
+
+// Breadcrumb JSON-LD (built from crumbs prop)
+const siteUrl = String(Astro.site).replace(/\/$/, "");
+const breadcrumbItems = [
+  { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+  ...(crumbs ?? []).map((c, i) => ({
+    "@type": "ListItem",
+    position: i + 2,
+    name: c.label,
+    ...(c.href ? { item: `${siteUrl}${c.href}` } : {}),
+  })),
+];
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: breadcrumbItems,
+};
+
+// Article JSON-LD (only for blog posts)
+const articleSchema = isArticle
+  ? {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      headline: title,
+      description,
+      datePublished: publishedTime,
+      ...(updatedTime ? { dateModified: updatedTime } : {}),
+      author: { "@type": "Person", name: author ?? "Bhuvan", url: siteUrl },
+      url: canonicalUrl,
+      image: ogImage,
+      ...(tags?.length ? { keywords: tags.join(", ") } : {}),
+    }
+  : null;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <Head
+      title={title}
+      description={description}
+      canonicalUrl={canonicalUrl}
+      ogImage={ogImage}
+      ogType={isArticle ? "article" : "website"}
+      publishedTime={publishedTime}
+      updatedTime={updatedTime}
+      author={author}
+      tags={tags}
+      jsonLd={[breadcrumbSchema, ...(articleSchema ? [articleSchema] : [])]}
+    />
+  </head>
+  <body>
+    <Preloader />
+    <Nav />
+    <main data-pagefind-body>
+      <slot />
+    </main>
+    <Footer />
+    <Scripts revealMode="blog" />
+  </body>
+</html>

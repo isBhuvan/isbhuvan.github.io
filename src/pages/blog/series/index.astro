@@ -1,0 +1,561 @@
+---
+// src/pages/series/index.astro
+import BlogLayout from '../../../layouts/BlogLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allSeries = await getCollection('series');
+const sorted = allSeries.sort((a, b) => {
+  // active first, then complete
+  if (a.data.status === 'active' && b.data.status !== 'active') return -1;
+  if (b.data.status === 'active' && a.data.status !== 'active') return 1;
+  return a.data.title.localeCompare(b.data.title);
+});
+
+const totalSeries  = sorted.length;
+const activeSeries = sorted.filter(s => s.data.status === 'active').length;
+const totalParts   = sorted.reduce((a, s) => a + s.data.modules.reduce((b, m) => b + m.posts.length, 0), 0);
+
+const levelColour = { beginner: '#16a34a', intermediate: '#d97706', advanced: '#dc2626' } as const;
+
+const allTopics = [...new Set(sorted.flatMap(s => s.data.topics))].sort();
+
+const blogPosts = await getCollection('blog', ({ data }) => !data.draft);
+const publishedSlugs = new Set(blogPosts.map(p => p.id.split('/').at(-1) ?? p.id));
+---
+
+<BlogLayout
+  title="isBhuvan / Series"
+  description="Multi-part learning series on Azure, Kubernetes, Terraform, and Go — structured like courses, written from real production experience."
+  crumbs={[{ label: 'Blog', href: '/blog' }, { label: 'Series' }]}
+>
+
+  <!-- ═══ HERO ══════════════════════════════════════════════════ -->
+  <section class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Learning Series</div>
+      <h1 class="hero-title">Deep dives, <span>end to end.</span></h1>
+      <p class="hero-sub">
+        Multi-part series that go all the way through a topic — real configs, real mistakes,
+        and what I'd do differently. Designed to be read in order, like a short course.
+      </p>
+      <div class="hero-meta">
+        <div class="hero-stat">
+          <span class="hero-stat-num">{totalSeries}</span>
+          <span class="hero-stat-label">Series</span>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">{totalParts}</span>
+          <span class="hero-stat-label">Parts total</span>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">{activeSeries}</span>
+          <span class="hero-stat-label">In progress</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FILTER BAR ════════════════════════════════════════════ -->
+  <div class="filter-wrap">
+    <div class="filter-inner">
+      <div class="filter-group">
+        <span class="filter-label">Topic</span>
+        <button class="filter-btn active" data-topic="all">All</button>
+        {allTopics.map(t => (
+          <button class="filter-btn" data-topic={t}>{t}</button>
+        ))}
+      </div>
+      <div class="filter-divider"></div>
+      <div class="filter-group">
+        <span class="filter-label">Status</span>
+        <button class="filter-btn active" data-status="all">All</button>
+        <button class="filter-btn" data-status="active">In Progress</button>
+        <button class="filter-btn" data-status="complete">Complete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SERIES LIST ═══════════════════════════════════════════ -->
+  <main class="main">
+    <div class="wrap">
+
+      <div class="series-list" id="series-list">
+        {sorted.map(s => {
+          const { title, description, level, hours, status, statusLabel,
+                  topics, objectives, prerequisites, modules,
+                  iconPath = 'M4 19.5A2.5 2.5 0 0 1 6.5 17H20 M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z',
+                  accentHue = '220' } = s.data;
+
+          const totalPosts = modules.reduce((a, m) => a + m.posts.length, 0);
+          const donePosts  = modules.reduce((a, m) => a + m.posts.filter(p => publishedSlugs.has(p.slug)).length, 0);
+          const firstPost  = modules.flatMap(m => m.posts).find(p => publishedSlugs.has(p.slug));
+          const pct        = Math.round((donePosts / totalPosts) * 100);
+
+          return (
+            <article class="series-card reveal" style={`--hue: ${accentHue}`} data-topics={topics.join(',')} data-status={status}>
+              <!-- Top accent bar -->
+              <div class="sc-accent-bar"></div>
+
+              <div class="sc-body">
+                <!-- Header row -->
+                <div class="sc-header">
+                  <div class="sc-icon">
+                    <svg viewBox="0 0 24 24"><path d={iconPath}/></svg>
+                  </div>
+                  <div class="sc-meta">
+                    <div class="sc-label">{totalPosts}-part series</div>
+                    <h2 class="sc-title">{title}</h2>
+                  </div>
+                  <span class={`sc-status ${status}`}>{statusLabel}</span>
+                </div>
+
+                <!-- Description -->
+                <p class="sc-desc">{description}</p>
+
+                <!-- Topics -->
+                <div class="sc-topics">
+                  {topics.map(t => (
+                    <a href="/blog" class="sc-topic">{t}</a>
+                  ))}
+                </div>
+
+                <!-- Two-column lower area -->
+                <div class="sc-lower">
+
+                  <!-- Modules / curriculum preview -->
+                  <div class="sc-curriculum">
+                    {modules.map(mod => (
+                      <div class="sc-module">
+                        <div class="sc-module-heading">{mod.heading}</div>
+                        <div class="sc-module-posts">
+                          {mod.posts.map((post, pi) => (
+                            <div class={`sc-post ${publishedSlugs.has(post.slug) ? 'done' : 'upcoming'}`}>
+                              <span class="sc-post-dot"></span>
+                              <span class="sc-post-title">{post.title}</span>
+                              {post.readTime && <span class="sc-post-time">{post.readTime}</span>}
+                              {!publishedSlugs.has(post.slug) && <span class="sc-post-soon">Soon</span>}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <!-- Stats sidebar -->
+                  <div class="sc-stats">
+                    <div class="sc-stat-row">
+                      <span class="sc-stat-label">Level</span>
+                      <span class="sc-stat-val" style={`color: ${levelColour[level as keyof typeof levelColour] ?? 'var(--muted)'}`}>
+                        {level.charAt(0).toUpperCase() + level.slice(1)}
+                      </span>
+                    </div>
+                    <div class="sc-stat-row">
+                      <span class="sc-stat-label">Time</span>
+                      <span class="sc-stat-val">~{hours}h</span>
+                    </div>
+                    <div class="sc-stat-row">
+                      <span class="sc-stat-label">Parts</span>
+                      <span class="sc-stat-val">{donePosts}/{totalPosts}</span>
+                    </div>
+                    {prerequisites.length > 0 && (
+                      <div class="sc-prereqs">
+                        <div class="sc-stat-label" style="margin-bottom: 0.4rem">Requires</div>
+                        {prerequisites.slice(0, 3).map(p => (
+                          <div class="sc-prereq-item">
+                            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                            {p}
+                          </div>
+                        ))}
+                        {prerequisites.length > 3 && (
+                          <div class="sc-prereq-more">+{prerequisites.length - 3} more</div>
+                        )}
+                      </div>
+                    )}
+
+                    <!-- Progress -->
+                    <div class="sc-progress">
+                      <div class="sc-progress-track">
+                        <div class="sc-progress-fill" style={`width: ${pct}%`}></div>
+                      </div>
+                      <span class="sc-progress-label">{pct}% published</span>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- CTA row -->
+                <div class="sc-footer">
+                  <a href={`/blog/series/${s.slug}`} class="sc-cta-primary">
+                    View Series
+                    <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  </a>
+                  {firstPost && (
+                    <a href={`/blog/${firstPost.slug}`} class="sc-cta-ghost">
+                      Start Part 1
+                      <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    </a>
+                  )}
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+      <!-- Empty state -->
+      <div class="filter-empty" id="filter-empty">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        No series match this filter.
+      </div>
+
+      <!-- Bottom nudge -->
+      <div class="bottom-nudge reveal">
+        <p>Looking for individual posts?</p>
+        <a href="/blog" class="bottom-link">
+          Browse all posts
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+</BlogLayout>
+
+<style>
+  .wrap { max-width: var(--max-w); margin: 0 auto; padding: 0 2rem; }
+  .main { padding: 3.5rem 0 6rem; }
+
+  /* ════════════════════════════════
+     HERO
+  ════════════════════════════════ */
+  .hero {
+    padding: 5rem 0 4rem;
+    background: var(--bg); border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .hero-grid-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px; opacity: 0.3;
+  }
+  .hero-inner {
+    position: relative; z-index: 1;
+    max-width: var(--max-w); margin: 0 auto; padding: 0 2rem;
+  }
+  .hero-eyebrow {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: inline-block; width: 28px; height: 2px;
+    background: var(--accent); border-radius: 2px;
+  }
+  .hero-title {
+    font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 800;
+    line-height: 1.05; color: var(--text); letter-spacing: -0.03em; margin-bottom: 1.25rem;
+  }
+  .hero-title span { color: var(--accent); }
+  .hero-sub {
+    font-size: 1rem; font-weight: 300; color: var(--muted);
+    max-width: 540px; line-height: 1.75;
+  }
+  .hero-meta { margin-top: 2.5rem; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+  .hero-stat { display: flex; flex-direction: column; gap: 2px; }
+  .hero-stat-num { font-size: 1.5rem; font-weight: 800; color: var(--text); line-height: 1; }
+  .hero-stat-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .hero-divider { width: 1px; height: 36px; background: var(--border); }
+
+  /* ════════════════════════════════
+     FILTER BAR
+  ════════════════════════════════ */
+  .filter-wrap {
+    padding: 1.1rem 0; border-bottom: 1px solid var(--border);
+    background: var(--surface); position: sticky; top: 60px; z-index: 90;
+  }
+  .filter-inner {
+    max-width: var(--max-w); margin: 0 auto; padding: 0 2rem;
+    display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+  }
+  .filter-group { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+  .filter-label {
+    font-size: 0.64rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-right: 0.25rem; white-space: nowrap;
+  }
+  .filter-btn {
+    padding: 0.3rem 0.85rem; border-radius: 6px;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase;
+    cursor: pointer; border: 1px solid var(--border); background: transparent;
+    color: var(--muted); font-family: var(--font); transition: all 0.18s;
+  }
+  .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .filter-divider { width: 1px; height: 22px; background: var(--border); flex-shrink: 0; }
+
+  /* Empty state */
+  .filter-empty {
+    display: none; text-align: center; padding: 5rem 1rem; color: var(--muted); font-size: 0.9rem;
+  }
+  .filter-empty.visible { display: block; }
+  .filter-empty svg {
+    width: 32px; height: 32px; stroke: var(--border); fill: none; stroke-width: 1.5;
+    stroke-linecap: round; display: block; margin: 0 auto 0.75rem;
+  }
+
+  /* ════════════════════════════════
+     SERIES LIST
+  ════════════════════════════════ */
+  .series-list { display: flex; flex-direction: column; gap: 2rem; }
+
+  .series-card.hidden { display: none; }
+
+  .series-card {
+    --hue: 220;
+    padding: 0; gap: 0; /* reset blog.css padding:1.4rem and gap:0.9rem */
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden;
+    transition: box-shadow 0.25s, border-color 0.25s;
+    position: relative;
+  }
+  .series-card:hover {
+    transform: none; /* cancel blog.css translateY(-3px) */
+    box-shadow: 0 20px 60px rgba(37,99,235,0.08);
+    border-color: rgba(37,99,235,0.22);
+  }
+
+  .sc-accent-bar {
+    height: 3px;
+    background: linear-gradient(90deg, hsl(var(--hue), 72%, 50%), hsl(var(--hue), 60%, 70%));
+  }
+
+  .sc-body { padding: 2rem; display: flex; flex-direction: column; gap: 1.25rem; }
+
+  /* Header */
+  .sc-header { display: flex; align-items: flex-start; gap: 1rem; }
+  .sc-icon {
+    width: 44px; height: 44px; border-radius: 11px; flex-shrink: 0;
+    background: rgba(37,99,235,0.07); border: 1px solid rgba(37,99,235,0.15);
+    display: flex; align-items: center; justify-content: center;
+  }
+  [data-theme="dark"] .sc-icon { background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.2); }
+  .sc-icon svg {
+    width: 19px; height: 19px; stroke: var(--accent); fill: none;
+    stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .sc-meta { flex: 1; min-width: 0; }
+  .sc-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.2rem; }
+  .sc-title { font-size: 1.2rem; font-weight: 800; color: var(--text); line-height: 1.25; letter-spacing: -0.02em; }
+  .sc-status {
+    flex-shrink: 0; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.22rem 0.65rem; border-radius: 20px; white-space: nowrap; align-self: flex-start;
+    border: 1px solid var(--border); color: var(--muted); background: var(--tag-bg);
+  }
+  .sc-status.active { color: #16a34a; border-color: rgba(22,163,74,0.3); background: rgba(22,163,74,0.06); }
+  [data-theme="dark"] .sc-status.active { color: #4ade80; }
+  .sc-status.complete { color: var(--accent); border-color: rgba(37,99,235,0.25); background: rgba(37,99,235,0.06); }
+
+  /* Description */
+  .sc-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.75; max-width: 760px; }
+
+  /* Topics */
+  .sc-topics { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .sc-topic {
+    font-size: 0.64rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 0.18rem 0.6rem; border-radius: 4px;
+    background: var(--tag-bg); border: 1px solid var(--border);
+    color: var(--muted); text-decoration: none; transition: color 0.18s, border-color 0.18s;
+  }
+  .sc-topic:hover { color: var(--accent); border-color: rgba(37,99,235,0.35); }
+
+  /* Lower two-column */
+  .sc-lower {
+    display: grid; grid-template-columns: 1fr 220px; gap: 2rem;
+    padding-top: 1rem; border-top: 1px solid var(--border);
+  }
+
+  /* Curriculum preview */
+  .sc-curriculum { display: flex; flex-direction: column; gap: 1.1rem; }
+  .sc-module-heading {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 0.5rem;
+  }
+  .sc-module-posts { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .sc-post {
+    display: flex; align-items: center; gap: 0.65rem;
+    padding: 0.6rem 0.9rem; border-bottom: 1px solid var(--border);
+    font-size: 0.82rem;
+  }
+  .sc-post:last-child { border-bottom: none; }
+  .sc-post.upcoming { opacity: 0.5; }
+  .sc-post-dot {
+    width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    background: var(--border); border: 1px solid var(--border);
+  }
+  .sc-post.done .sc-post-dot { background: var(--accent); border-color: var(--accent); }
+  .sc-post-title { flex: 1; color: var(--muted); font-weight: 500; line-height: 1.35; }
+  .sc-post.done .sc-post-title { color: var(--text); font-weight: 600; }
+  .sc-post-time {
+    font-size: 0.66rem; font-weight: 600; color: var(--muted); white-space: nowrap; flex-shrink: 0;
+  }
+  .sc-post-soon {
+    font-size: 0.58rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); background: var(--tag-bg); border: 1px solid var(--border);
+    border-radius: 3px; padding: 0.06rem 0.35rem; flex-shrink: 0;
+  }
+
+  /* Stats sidebar */
+  .sc-stats {
+    display: flex; flex-direction: column; gap: 0;
+    border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+    height: fit-content;
+  }
+  .sc-stat-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.65rem 1rem; border-bottom: 1px solid var(--border);
+    font-size: 0.82rem;
+  }
+  .sc-stat-label { color: var(--muted); font-weight: 500; font-size: 0.76rem; }
+  .sc-stat-val { font-weight: 700; color: var(--text); font-size: 0.82rem; }
+
+  .sc-prereqs { padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); }
+  .sc-prereq-item {
+    display: flex; align-items: flex-start; gap: 0.4rem;
+    font-size: 0.73rem; color: var(--muted); line-height: 1.4; margin-bottom: 0.3rem;
+  }
+  .sc-prereq-item:last-of-type { margin-bottom: 0; }
+  .sc-prereq-item svg {
+    width: 10px; height: 10px; stroke: var(--muted); fill: none;
+    stroke-width: 2.4; stroke-linecap: round; flex-shrink: 0; margin-top: 2px;
+  }
+  .sc-prereq-more { font-size: 0.68rem; color: var(--accent); font-weight: 600; margin-top: 0.3rem; }
+
+  .sc-progress { padding: 0.75rem 1rem; display: flex; flex-direction: column; gap: 0.4rem; }
+  .sc-progress-track { height: 4px; border-radius: 99px; background: var(--border); overflow: hidden; }
+  .sc-progress-fill { height: 100%; border-radius: 99px; background: var(--accent); }
+  .sc-progress-label { font-size: 0.68rem; font-weight: 600; color: var(--muted); }
+
+  /* CTA footer */
+  .sc-footer {
+    display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+    padding-top: 1rem; border-top: 1px solid var(--border);
+  }
+  .sc-cta-primary {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    padding: 0.65rem 1.35rem; border-radius: 8px;
+    background: var(--accent); color: #fff; text-decoration: none;
+    font-size: 0.85rem; font-weight: 700; transition: background 0.2s, gap 0.2s;
+  }
+  .sc-cta-primary:hover { background: var(--accent2); gap: 0.7rem; }
+  .sc-cta-primary svg {
+    width: 13px; height: 13px; stroke: currentColor; fill: none;
+    stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .sc-cta-ghost {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    padding: 0.63rem 1.15rem; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--surface);
+    color: var(--muted); text-decoration: none;
+    font-size: 0.85rem; font-weight: 600; transition: border-color 0.18s, color 0.18s;
+  }
+  .sc-cta-ghost:hover { color: var(--accent); border-color: var(--accent); }
+  .sc-cta-ghost svg {
+    width: 13px; height: 13px; stroke: currentColor; fill: none;
+    stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  /* ════════════════════════════════
+     BOTTOM NUDGE
+  ════════════════════════════════ */
+  .bottom-nudge {
+    margin-top: 4rem; text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
+  }
+  .bottom-nudge p { font-size: 0.9rem; color: var(--muted); }
+  .bottom-link {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    font-size: 0.88rem; font-weight: 700; color: var(--accent); text-decoration: none;
+    transition: gap 0.2s;
+  }
+  .bottom-link:hover { gap: 0.7rem; }
+  .bottom-link svg {
+    width: 14px; height: 14px; stroke: currentColor; fill: none;
+    stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  /* ════════════════════════════════
+     REVEAL
+  ════════════════════════════════ */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ════════════════════════════════
+     RESPONSIVE
+  ════════════════════════════════ */
+  @media (max-width: 860px) {
+    .sc-lower { grid-template-columns: 1fr; }
+    .sc-stats { flex-direction: row; flex-wrap: wrap; border-radius: 8px; }
+    .sc-stat-row { border-right: 1px solid var(--border); flex: 1 1 auto; }
+    .sc-prereqs { flex: 1 1 100%; }
+    .sc-progress { flex: 1 1 100%; }
+  }
+  @media (max-width: 600px) {
+    .hero { padding: 3rem 0 2.5rem; }
+    .hero-title { font-size: 2.2rem; }
+    .sc-body { padding: 1.25rem; }
+    .sc-header { flex-wrap: wrap; }
+    .wrap { padding: 0 1rem; }
+  }
+</style>
+
+<script>
+  // ── Scroll reveal ──
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // ── Filter logic ──
+  const topicBtns  = document.querySelectorAll<HTMLButtonElement>('.filter-wrap button[data-topic]');
+  const statusBtns = document.querySelectorAll<HTMLButtonElement>('.filter-wrap button[data-status]');
+  const cards      = document.querySelectorAll<HTMLElement>('#series-list .series-card');
+  const empty      = document.getElementById('filter-empty')!;
+
+  let activeTopic  = 'all';
+  let activeStatus = 'all';
+
+  function applyFilters() {
+    let visible = 0;
+    cards.forEach(card => {
+      const topics = (card.dataset.topics ?? '').split(',');
+      const status = card.dataset.status ?? '';
+      const matchTopic  = activeTopic  === 'all' || topics.includes(activeTopic);
+      const matchStatus = activeStatus === 'all' || status === activeStatus;
+      const show = matchTopic && matchStatus;
+      card.classList.toggle('hidden', !show);
+      if (show) visible++;
+    });
+    empty.classList.toggle('visible', visible === 0);
+  }
+
+  topicBtns.forEach(btn => btn.addEventListener('click', () => {
+    topicBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeTopic = btn.dataset.topic ?? 'all';
+    applyFilters();
+  }));
+
+  statusBtns.forEach(btn => btn.addEventListener('click', () => {
+    statusBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeStatus = btn.dataset.status ?? 'all';
+    applyFilters();
+  }));
+</script>

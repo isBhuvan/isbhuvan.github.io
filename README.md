@@ -1,72 +1,43 @@
-# Bhuvaneshwaran | Professional Portfolio
+# Astro Starter Kit: Minimal
 
-A clean, responsive, and modern portfolio website designed to showcase my work, skills, and experience as a **Cloud Engineer**.
-
-![Status: WIP](https://img.shields.io/badge/Status-Work_In_Progress-orange)
-
----
-
-## 🚀 Live Demo
-
-You can view the live version of this portfolio here: [https://isbhuvan.github.io/](https://isbhuvan.github.io/)
-
-## ✨ Features
-
-* **Responsive Design:** Fully optimized for mobile, tablet, and desktop using Bootstrap's grid system.
-* **Project Gallery:** Interactive cards showcasing my latest work with links to GitHub and live demos.
-* **Modern UI:** Custom CSS animations and a clean aesthetic.
-* **SEO Optimized:** Proper use of semantic HTML5 tags.
-
-## 🛠️ Tech Stack
-
-* **HTML5:** Structure and Semantics.
-* **CSS3:** Custom styling and layout.
-* **JavaScript (ES6):** Interactivity and dynamic elements.
-* **Bootstrap 5:** Responsive framework and UI components.
-* **Google Fonts:** Typography.
-
-## 📁 Folder Structure
-
-```text
-├── assets/
-│   ├── css/      # Custom styles
-│   ├── js/       # Interactive logic
-│   └── img/      # Optimized project images and icons
-├── index.html    # Main entry point
-└── README.md     # Project documentation
-
+```sh
+npm create astro@latest -- --template minimal
 ```
 
-## ⚙️ Installation & Setup
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
-To run this project locally:
+## 🚀 Project Structure
 
-1. **Clone the repository:**
+Inside of your Astro project, you'll see the following folders and files:
 
-    ```bash
-    git clone https://github.com/isbhuvan/isbhuvan.github.io.git
-    ```
+```text
+/
+├── public/
+├── src/
+│   └── pages/
+│       └── index.astro
+└── package.json
+```
 
-2. **Navigate to the directory:**
+Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
 
-    ```bash
-    cd isbhuvan.github.io
-    ```
+There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
 
-3. **Open in your browser:**
-    Simply open `index.html` in your favorite browser or use the **Live Server** extension in VS Code.
+Any static assets, like images, can be placed in the `public/` directory.
 
-## 📧 Contact
+## 🧞 Commands
 
-Let's connect!
+All commands are run from the root of the project, from a terminal:
 
-* 💼 **LinkedIn:** [https://www.linkedin.com/in/isbhuvan](https://www.linkedin.com/in/isbhuvan)
-* 💻 **GitHub:** [https://github.com/isbhuvan](https://github.com/isbhuvan)
-* 🐦 **X (Twitter):** [https://x.com/isbhuvan](https://x.com/isbhuvan)
-* 📝 **Medium:** [https://medium.com/@isbhuvan](https://medium.com/@isbhuvan)
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at `localhost:4321`      |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro -- --help` | Get help using the Astro CLI                     |
 
----
+## 👀 Want to learn more?
 
-## License
-
-This project is licensed under the MIT License.
+Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).

@@ -1,0 +1,1501 @@
+---
+// src/pages/about.astro
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import { Image } from "astro:assets";
+import avatarImg from "../images/avatar.webp";
+import { homeContent } from "../data/homeContent";
+
+const { about, resume, reach } = homeContent;
+
+const values = [
+  {
+    num: "01",
+    title: "Reliability Over Features",
+    desc: "A feature nobody can use is worse than no feature at all. I design for failure first — because distributed systems will fail — and build observability in from day one, not as an afterthought.",
+    icon: `<path d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z"/>`,
+  },
+  {
+    num: "02",
+    title: "Everything as Code",
+    desc: "Infrastructure, security policies, runbooks, architecture diagrams — if it can be in a repository, it should be. Version control is the foundation of repeatability, auditability, and trust.",
+    icon: `<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>`,
+  },
+  {
+    num: "03",
+    title: "Automate the Toil Away",
+    desc: "If an engineer has to do the same thing twice, the third time should be a script. If three engineers do it weekly, it should be a self-service platform. Toil is engineering debt you can measure in hours.",
+    icon: `<path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>`,
+  },
+  {
+    num: "04",
+    title: "Security is Foundational",
+    desc: "Zero-trust isn't a product you buy — it's a mindset you build into every layer. Security reviews in design reviews, not post-deployment. Least privilege everywhere, always.",
+    icon: `<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M10 10h4"/>`,
+  },
+  {
+    num: "05",
+    title: "Observe Before You Optimise",
+    desc: "You cannot improve what you cannot see. I instrument everything with meaningful metrics, structured logs, and distributed traces before I think about performance. Data drives decisions, not intuition.",
+    icon: `<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/>`,
+  },
+  {
+    num: "06",
+    title: "Teach What You Learn",
+    desc: "Knowledge that stays in one person's head is a single point of failure. I write documentation like I'm writing it for a future version of myself at 2 AM during an incident — because I've been that person.",
+    icon: `<rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M8 14h8"/>`,
+  },
+];
+
+const philosophy = [
+  {
+    num: "01",
+    title: "Boring is Beautiful",
+    desc: "The best infrastructure is invisible. I aim for systems so stable, so automated, and so well-observed that on-call means catching up on reading.",
+  },
+  {
+    num: "02",
+    title: "Everything is Code",
+    desc: "If it's not in a repository, it doesn't exist reliably. Infrastructure, policies, runbooks, diagrams — all versioned, reviewed, and continuously tested.",
+  },
+  {
+    num: "03",
+    title: "Shift Left on Everything",
+    desc: "Security, cost, and operational concerns belong in the design phase, not the post-mortem. Early constraints produce better architecture.",
+  },
+  {
+    num: "04",
+    title: "Platforms are Products",
+    desc: "Internal platforms have real customers — developers. Adoption is never mandatory. If engineers choose the golden path, the platform is genuinely good.",
+  },
+];
+
+const process = [
+  {
+    step: "01",
+    title: "Understand Before Building",
+    tag: "Discovery",
+    desc: "Every engagement starts with listening — to engineers, to architects, to on-call war stories. I read the last six months of post-mortems before writing a single line of Terraform. Context shapes architecture.",
+  },
+  {
+    step: "02",
+    title: "Architecture as Written Thought",
+    tag: "Design",
+    desc: "I write architecture decision records before I draw diagrams, and diagrams before I write code. The RFC process exists because good decisions come from documented reasoning, not from whoever spoke last in the Slack thread.",
+  },
+  {
+    step: "03",
+    title: "Code That Reviews Well",
+    tag: "Build",
+    desc: "I write infrastructure code with the reviewer in mind — clear variable names, module interfaces that reveal intent, comments that explain why, not what. Readable IaC is maintainable IaC, and maintainable infra is a competitive advantage.",
+  },
+  {
+    step: "04",
+    title: "Observability as a First-Class Feature",
+    tag: "Operate",
+    desc: "Dashboards, runbooks, SLOs, and alert thresholds are delivery artefacts as much as the infrastructure itself. A system you can't understand in production at 2 AM isn't finished. I ship observability alongside code.",
+  },
+  {
+    step: "05",
+    title: "Post-Mortems as Learning",
+    tag: "Improve",
+    desc: "Every incident is a free lesson in how real systems fail. I run blameless post-mortems, track action items to completion, and feed findings back into the design process. The goal isn't zero incidents — it's incidents that never repeat.",
+  },
+];
+---
+
+<BaseLayout
+  title="About — isBhuvan"
+  description="Azure Cloud Engineer with 10+ years of experience designing resilient cloud infrastructure, writing Terraform modules, and automating everything from code to production."
+>
+  <!-- ══ HERO ══ -->
+  <PageHero
+    eyebrow="Engineer & Writer"
+    title="Bhuvaneshwaran S, <span>cloud engineer.</span>"
+    sub={about.paragraphs[0]}
+    stats={about.stats.map((s) => ({ num: s.value, label: s.label }))}
+    maxWidth="var(--max-w)"
+  >
+    <svg
+      slot="icon"
+      class="page-header-icon"
+      viewBox="0 0 200 200"
+      fill="none"
+      aria-hidden="true"
+    >
+      <circle
+        cx="100"
+        cy="72"
+        r="38"
+        stroke="currentColor"
+        stroke-width="5"
+        opacity=".75"></circle>
+      <circle
+        cx="100"
+        cy="72"
+        r="23"
+        stroke="currentColor"
+        stroke-width="2"
+        opacity=".35"></circle>
+      <path
+        d="M 28 185 Q 28 130 100 130 Q 172 130 172 185"
+        stroke="currentColor"
+        stroke-width="5"
+        stroke-linecap="round"
+        opacity=".75"></path>
+      <path
+        d="M 52 180 Q 54 152 100 152 Q 146 152 148 180"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        opacity=".35"></path>
+      <circle cx="100" cy="72" r="6" fill="currentColor" opacity=".12"></circle>
+    </svg>
+  </PageHero>
+
+  <!-- ══ SECTION NAV ══ -->
+  <div class="section-nav-wrap">
+    <nav class="section-nav-inner" aria-label="Page sections">
+      <a href="#about" class="section-link active">About</a>
+      <a href="#principles" class="section-link">Principles</a>
+      <a href="#philosophy" class="section-link">Philosophy</a>
+      <a href="#process" class="section-link">Process</a>
+      <a href="#resume" class="section-link">Resume</a>
+      <a href="#reach" class="section-link">Reach Me</a>
+    </nav>
+  </div>
+
+  <!-- ══ STORY ══ -->
+  <section class="story-section" id="about">
+    <div class="story-grid-bg" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="chapter-div reveal">
+        <span class="chapter-num">01</span>
+        <span class="chapter-line"></span>
+        <span class="chapter-label">Story</span>
+      </div>
+
+      <div class="story-grid">
+        <!-- Portrait column -->
+        <div class="story-portrait-col reveal">
+          <div class="portrait-wrap">
+            <Image
+              src={avatarImg}
+              alt="Bhuvan"
+              class="portrait-img"
+              width={400}
+            />
+            <div class="portrait-nameplate">
+              <span class="np-name">Bhuvan S</span>
+              <span class="np-role">Cloud Engineer · Writer</span>
+            </div>
+          </div>
+          <div class="portrait-links">
+            {
+              about.portraitLinks.map((link) => (
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener"
+                  class={link.className}
+                >
+                  <svg viewBox="0 0 24 24" set:html={link.icon} />
+                  {link.label}
+                </a>
+              ))
+            }
+          </div>
+        </div>
+
+        <!-- Editorial text column -->
+        <div class="story-editorial reveal">
+          <div class="story-eyebrow">My Background</div>
+          <h2 class="story-heading">
+            Azure engineer,<br />
+            <em>by curiosity</em>
+          </h2>
+          <div class="story-body">
+            <p>
+              I fell into cloud engineering by accident — a broken Azure
+              deployment that took a weekend to fix. That weekend taught me more
+              about distributed systems than any course. I've been chasing that
+              feeling of <strong>"finally understanding how it works"</strong> ever
+              since.
+            </p>
+            <p>
+              Today I work as an <strong>Azure Cloud Engineer</strong>, focused
+              on AKS, Terraform, GitHub Actions, and Go-based tooling. I care
+              about the developer experience because I've seen what happens when
+              infrastructure is a wall instead of a launchpad.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ VALUES ══ -->
+  <section class="values-section" id="principles">
+    <div class="wrap">
+       <div class="chapter-div reveal">
+        <span class="chapter-num">02</span>
+        <span class="chapter-line"></span>
+        <span class="chapter-label">Principles</span>
+      </div>
+
+      <div class="values-header reveal">
+        <div class="values-header-left">
+          <div class="values-eyebrow">What I Stand For</div>
+          <h2 class="values-heading">
+            Principles that<br />
+            <em>guide the work</em>
+          </h2>
+        </div>
+        <div class="values-header-right">
+          <p class="values-intro">
+            Engineering is as much about culture and craft as it is about
+            technology. These are the principles I bring to every team, every
+            project, every pull request.
+          </p>
+        </div>
+      </div>
+
+      <div class="values-grid">
+        {
+          values.map((v) => (
+            <div class="val-card reveal">
+              <div class="val-card-top">
+                <svg class="val-icon" viewBox="0 0 24 24" set:html={v.icon} />
+                <span class="val-num">{v.num}</span>
+              </div>
+              <h3 class="val-title">{v.title}</h3>
+              <p class="val-desc">{v.desc}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PHILOSOPHY ══ -->
+  <section class="philosophy-section" id="philosophy">
+    <div class="wrap">
+       <div class="chapter-div reveal">
+        <span class="chapter-num">03</span>
+        <span class="chapter-line"></span>
+        <span class="chapter-label">Philosophy</span>
+      </div>
+
+      <div class="philosophy-header reveal">
+        <div class="phil-eyebrow">Philosophy</div>
+        <h2 class="phil-heading">
+          How I think<br />
+          <em>about engineering</em>
+        </h2>
+      </div>
+
+      <div class="philosophy-grid">
+        {
+          philosophy.map((p) => (
+            <div class="phil-card reveal">
+              <span class="phil-num">{p.num}</span>
+              <h3 class="phil-title">{p.title}</h3>
+              <p class="phil-desc">{p.desc}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PROCESS ══ -->
+  <section class="process-section" id="process">
+    <div class="wrap">
+       <div class="chapter-div reveal">
+        <span class="chapter-num">04</span>
+        <span class="chapter-line"></span>
+        <span class="chapter-label">Process</span>
+      </div>
+
+      <div class="process-header reveal">
+        <div class="process-header-left">
+          <div class="process-eyebrow">My Process</div>
+          <h2 class="process-main-heading">
+            The way I approach<br />
+            <em>every engagement</em>
+          </h2>
+        </div>
+        <div class="process-header-right">
+          <p class="process-intro">
+            Whether it's a greenfield platform or a fire-fighting engagement, I
+            follow the same disciplined process. It's been refined over seven
+            years and forty-plus projects.
+          </p>
+        </div>
+      </div>
+
+      <div class="process-list">
+        {
+          process.map((p) => (
+            <div class="process-item reveal">
+              <span class="process-step">{p.step}</span>
+              <div class="process-title-wrap">
+                <span class="process-tag">{p.tag}</span>
+                <h3 class="process-title">{p.title}</h3>
+              </div>
+              <p class="process-desc">{p.desc}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ RESUME ══ -->
+  <section class="resume-section" id="resume">
+    <div class="wrap">
+      <div class="chapter-div reveal">
+        <span class="chapter-num">05</span>
+        <span class="chapter-line"></span>
+        <span class="chapter-label">Background</span>
+      </div>
+
+      {
+        resume.sections.map((section) => (
+          <div class="resume-block reveal">
+            <div class="resume-block-header">
+              <div class="resume-block-icon">
+                <svg viewBox="0 0 24 24" set:html={section.icon} />
+              </div>
+              <span class="resume-block-title">{section.title}</span>
+            </div>
+            <div class="resume-timeline">
+              {section.items.map((item) => (
+                <div class="resume-item">
+                  <div class="resume-period">{item.period}</div>
+                  <div class="resume-item-body">
+                    <div class="resume-role">{item.role}</div>
+                    <div class="resume-org">{item.org}</div>
+                    <p class="resume-desc">{item.desc}</p>
+                    <div class="resume-tags">
+                      {item.tags.map((tag) => (
+                        <span class="resume-tag">{tag}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ══ REACH ══ -->
+  <section class="cta-section" id="reach">
+    <div class="cta-inner">
+      <div class="reach-availability">
+        <span class="reach-dot"></span>
+        {reach.availability}
+      </div>
+      <h2 class="cta-headline">
+        Let's build something <em>together.</em>
+      </h2>
+      <p class="cta-body">{reach.body}</p>
+
+      <div class="reach-pills">
+        {
+          reach.socials.map((s) => (
+            <a
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="reach-pill"
+              style={`--pill-color: ${s.color};`}
+            >
+              <div class="rp-icon">
+                <svg viewBox="0 0 24 24" set:html={s.icon} />
+              </div>
+              <div class="rp-text">
+                <span class="rp-name">{s.name}</span>
+                <span class="rp-handle">{s.handle}</span>
+              </div>
+              <svg class="rp-arrow" viewBox="0 0 24 24">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ── Shared layout ── */
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* ── Section nav ── */
+  .section-nav-wrap {
+    position: sticky;
+    top: 64px;
+    z-index: 90;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    transition:
+      background 0.3s,
+      border-color 0.3s;
+  }
+  .section-nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .section-link {
+    padding: 0.7rem 1rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    white-space: nowrap;
+    transition:
+      color 0.15s,
+      border-color 0.15s;
+  }
+  .section-link:hover {
+    color: var(--text);
+  }
+  .section-link.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* ── Chapter dividers ── */
+  .chapter-div {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin: 2.5rem 0 1.5rem;
+  }
+  .chapter-num {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 6vw, 5rem);
+    font-weight: 700;
+    color: var(--text);
+    opacity: 0.07;
+    line-height: 1;
+    flex-shrink: 0;
+    user-select: none;
+  }
+  .chapter-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .chapter-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  /* ══════════════════════════════
+     STORY
+  ══════════════════════════════ */
+  .story-section {
+    position: relative;
+    overflow: hidden;
+    padding: 0 0 2rem;
+  }
+  .story-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.25;
+    mask-image: radial-gradient(
+      ellipse 55% 75% at 85% 50%,
+      black 20%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+  .story-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .portrait-wrap {
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    aspect-ratio: 3 / 4;
+  }
+  .portrait-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+  }
+  .portrait-nameplate {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem 1.25rem 1rem;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.75) 0%,
+      transparent 100%
+    );
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .np-name {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    color: #fff;
+    line-height: 1;
+  }
+  .np-role {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .portrait-links {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+  .portrait-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition:
+      background 0.18s,
+      transform 0.15s;
+    border: 1.5px solid transparent;
+  }
+  .portrait-btn svg {
+    width: 12px;
+    height: 12px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .portrait-btn:hover {
+    transform: translateY(-1px);
+  }
+  .portrait-btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .portrait-btn-primary:hover {
+    background: var(--accent2);
+    border-color: var(--accent2);
+  }
+  .portrait-btn-outline {
+    background: transparent;
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .portrait-btn-outline:hover {
+    background: var(--accent-soft);
+  }
+
+  .story-editorial {
+    position: relative;
+    z-index: 1;
+  }
+  .story-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    margin-bottom: 0.85rem;
+  }
+  .story-eyebrow::before {
+    content: "";
+    display: block;
+    width: 1.5rem;
+    height: 1px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .story-heading {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    margin-bottom: 2rem;
+  }
+  .story-heading em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+  .story-body p {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.85;
+    margin-bottom: 1.1rem;
+  }
+  .story-body p:last-child {
+    margin-bottom: 0;
+  }
+  .story-body strong {
+    color: var(--text);
+    font-weight: 700;
+  }
+  .story-blockquote {
+    position: relative;
+    margin: 2.25rem 0;
+    padding: 0.5rem 1.5rem 0.5rem 2rem;
+    border-left: 2px solid var(--accent);
+  }
+  .story-blockquote::before {
+    content: "\201C";
+    position: absolute;
+    left: -0.15rem;
+    top: -1.5rem;
+    font-family: var(--serif);
+    font-size: 5rem;
+    color: var(--accent);
+    opacity: 0.18;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .story-blockquote p {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 0.65rem;
+  }
+  .story-blockquote cite {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    font-style: normal;
+  }
+  .story-link {
+    color: var(--text);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-underline-offset: 3px;
+    transition: color 0.18s;
+  }
+  .story-link:hover {
+    color: var(--accent);
+  }
+
+  /* ══════════════════════════════
+     VALUES
+  ══════════════════════════════ */
+  .values-section {
+    background: var(--bg);
+    padding: 3rem 0;
+  }
+
+  .values-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem 4rem;
+    align-items: end;
+    margin-bottom: 3.5rem;
+  }
+  .values-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    margin-bottom: 0.85rem;
+  }
+  .values-eyebrow::before {
+    content: "";
+    display: block;
+    width: 1.5rem;
+    height: 1px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .values-heading {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+  }
+  .values-heading em {
+    font-style: italic;
+    font-weight: 400;
+  }
+  .values-intro {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.85;
+    margin: 0;
+  }
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+  .val-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.75rem 1.75rem 2rem;
+    display: flex;
+    flex-direction: column;
+    transition:
+      box-shadow 0.2s,
+      transform 0.2s;
+  }
+  .val-card:hover {
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.07);
+    transform: translateY(-3px);
+  }
+  .val-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  .val-icon {
+    width: 22px;
+    height: 22px;
+    stroke: var(--text);
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+  }
+  .val-num {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    opacity: 0.1;
+    line-height: 1;
+    user-select: none;
+  }
+  .val-title {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+  }
+  .val-desc {
+    font-size: 0.84rem;
+    color: var(--muted);
+    line-height: 1.75;
+    margin: 0;
+  }
+
+  /* ══════════════════════════════
+     NUMBERS
+  ══════════════════════════════ */
+  .numbers-section {
+    padding: 4rem 0;
+  }
+  .numbers-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+  .stat-item {
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    border-right: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+  .stat-item:last-child {
+    border-right: none;
+  }
+  .stat-item:hover {
+    background: var(--surface);
+  }
+  .stat-num {
+    display: block;
+    font-family: var(--serif);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .stat-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+  }
+
+  /* ══════════════════════════════
+     PROCESS
+  ══════════════════════════════ */
+  .process-section {
+    background: var(--bg);
+    padding: 3rem 0;
+  }
+  .process-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem 4rem;
+    align-items: end;
+    margin-bottom: 3.5rem;
+  }
+  .process-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    margin-bottom: 0.85rem;
+  }
+  .process-eyebrow::before {
+    content: "";
+    display: block;
+    width: 1.5rem;
+    height: 1px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .process-main-heading {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+  }
+  .process-main-heading em {
+    font-style: italic;
+    font-weight: 400;
+  }
+  .process-intro {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.85;
+    margin: 0;
+  }
+  .process-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .process-item {
+    display: grid;
+    grid-template-columns: 5rem 1fr 1fr;
+    gap: 2.5rem;
+    align-items: start;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.18s;
+  }
+  .process-item:first-child {
+    border-top: 1px solid var(--border);
+  }
+  .process-item:last-child {
+    border-bottom: none;
+  }
+  .process-step {
+    font-family: var(--serif);
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--text);
+    opacity: 0.06;
+    line-height: 1;
+    padding-top: 0.1rem;
+    user-select: none;
+    transition: opacity 0.3s ease;
+  }
+  .process-item:hover .process-step {
+    opacity: 0.28;
+  }
+  .process-title-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 0.15rem;
+  }
+  .process-tag {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+  }
+  .process-title {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.25;
+  }
+  .process-desc {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.85;
+    padding-top: 0.25rem;
+    margin: 0;
+  }
+
+  /* ══════════════════════════════
+     RESUME
+  ══════════════════════════════ */
+  .resume-section {
+    padding: 0 0 3rem;
+  }
+  .resume-block {
+    margin-bottom: 3rem;
+  }
+  .resume-block:last-child {
+    margin-bottom: 0;
+  }
+  .resume-block-header {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+  }
+  .resume-block-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--accent-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .resume-block-icon svg {
+    width: 15px;
+    height: 15px;
+    stroke: var(--accent);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .resume-block-title {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .resume-timeline {
+    display: flex;
+    flex-direction: column;
+  }
+  .resume-item {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    gap: 1.25rem;
+    padding-bottom: 2rem;
+    position: relative;
+  }
+  .resume-item:last-child {
+    padding-bottom: 0;
+  }
+  .resume-period {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-align: right;
+    padding-top: 0.3rem;
+    white-space: nowrap;
+  }
+  .resume-item-body {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+  .resume-item-body::before {
+    content: "";
+    position: absolute;
+    left: -0.45rem;
+    top: 0.35rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--surface);
+    box-shadow: 0 0 0 2px var(--accent);
+    z-index: 1;
+  }
+  .resume-item:not(:last-child) .resume-item-body::after {
+    content: "";
+    position: absolute;
+    left: calc(-0.45rem + 3px);
+    top: calc(0.35rem + 8px);
+    bottom: -2rem;
+    width: 2px;
+    background: var(--border);
+  }
+  .resume-role {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .resume-org {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 0.2rem 0 0.65rem;
+  }
+  .resume-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: 0 0 0.75rem;
+  }
+  .resume-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .resume-tag {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    background: var(--tag-bg);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    letter-spacing: 0.02em;
+  }
+
+  /* ══════════════════════════════
+     CTA / REACH
+  ══════════════════════════════ */
+  .cta-section {
+    position: relative;
+    padding: 6rem 2rem 7rem;
+    overflow: hidden;
+    text-align: center;
+  }
+  .cta-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse 800px 500px at 50% 30%,
+      var(--accent-soft) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+  .cta-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .reach-availability {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #16a34a;
+    margin-bottom: 1.25rem;
+  }
+  [data-theme="dark"] .reach-availability {
+    color: #4ade80;
+  }
+  .reach-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #16a34a;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
+    animation: reach-pulse 2.5s infinite;
+    flex-shrink: 0;
+  }
+  [data-theme="dark"] .reach-dot {
+    background: #4ade80;
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.15);
+  }
+  @keyframes reach-pulse {
+    0%,
+    100% {
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
+    }
+    50% {
+      box-shadow: 0 0 0 7px rgba(22, 163, 74, 0.05);
+    }
+  }
+  .cta-headline {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--text);
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+  .cta-headline em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .cta-body {
+    font-size: 0.95rem;
+    color: var(--muted);
+    max-width: 52ch;
+    margin: 0 auto 2.5rem;
+    line-height: 1.8;
+  }
+  .reach-pills {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 0.6rem;
+    text-align: left;
+  }
+  .reach-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    text-decoration: none;
+    color: inherit;
+    transition:
+      border-color 0.18s,
+      background 0.18s;
+  }
+  .reach-pill:hover {
+    border-color: var(--pill-color);
+    background: color-mix(in srgb, var(--pill-color) 5%, var(--surface));
+  }
+  .rp-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    background: color-mix(in srgb, var(--pill-color) 10%, transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .rp-icon svg {
+    width: 15px;
+    height: 15px;
+    stroke: var(--pill-color);
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .rp-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .rp-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .rp-handle {
+    font-size: 0.68rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+  }
+  .rp-arrow {
+    width: 13px;
+    height: 13px;
+    stroke: var(--muted);
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+    transition:
+      stroke 0.18s,
+      transform 0.18s;
+  }
+  .reach-pill:hover .rp-arrow {
+    stroke: var(--pill-color);
+    transform: translateX(2px);
+  }
+
+  /* ══════════════════════════════
+     PHILOSOPHY
+  ══════════════════════════════ */
+  .philosophy-section {
+    padding: 3rem 0;
+  }
+  .philosophy-header {
+    margin-bottom: 3rem;
+  }
+  .phil-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    margin-bottom: 0.85rem;
+  }
+  .phil-eyebrow::before {
+    content: "";
+    display: block;
+    width: 2rem;
+    height: 1px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .phil-heading {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+  .phil-heading em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+  }
+  .philosophy-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  .phil-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.75rem 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s,
+      transform 0.2s;
+  }
+  .phil-card:hover {
+    border-color: rgba(42, 92, 232, 0.2);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.06);
+    transform: translateY(-3px);
+  }
+  .phil-num {
+    display: block;
+    font-family: var(--serif);
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--text);
+    opacity: 0.08;
+    line-height: 1;
+    margin-bottom: 1.25rem;
+    user-select: none;
+  }
+  .phil-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.35;
+    margin-bottom: 0.6rem;
+  }
+  .phil-desc {
+    font-size: 0.84rem;
+    color: var(--muted);
+    line-height: 1.75;
+    margin: 0;
+  }
+
+  /* ══════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════ */
+  @media (max-width: 768px) {
+    .section-nav-wrap {
+      top: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .section-nav-wrap::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  @media (max-width: 960px) {
+    .story-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    .story-portrait-col {
+      max-width: 320px;
+    }
+    .values-header {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+    .values-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .philosophy-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .numbers-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .stat-item:nth-child(2) {
+      border-right: none;
+    }
+    .stat-item:nth-child(3) {
+      border-top: 1px solid var(--border);
+    }
+    .stat-item:nth-child(4) {
+      border-right: none;
+      border-top: 1px solid var(--border);
+    }
+    .process-header {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+    .process-item {
+      grid-template-columns: 4rem 1fr;
+      gap: 1.5rem;
+    }
+    .process-desc {
+      grid-column: 2;
+      padding-top: 0;
+      margin-top: 0.5rem;
+    }
+  }
+  @media (max-width: 640px) {
+    .values-grid {
+      grid-template-columns: 1fr;
+    }
+    .philosophy-grid {
+      grid-template-columns: 1fr;
+    }
+    .numbers-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .process-item {
+      grid-template-columns: 3rem 1fr;
+      gap: 1rem;
+    }
+    .process-step {
+      font-size: 2rem;
+    }
+    .process-desc {
+      grid-column: 2;
+    }
+    .resume-item {
+      grid-template-columns: 5rem 1fr;
+    }
+    .wrap {
+      padding: 0 1.25rem;
+    }
+    .chapter-div {
+      margin: 1.75rem 0 1rem;
+    }
+  }
+</style>
+
+<script>
+  const links = document.querySelectorAll<HTMLAnchorElement>(".section-link");
+  const sectionIds = ["about", "principles", "philosophy", "process", "resume", "reach"];
+  const sections = sectionIds
+    .map((id) => document.getElementById(id))
+    .filter(Boolean) as HTMLElement[];
+
+  const setActive = (id: string) => {
+    links.forEach((l) => {
+      l.classList.toggle("active", l.getAttribute("href") === `#${id}`);
+    });
+  };
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    },
+    { rootMargin: "-15% 0px -70% 0px", threshold: 0 },
+  );
+
+  sections.forEach((s) => observer.observe(s));
+</script>

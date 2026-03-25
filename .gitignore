@@ -11,6 +11,7 @@ Thumbs.db
 # Local Server/Environment
 node_modules/
 .env
+.env.production
 .npm/
 
 # Logs
@@ -18,6 +19,13 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Build/Dist folders (If you decide to use a bundler later)
+# Build/Dist folders
 dist/
 build/
+.astro/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

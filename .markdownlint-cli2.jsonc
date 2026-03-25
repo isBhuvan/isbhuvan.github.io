@@ -1,0 +1,22 @@
+{
+  "globs": [
+    "src/content/blog/**/*.md"
+  ],
+  "ignores": [
+    "node_modules/**",
+    "dist/**",
+    ".astro/**"
+  ],
+  "config": {
+    "default": true,
+    "MD001": false,
+    "MD003": false,
+    "MD013": false,
+    "MD024": false,
+    "MD028": false,
+    "MD032": false,
+    "MD036": false,
+    "MD040": false,
+    "MD060": false
+  }
+}
