@@ -61,20 +61,37 @@ const publishedSlugs = new Set(blogPosts.map(p => p.id.split('/').at(-1) ?? p.id
   <!-- ═══ FILTER BAR ════════════════════════════════════════════ -->
   <div class="filter-wrap">
     <div class="filter-inner">
-      <div class="filter-group">
-        <span class="filter-label">Topic</span>
-        <button class="filter-btn active" data-topic="all">All</button>
-        {allTopics.map(t => (
-          <button class="filter-btn" data-topic={t}>{t}</button>
-        ))}
+      <div class="filter-dropdown" id="filter-dropdown">
+        <button class="filter-trigger" id="filter-trigger" aria-expanded="false" aria-haspopup="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+          Filter
+          <span class="filter-active-count" id="filter-active-count" aria-hidden="true"></span>
+          <svg class="filter-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <div class="filter-panel" id="filter-panel" role="dialog" aria-label="Filters">
+          <div class="filter-section">
+            <span class="filter-label">Topic</span>
+            <div class="filter-group">
+              <button class="filter-btn active" data-topic="all">All</button>
+              {allTopics.map(t => (
+                <button class="filter-btn" data-topic={t}>{t}</button>
+              ))}
+            </div>
+          </div>
+          <div class="filter-divider"></div>
+          <div class="filter-section">
+            <span class="filter-label">Status</span>
+            <div class="filter-group">
+              <button class="filter-btn active" data-status="all">All</button>
+              <button class="filter-btn" data-status="active">In Progress</button>
+              <button class="filter-btn" data-status="complete">Complete</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="filter-divider"></div>
-      <div class="filter-group">
-        <span class="filter-label">Status</span>
-        <button class="filter-btn active" data-status="all">All</button>
-        <button class="filter-btn" data-status="active">In Progress</button>
-        <button class="filter-btn" data-status="complete">Complete</button>
-      </div>
+
+      <span class="filter-summary" id="filter-summary"></span>
     </div>
   </div>
 
@@ -85,7 +102,7 @@ const publishedSlugs = new Set(blogPosts.map(p => p.id.split('/').at(-1) ?? p.id
       <div class="series-list" id="series-list">
         {sorted.map(s => {
           const { title, description, level, hours, status, statusLabel,
-                  topics, objectives, prerequisites, modules,
+                  topics, prerequisites, modules,
                   iconPath = 'M4 19.5A2.5 2.5 0 0 1 6.5 17H20 M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z',
                   accentHue = '220' } = s.data;
 
@@ -131,7 +148,7 @@ const publishedSlugs = new Set(blogPosts.map(p => p.id.split('/').at(-1) ?? p.id
                       <div class="sc-module">
                         <div class="sc-module-heading">{mod.heading}</div>
                         <div class="sc-module-posts">
-                          {mod.posts.map((post, pi) => (
+                          {mod.posts.map((post) => (
                             <div class={`sc-post ${publishedSlugs.has(post.slug) ? 'done' : 'upcoming'}`}>
                               <span class="sc-post-dot"></span>
                               <span class="sc-post-title">{post.title}</span>
@@ -276,27 +293,66 @@ const publishedSlugs = new Set(blogPosts.map(p => p.id.split('/').at(-1) ?? p.id
      FILTER BAR
   ════════════════════════════════ */
   .filter-wrap {
-    padding: 1.1rem 0; border-bottom: 1px solid var(--border);
-    background: var(--surface); position: sticky; top: 60px; z-index: 90;
+    padding: 1rem 0; border-bottom: 1px solid var(--border);
+    background: var(--surface);
   }
   .filter-inner {
     max-width: var(--max-w); margin: 0 auto; padding: 0 2rem;
-    display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+    display: flex; align-items: center; gap: 0.75rem;
   }
+
+  /* Trigger button */
+  .filter-dropdown { position: relative; }
+  .filter-trigger {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.4rem 0.9rem; border-radius: 8px;
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.02em;
+    cursor: pointer; border: 1px solid var(--border); background: var(--surface);
+    color: var(--muted); font-family: var(--font); transition: all 0.18s;
+    user-select: none;
+  }
+  .filter-trigger:hover, .filter-trigger[aria-expanded="true"] {
+    border-color: var(--accent); color: var(--accent);
+  }
+  .filter-trigger svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+  .filter-chevron { transition: transform 0.2s; }
+  .filter-trigger[aria-expanded="true"] .filter-chevron { transform: rotate(180deg); }
+
+  .filter-active-count {
+    display: none; background: var(--accent); color: #fff;
+    font-size: 0.6rem; font-weight: 700; border-radius: 99px;
+    padding: 0.05rem 0.45rem; line-height: 1.6;
+  }
+  .filter-active-count.visible { display: inline-block; }
+
+  /* Dropdown panel */
+  .filter-panel {
+    display: none; position: absolute; top: calc(100% + 6px); left: 0;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1rem; min-width: 280px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1); z-index: 100;
+  }
+  .filter-panel.open { display: flex; flex-direction: column; gap: 0.75rem; }
+  .filter-section { display: flex; flex-direction: column; gap: 0.5rem; }
   .filter-group { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
   .filter-label {
-    font-size: 0.64rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--muted); margin-right: 0.25rem; white-space: nowrap;
+    font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); white-space: nowrap;
   }
   .filter-btn {
-    padding: 0.3rem 0.85rem; border-radius: 6px;
-    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase;
+    padding: 0.28rem 0.75rem; border-radius: 6px;
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase;
     cursor: pointer; border: 1px solid var(--border); background: transparent;
     color: var(--muted); font-family: var(--font); transition: all 0.18s;
   }
   .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
   .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .filter-divider { width: 1px; height: 22px; background: var(--border); flex-shrink: 0; }
+  .filter-divider { height: 1px; background: var(--border); }
+
+  /* Active filter summary */
+  .filter-summary {
+    font-size: 0.72rem; color: var(--muted); font-style: italic;
+  }
 
   /* Empty state */
   .filter-empty {
@@ -522,9 +578,27 @@ const publishedSlugs = new Set(blogPosts.map(p => p.id.split('/').at(-1) ?? p.id
   }, { threshold: 0.05 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
+  // ── Filter dropdown ──
+  const trigger   = document.getElementById('filter-trigger') as HTMLButtonElement;
+  const panel     = document.getElementById('filter-panel')!;
+  const countBadge = document.getElementById('filter-active-count')!;
+  const summary   = document.getElementById('filter-summary')!;
+
+  trigger.addEventListener('click', () => {
+    const open = panel.classList.toggle('open');
+    trigger.setAttribute('aria-expanded', String(open));
+  });
+
+  document.addEventListener('click', e => {
+    if (!document.getElementById('filter-dropdown')!.contains(e.target as Node)) {
+      panel.classList.remove('open');
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+  });
+
   // ── Filter logic ──
-  const topicBtns  = document.querySelectorAll<HTMLButtonElement>('.filter-wrap button[data-topic]');
-  const statusBtns = document.querySelectorAll<HTMLButtonElement>('.filter-wrap button[data-status]');
+  const topicBtns  = document.querySelectorAll<HTMLButtonElement>('#filter-panel button[data-topic]');
+  const statusBtns = document.querySelectorAll<HTMLButtonElement>('#filter-panel button[data-status]');
   const cards      = document.querySelectorAll<HTMLElement>('#series-list .series-card');
   const empty      = document.getElementById('filter-empty')!;
 
@@ -536,13 +610,22 @@ const publishedSlugs = new Set(blogPosts.map(p => p.id.split('/').at(-1) ?? p.id
     cards.forEach(card => {
       const topics = (card.dataset.topics ?? '').split(',');
       const status = card.dataset.status ?? '';
-      const matchTopic  = activeTopic  === 'all' || topics.includes(activeTopic);
-      const matchStatus = activeStatus === 'all' || status === activeStatus;
-      const show = matchTopic && matchStatus;
+      const show = (activeTopic === 'all' || topics.includes(activeTopic))
+                && (activeStatus === 'all' || status === activeStatus);
       card.classList.toggle('hidden', !show);
       if (show) visible++;
     });
     empty.classList.toggle('visible', visible === 0);
+
+    // Update badge & summary
+    const activeCount = (activeTopic !== 'all' ? 1 : 0) + (activeStatus !== 'all' ? 1 : 0);
+    countBadge.textContent = String(activeCount);
+    countBadge.classList.toggle('visible', activeCount > 0);
+
+    const parts: string[] = [];
+    if (activeTopic !== 'all') parts.push(activeTopic);
+    if (activeStatus !== 'all') parts.push(activeStatus === 'active' ? 'In Progress' : 'Complete');
+    summary.textContent = parts.length ? `Showing: ${parts.join(' · ')}` : '';
   }
 
   topicBtns.forEach(btn => btn.addEventListener('click', () => {
