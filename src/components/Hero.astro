@@ -3,26 +3,26 @@
 
 const codeHtml = [
   '<span class="t-c"># Azure AKS · Terraform</span>',
-  '',
+  "",
   '<span class="t-k">resource</span> <span class="t-s">"azurerm_kubernetes_cluster"</span> <span class="t-s">"prod"</span> {',
   '  name                = <span class="t-s">"prod-aks-eastus"</span>',
   '  resource_group_name = <span class="t-a">var</span>.rg_name',
   '  location            = <span class="t-s">"eastus"</span>',
   '  kubernetes_version  = <span class="t-s">"1.29"</span>',
-  '',
+  "",
   '  <span class="t-k">default_node_pool</span> {',
   '    name       = <span class="t-s">"system"</span>',
   '    node_count = <span class="t-n">3</span>',
   '    vm_size    = <span class="t-s">"Standard_D4s_v5"</span>',
-  '  }',
+  "  }",
   '  <span class="t-k">identity</span> { type = <span class="t-s">"SystemAssigned"</span> }',
-  '}',
-  '',
+  "}",
+  "",
   '<span class="t-c">$ terraform apply -auto-approve</span>',
   '<span class="t-ok">✓ azurerm_kubernetes_cluster.prod created</span>',
   '<span class="t-ok">✓ 32 resources · 4m 18s</span>',
   '<span class="t-c">$ </span><span class="t-cursor">_</span>',
-].join('\n');
+].join("\n");
 ---
 
 <section id="hero">
@@ -50,9 +50,9 @@ const codeHtml = [
       </div>
 
       <p class="hero-desc">
-        Building cloud-native infrastructure on Azure &mdash; Kubernetes platforms,
-        Terraform module registries, GitOps pipelines, and Go-based operators.
-        Writing about what I learn at <strong>isBhuvan</strong>.
+        Building cloud-native infrastructure on Azure &mdash; Kubernetes
+        platforms, Terraform module registries, GitOps pipelines, and Go-based
+        operators. Writing about what I learn at <strong>isBhuvan</strong>.
       </p>
 
       <div class="hero-ctas">
@@ -60,8 +60,8 @@ const codeHtml = [
         <a href="/blog" class="hero-btn-outline">
           Read the Blog
           <svg viewBox="0 0 24 24" aria-hidden="true">
-            <line x1="5" y1="12" x2="19" y2="12"/>
-            <polyline points="12 5 19 12 12 19"/>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
           </svg>
         </a>
       </div>
@@ -95,7 +95,7 @@ const codeHtml = [
           <span class="t-dot t-green"></span>
           <span class="terminal-title">main.tf &mdash; prod-aks</span>
         </div>
-        <pre class="terminal-body" set:html={codeHtml}></pre>
+        <pre class="terminal-body" set:html={codeHtml} />
         <div class="terminal-badges">
           <span class="t-badge ok">3 Nodes Ready</span>
           <span class="t-badge">AKS 1.29</span>
@@ -108,8 +108,8 @@ const codeHtml = [
 
   <div class="hero-scroll" aria-hidden="true">
     <svg viewBox="0 0 24 24">
-      <line x1="12" y1="5" x2="12" y2="19"/>
-      <polyline points="19 12 12 19 5 12"/>
+      <line x1="12" y1="5" x2="12" y2="19"></line>
+      <polyline points="19 12 12 19 5 12"></polyline>
     </svg>
     Scroll
   </div>
@@ -168,12 +168,18 @@ const codeHtml = [
 
   /* ── Left column ───────────────────────────────────── */
   .hero-left {
-    animation: heroUp 0.9s var(--ease, cubic-bezier(.16,1,.3,1)) both 0.1s;
+    animation: heroUp 0.9s var(--ease, cubic-bezier(0.16, 1, 0.3, 1)) both 0.1s;
   }
 
   @keyframes heroUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: none; }
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   .hero-kicker {
@@ -187,8 +193,9 @@ const codeHtml = [
     align-items: center;
     gap: 0.5rem;
   }
+
   .hero-kicker::before {
-    content: '';
+    content: "";
     display: inline-block;
     width: 24px;
     height: 1.5px;
@@ -205,10 +212,12 @@ const codeHtml = [
     color: var(--text);
     margin-bottom: 1.4rem;
   }
+
   .hero-h1 em {
     font-style: italic;
     color: var(--muted);
   }
+
   .hero-acc {
     color: var(--accent);
   }
@@ -219,8 +228,9 @@ const codeHtml = [
     flex-wrap: wrap;
     gap: 0.4rem;
     margin-bottom: 1.5rem;
-    animation: heroUp 0.8s var(--ease, cubic-bezier(.16,1,.3,1)) both 0.35s;
+    animation: heroUp 0.8s var(--ease, cubic-bezier(0.16, 1, 0.3, 1)) both 0.35s;
   }
+
   .hero-pill {
     font-family: var(--font-mono);
     font-size: 0.6rem;
@@ -231,6 +241,7 @@ const codeHtml = [
     color: var(--muted);
     white-space: nowrap;
   }
+
   .hero-pill.hi {
     color: var(--accent);
     border-color: color-mix(in srgb, var(--accent) 35%, transparent);
@@ -244,8 +255,9 @@ const codeHtml = [
     color: var(--muted);
     max-width: 520px;
     margin-bottom: 1.8rem;
-    animation: heroUp 0.8s var(--ease, cubic-bezier(.16,1,.3,1)) both 0.45s;
+    animation: heroUp 0.8s var(--ease, cubic-bezier(0.16, 1, 0.3, 1)) both 0.45s;
   }
+
   .hero-desc strong {
     color: var(--text);
     font-weight: 600;
@@ -257,8 +269,9 @@ const codeHtml = [
     gap: 0.75rem;
     flex-wrap: wrap;
     margin-bottom: 2.4rem;
-    animation: heroUp 0.8s var(--ease, cubic-bezier(.16,1,.3,1)) both 0.55s;
+    animation: heroUp 0.8s var(--ease, cubic-bezier(0.16, 1, 0.3, 1)) both 0.55s;
   }
+
   .hero-btn-solid {
     background: var(--text);
     color: var(--bg);
@@ -268,9 +281,15 @@ const codeHtml = [
     font-weight: 600;
     text-decoration: none;
     letter-spacing: 0.02em;
-    transition: opacity 0.2s, transform 0.15s;
+    transition:
+      opacity 0.2s,
+      transform 0.15s;
   }
-  .hero-btn-solid:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  .hero-btn-solid:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+  }
 
   .hero-btn-outline {
     display: inline-flex;
@@ -282,13 +301,24 @@ const codeHtml = [
     font-weight: 600;
     text-decoration: none;
     letter-spacing: 0.02em;
-    transition: color 0.2s, gap 0.2s;
+    transition:
+      color 0.2s,
+      gap 0.2s;
   }
-  .hero-btn-outline:hover { color: var(--accent); gap: 0.7rem; }
+
+  .hero-btn-outline:hover {
+    color: var(--accent);
+    gap: 0.7rem;
+  }
+
   .hero-btn-outline svg {
-    width: 15px; height: 15px;
-    stroke: currentColor; fill: none;
-    stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+    width: 15px;
+    height: 15px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
   /* Stats */
@@ -300,9 +330,17 @@ const codeHtml = [
     border: 1px solid var(--border);
     border-radius: 10px;
     overflow: hidden;
-    animation: fadeIn 1s var(--ease, cubic-bezier(.16,1,.3,1)) both 0.65s;
+    animation: fadeIn 1s var(--ease, cubic-bezier(0.16, 1, 0.3, 1)) both 0.65s;
   }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 
   .hstat {
     padding: 0.9rem 1.4rem;
@@ -310,7 +348,10 @@ const codeHtml = [
     border-right: 1px solid var(--border);
     background: var(--surface);
   }
-  .hstat:last-child { border-right: none; }
+
+  .hstat:last-child {
+    border-right: none;
+  }
 
   .hstat-num {
     font-family: var(--serif);
@@ -319,11 +360,13 @@ const codeHtml = [
     line-height: 1;
     font-weight: 400;
   }
+
   .hstat-num sup {
     font-size: 0.7em;
     vertical-align: super;
     color: var(--accent);
   }
+
   .hstat-lbl {
     font-family: var(--font-mono);
     font-size: 0.52rem;
@@ -335,15 +378,17 @@ const codeHtml = [
 
   /* ── Terminal (right column) ───────────────────────── */
   .hero-right {
-    animation: fadeIn 1s var(--ease, cubic-bezier(.16,1,.3,1)) both 0.5s;
+    animation: fadeIn 1s var(--ease, cubic-bezier(0.16, 1, 0.3, 1)) both 0.5s;
   }
 
   .terminal {
     background: #0f1117;
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 24px 60px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.12);
+    box-shadow:
+      0 24px 60px rgba(0, 0, 0, 0.18),
+      0 4px 16px rgba(0, 0, 0, 0.12);
   }
 
   .terminal-bar {
@@ -352,22 +397,33 @@ const codeHtml = [
     gap: 6px;
     padding: 0.75rem 1rem;
     background: #161b22;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   }
+
   .t-dot {
-    width: 11px; height: 11px;
+    width: 11px;
+    height: 11px;
     border-radius: 50%;
     flex-shrink: 0;
   }
-  .t-red   { background: #ff5f57; }
-  .t-amber { background: #febc2e; }
-  .t-green { background: #28c840; }
+
+  .t-red {
+    background: #ff5f57;
+  }
+
+  .t-amber {
+    background: #febc2e;
+  }
+
+  .t-green {
+    background: #28c840;
+  }
 
   .terminal-title {
     margin-left: 0.5rem;
     font-family: var(--font-mono);
     font-size: 0.62rem;
-    color: rgba(255,255,255,0.35);
+    color: rgba(255, 255, 255, 0.35);
     letter-spacing: 0.04em;
   }
 
@@ -383,12 +439,30 @@ const codeHtml = [
   }
 
   /* Terminal syntax colors */
-  .terminal-body :global(.t-c)  { color: #55616e; }
-  .terminal-body :global(.t-k)  { color: #c792ea; }
-  .terminal-body :global(.t-s)  { color: #c3e88d; }
-  .terminal-body :global(.t-n)  { color: #f78c6c; }
-  .terminal-body :global(.t-a)  { color: #82aaff; }
-  .terminal-body :global(.t-ok) { color: #c3e88d; }
+  .terminal-body :global(.t-c) {
+    color: #55616e;
+  }
+
+  .terminal-body :global(.t-k) {
+    color: #c792ea;
+  }
+
+  .terminal-body :global(.t-s) {
+    color: #c3e88d;
+  }
+
+  .terminal-body :global(.t-n) {
+    color: #f78c6c;
+  }
+
+  .terminal-body :global(.t-a) {
+    color: #82aaff;
+  }
+
+  .terminal-body :global(.t-ok) {
+    color: #c3e88d;
+  }
+
   .terminal-body :global(.t-cursor) {
     display: inline-block;
     width: 0.55em;
@@ -397,68 +471,106 @@ const codeHtml = [
     vertical-align: text-bottom;
     animation: blink 1.2s step-end infinite;
   }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
 
   .terminal-badges {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
     padding: 0.75rem 1.2rem;
-    border-top: 1px solid rgba(255,255,255,0.07);
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
   }
+
   .t-badge {
     font-family: var(--font-mono);
     font-size: 0.58rem;
     letter-spacing: 0.06em;
     padding: 0.22rem 0.6rem;
     border-radius: 4px;
-    border: 1px solid rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.45);
-    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.04);
   }
+
   .t-badge.ok {
     color: #c3e88d;
-    border-color: rgba(195,232,141,0.25);
-    background: rgba(195,232,141,0.06);
+    border-color: rgba(195, 232, 141, 0.25);
+    background: rgba(195, 232, 141, 0.06);
   }
 
   /* ── Terminal light theme ───────────────────────── */
   :global([data-theme="light"]) .terminal {
     background: #f6f8fa;
-    border-color: rgba(0,0,0,0.1);
-    box-shadow: 0 24px 60px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow:
+      0 24px 60px rgba(0, 0, 0, 0.07),
+      0 4px 16px rgba(0, 0, 0, 0.05);
   }
+
   :global([data-theme="light"]) .terminal-bar {
     background: #eaeef2;
-    border-bottom-color: rgba(0,0,0,0.08);
+    border-bottom-color: rgba(0, 0, 0, 0.08);
   }
+
   :global([data-theme="light"]) .terminal-title {
-    color: rgba(0,0,0,0.38);
+    color: rgba(0, 0, 0, 0.38);
   }
+
   :global([data-theme="light"]) .terminal-body {
     color: #24292f;
   }
-  :global([data-theme="light"]) .terminal-body :global(.t-c)  { color: #6e7781; }
-  :global([data-theme="light"]) .terminal-body :global(.t-k)  { color: #8250df; }
-  :global([data-theme="light"]) .terminal-body :global(.t-s)  { color: #0a3069; }
-  :global([data-theme="light"]) .terminal-body :global(.t-n)  { color: #0550ae; }
-  :global([data-theme="light"]) .terminal-body :global(.t-a)  { color: #953800; }
-  :global([data-theme="light"]) .terminal-body :global(.t-ok) { color: #1a7f37; }
+
+  :global([data-theme="light"]) .terminal-body :global(.t-c) {
+    color: #6e7781;
+  }
+
+  :global([data-theme="light"]) .terminal-body :global(.t-k) {
+    color: #8250df;
+  }
+
+  :global([data-theme="light"]) .terminal-body :global(.t-s) {
+    color: #0a3069;
+  }
+
+  :global([data-theme="light"]) .terminal-body :global(.t-n) {
+    color: #0550ae;
+  }
+
+  :global([data-theme="light"]) .terminal-body :global(.t-a) {
+    color: #953800;
+  }
+
+  :global([data-theme="light"]) .terminal-body :global(.t-ok) {
+    color: #1a7f37;
+  }
+
   :global([data-theme="light"]) .terminal-body :global(.t-cursor) {
     background: #0969da;
   }
+
   :global([data-theme="light"]) .terminal-badges {
-    border-top-color: rgba(0,0,0,0.08);
+    border-top-color: rgba(0, 0, 0, 0.08);
   }
+
   :global([data-theme="light"]) .t-badge {
-    border-color: rgba(0,0,0,0.1);
-    color: rgba(0,0,0,0.45);
-    background: rgba(0,0,0,0.03);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.45);
+    background: rgba(0, 0, 0, 0.03);
   }
+
   :global([data-theme="light"]) .t-badge.ok {
     color: #1a7f37;
-    border-color: rgba(26,127,55,0.25);
-    background: rgba(26,127,55,0.06);
+    border-color: rgba(26, 127, 55, 0.25);
+    background: rgba(26, 127, 55, 0.06);
   }
 
   /* ── Scroll hint ─────────────────────────────────── */
@@ -478,14 +590,25 @@ const codeHtml = [
     text-transform: uppercase;
     animation: scrollBounce 2.2s ease-in-out infinite;
   }
+
   .hero-scroll svg {
-    width: 16px; height: 16px;
-    stroke: currentColor; fill: none;
-    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
+
   @keyframes scrollBounce {
-    0%,100% { transform: translateX(-50%) translateY(0); }
-    50%      { transform: translateX(-50%) translateY(5px); }
+    0%,
+    100% {
+      transform: translateX(-50%) translateY(0);
+    }
+    50% {
+      transform: translateX(-50%) translateY(5px);
+    }
   }
 
   /* ── Responsive ──────────────────────────────────── */
@@ -495,21 +618,51 @@ const codeHtml = [
       gap: 2.5rem;
     }
   }
+
   @media (max-width: 900px) {
     .hero-inner {
       grid-template-columns: 1fr;
       padding: 5rem 1.5rem 3rem;
     }
-    .hero-right { display: none; }
-    .hero-watermark { display: none; }
-    .hero-h1 { font-size: clamp(3rem, 12vw, 5rem); }
-    .hero-stats { grid-template-columns: repeat(2, auto); }
-    .hstat:nth-child(2) { border-right: 1px solid var(--border); }
-    .hstat:nth-child(3) { border-top: 1px solid var(--border); }
-    .hstat:nth-child(4) { border-top: 1px solid var(--border); }
+
+    .hero-right {
+      display: none;
+    }
+
+    .hero-watermark {
+      display: none;
+    }
+
+    .hero-h1 {
+      font-size: clamp(3rem, 12vw, 5rem);
+    }
+
+    .hero-stats {
+      grid-template-columns: repeat(2, auto);
+    }
+
+    .hstat:nth-child(2) {
+      border-right: 1px solid var(--border);
+    }
+
+    .hstat:nth-child(3) {
+      border-top: 1px solid var(--border);
+    }
+
+    .hstat:nth-child(4) {
+      border-top: 1px solid var(--border);
+    }
   }
+
   @media (max-width: 480px) {
-    .hero-ctas { flex-direction: column; align-items: flex-start; }
-    .hero-stats { grid-template-columns: repeat(2, 1fr); width: 100%; }
+    .hero-ctas {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .hero-stats {
+      grid-template-columns: repeat(2, 1fr);
+      width: 100%;
+    }
   }
 </style>

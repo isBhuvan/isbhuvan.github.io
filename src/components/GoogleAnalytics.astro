@@ -1,8 +1,6 @@
 ---
-// src/components/GoogleAnalytics.astro
-// Drop inside <head>. Only renders in production to avoid polluting analytics during dev.
 interface Props {
-  id: string; // GA Measurement ID, e.g. "G-XXXXXXXXXX"
+  id: string;
 }
 const { id } = Astro.props;
 const isProd = import.meta.env.PROD;

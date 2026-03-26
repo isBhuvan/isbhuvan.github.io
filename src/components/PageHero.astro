@@ -1,5 +1,4 @@
 ---
-// src/components/PageHero.astro
 interface Stat {
   num: string | number;
   label: string;
@@ -165,6 +164,7 @@ const { eyebrow, title, sub, stats = [], maxWidth = "760px" } = Astro.props;
     height: auto;
     z-index: 0;
   }
+  
   :root:not([data-theme="dark"]) :global(.page-header-icon) {
     opacity: 0.045;
   }
@@ -173,6 +173,7 @@ const { eyebrow, title, sub, stats = [], maxWidth = "760px" } = Astro.props;
     .page-hero {
       padding: 4rem 1.5rem 3rem;
     }
+
     :global(.page-header-icon) {
       width: clamp(100px, 28vw, 180px);
       opacity: 0.04;
@@ -183,12 +184,15 @@ const { eyebrow, title, sub, stats = [], maxWidth = "760px" } = Astro.props;
     .page-hero {
       padding: 3.5rem 1.25rem 2.5rem;
     }
+
     :global(.page-header-icon) {
       display: none;
     }
+
     .page-hero-meta {
       gap: 1.25rem;
     }
+
     .page-hero-stat-num {
       font-size: 1.5rem;
     }

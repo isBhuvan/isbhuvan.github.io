@@ -1,5 +1,5 @@
 ---
-// src/components/Preloader.astro
+
 ---
 
 <div id="preloader">
@@ -25,9 +25,11 @@
       opacity 0.6s ease,
       visibility 0.6s ease;
   }
+
   :global([data-theme="dark"]) #preloader {
     background: #0d1117;
   }
+
   #preloader.hidden {
     opacity: 0;
     visibility: hidden;
@@ -42,6 +44,7 @@
     letter-spacing: normal;
     animation: fadeIn 0.5s ease forwards;
   }
+
   .preloader-bar-wrap {
     width: 140px;
     height: 2px;
@@ -50,6 +53,7 @@
     overflow: hidden;
     animation: fadeIn 0.5s ease 0.3s both;
   }
+
   .preloader-bar {
     height: 100%;
     width: 0;
@@ -57,6 +61,7 @@
     background: linear-gradient(90deg, var(--accent), var(--accent2));
     animation: fill 1.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
   }
+
   .preloader-label {
     font-size: 0.68rem;
     letter-spacing: 0.25em;
@@ -65,23 +70,28 @@
     color: var(--muted);
     animation: fadeIn 0.5s ease 0.5s both;
   }
+
   @keyframes fadeIn {
     from {
       opacity: 0;
       transform: translateY(8px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
     }
   }
+
   @keyframes fill {
     0% {
       width: 0%;
     }
+
     60% {
       width: 70%;
     }
+
     100% {
       width: 100%;
     }

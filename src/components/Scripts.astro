@@ -1,14 +1,5 @@
 ---
-// src/components/Scripts.astro
-// Shared client-side behaviour used by all layouts.
-// Import this once per layout instead of duplicating inline scripts.
-
 interface Props {
-  /**
-   * 'portfolio' — adds .will-reveal to elements before observing,
-   *   so CSS can start them hidden via .will-reveal and reveal on .visible.
-   * 'blog'      — elements start hidden via CSS; JS only adds .visible.
-   */
   revealMode?: "portfolio" | "blog";
 }
 
