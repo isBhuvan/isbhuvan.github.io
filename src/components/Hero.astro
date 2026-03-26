@@ -422,6 +422,45 @@ const codeHtml = [
     background: rgba(195,232,141,0.06);
   }
 
+  /* ── Terminal light theme ───────────────────────── */
+  :global([data-theme="light"]) .terminal {
+    background: #f6f8fa;
+    border-color: rgba(0,0,0,0.1);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+  }
+  :global([data-theme="light"]) .terminal-bar {
+    background: #eaeef2;
+    border-bottom-color: rgba(0,0,0,0.08);
+  }
+  :global([data-theme="light"]) .terminal-title {
+    color: rgba(0,0,0,0.38);
+  }
+  :global([data-theme="light"]) .terminal-body {
+    color: #24292f;
+  }
+  :global([data-theme="light"]) .terminal-body :global(.t-c)  { color: #6e7781; }
+  :global([data-theme="light"]) .terminal-body :global(.t-k)  { color: #8250df; }
+  :global([data-theme="light"]) .terminal-body :global(.t-s)  { color: #0a3069; }
+  :global([data-theme="light"]) .terminal-body :global(.t-n)  { color: #0550ae; }
+  :global([data-theme="light"]) .terminal-body :global(.t-a)  { color: #953800; }
+  :global([data-theme="light"]) .terminal-body :global(.t-ok) { color: #1a7f37; }
+  :global([data-theme="light"]) .terminal-body :global(.t-cursor) {
+    background: #0969da;
+  }
+  :global([data-theme="light"]) .terminal-badges {
+    border-top-color: rgba(0,0,0,0.08);
+  }
+  :global([data-theme="light"]) .t-badge {
+    border-color: rgba(0,0,0,0.1);
+    color: rgba(0,0,0,0.45);
+    background: rgba(0,0,0,0.03);
+  }
+  :global([data-theme="light"]) .t-badge.ok {
+    color: #1a7f37;
+    border-color: rgba(26,127,55,0.25);
+    background: rgba(26,127,55,0.06);
+  }
+
   /* ── Scroll hint ─────────────────────────────────── */
   .hero-scroll {
     position: absolute;
