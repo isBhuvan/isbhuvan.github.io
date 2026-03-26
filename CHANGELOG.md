@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/isBhuvan/isbhuvan.github.io/compare/v0.0.5...v0.0.6) (2026-03-26)
+
+
+### Features
+
+* add light theme styles for terminal component ([beb3061](https://github.com/isBhuvan/isbhuvan.github.io/commit/beb3061c9208569a3d059e191e7f80ab85c36cd8))
+
 ### [0.0.5](https://github.com/isBhuvan/isbhuvan.github.io/compare/v0.0.4...v0.0.5) (2026-03-26)
 
 ### 0.0.4 (2026-03-26)
