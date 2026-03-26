@@ -1,15 +1,12 @@
 ---
-// src/components/Giscus.astro
-// Configuration — run the wizard at https://giscus.app to get your IDs
-// then replace the placeholders below.
-const REPO = "isbhuvan/isbhuvan.github.io"; // owner/repo
-const REPO_ID = "R_kgDOQxc2GQ"; // from giscus.app
-const CATEGORY = "General"; // Discussions category name
-const CATEGORY_ID = "DIC_kwDOQxc2Gc4C4fK8"; // from giscus.app
+const REPO = "isbhuvan/isbhuvan.github.io";
+const REPO_ID = "R_kgDOQxc2GQ";
+const CATEGORY = "General";
+const CATEGORY_ID = "DIC_kwDOQxc2Gc4C4fK8";
 ---
 
 <section class="giscus-section">
-  <div class="giscus-inner">
+  <div class="giscus-container">
     <div class="giscus-header">
       <span class="giscus-eyebrow">Discussion</span>
       <h2 class="giscus-title">Comments</h2>
@@ -38,7 +35,6 @@ const CATEGORY_ID = "DIC_kwDOQxc2Gc4C4fK8"; // from giscus.app
 </section>
 
 <script>
-  // Sync Giscus theme with the site theme toggle
   function getGiscusTheme() {
     return document.documentElement.dataset.theme === "dark" ? "dark" : "light";
   }
@@ -80,7 +76,7 @@ const CATEGORY_ID = "DIC_kwDOQxc2Gc4C4fK8"; // from giscus.app
     background: var(--bg);
   }
 
-  .giscus-inner {
+  .giscus-container {
     max-width: 760px;
     margin: 0 auto;
     padding: 0 2rem;
@@ -107,10 +103,6 @@ const CATEGORY_ID = "DIC_kwDOQxc2Gc4C4fK8"; // from giscus.app
     letter-spacing: -0.02em;
     line-height: 1.15;
     margin: 0;
-  }
-
-  .giscus-wrap {
-    /* Let Giscus iframe fill the container naturally */
   }
 
   /* Override Giscus iframe border radius to match site radius */
