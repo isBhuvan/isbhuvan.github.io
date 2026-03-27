@@ -23,17 +23,68 @@ const featuredProjects = projects.filter((p) => p.featured);
     maxWidth="var(--max-w)"
   >
     <!-- Hexagon node cluster — Work/Projects -->
-    <svg slot="icon" class="page-header-icon" viewBox="0 0 200 200" fill="none" aria-hidden="true">
-      <polygon points="100,65 130,82 130,118 100,135 70,118 70,82" stroke="currentColor" stroke-width="5" stroke-linejoin="round" opacity=".75"/>
-      <polygon points="155,38 174,49 174,71 155,82 136,71 136,49" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" opacity=".5"/>
-      <polygon points="50,128 69,139 69,161 50,172 31,161 31,139" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" opacity=".5"/>
-      <polygon points="162,114 176,122 176,138 162,146 148,138 148,122" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" opacity=".35"/>
-      <line x1="130" y1="90" x2="136" y2="62" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".5"/>
-      <line x1="70" y1="115" x2="60" y2="139" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".5"/>
-      <line x1="130" y1="110" x2="148" y2="125" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".35"/>
-      <circle cx="100" cy="100" r="4" fill="currentColor" opacity=".12"/>
-      <circle cx="155" cy="60" r="3" fill="currentColor" opacity=".1"/>
-      <circle cx="50" cy="150" r="3" fill="currentColor" opacity=".1"/>
+    <svg
+      slot="icon"
+      class="page-header-icon"
+      viewBox="0 0 200 200"
+      fill="none"
+      aria-hidden="true"
+    >
+      <polygon
+        points="100,65 130,82 130,118 100,135 70,118 70,82"
+        stroke="currentColor"
+        stroke-width="5"
+        stroke-linejoin="round"
+        opacity=".75"></polygon>
+      <polygon
+        points="155,38 174,49 174,71 155,82 136,71 136,49"
+        stroke="currentColor"
+        stroke-width="3.5"
+        stroke-linejoin="round"
+        opacity=".5"></polygon>
+      <polygon
+        points="50,128 69,139 69,161 50,172 31,161 31,139"
+        stroke="currentColor"
+        stroke-width="3.5"
+        stroke-linejoin="round"
+        opacity=".5"></polygon>
+      <polygon
+        points="162,114 176,122 176,138 162,146 148,138 148,122"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linejoin="round"
+        opacity=".35"></polygon>
+      <line
+        x1="130"
+        y1="90"
+        x2="136"
+        y2="62"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        opacity=".5"></line>
+      <line
+        x1="70"
+        y1="115"
+        x2="60"
+        y2="139"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        opacity=".5"></line>
+      <line
+        x1="130"
+        y1="110"
+        x2="148"
+        y2="125"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        opacity=".35"></line>
+      <circle cx="100" cy="100" r="4" fill="currentColor" opacity=".12"
+      ></circle>
+      <circle cx="155" cy="60" r="3" fill="currentColor" opacity=".1"></circle>
+      <circle cx="50" cy="150" r="3" fill="currentColor" opacity=".1"></circle>
     </svg>
   </PageHero>
 
@@ -69,52 +120,67 @@ const featuredProjects = projects.filter((p) => p.featured);
   </div>
 
   <!-- ══ FEATURED PROJECTS ═════════════════════════════════════════ -->
-  {featuredProjects.length > 0 && (
-    <section class="featured-section" id="featured-section">
-      <div class="projects-inner">
-        <div class="proj-section-label">Featured</div>
-        <div class="featured-grid">
-          {featuredProjects.map((p, i) => {
-            const theme = cardThemes[i % cardThemes.length];
-            const year = p.meta.split("—")[1]?.trim() ?? "";
-            return (
-              <a
-                href={p.href}
-                class="proj-featured"
-                target="_blank"
-                rel="noopener"
-                aria-label={p.title}
-              >
-                <div class="proj-cover" style={`background: ${theme.gradient}`}>
-                  <svg class="cover-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d={p.iconPath} />
-                  </svg>
-                </div>
-                <div class="proj-body">
-                  <div class="proj-meta">
-                    <span class="proj-badge">{p.tags[0]}</span>
-                    <span class="proj-year">{year}</span>
-                  </div>
-                  <h3 class="proj-title">{p.title}</h3>
-                  <p class="proj-desc">{p.desc}</p>
-                  <div class="proj-stack">
-                    {p.tags.map((t) => <span class="proj-tech">{t}</span>)}
-                  </div>
-                  <div class="proj-footer">
-                    <span class="proj-cta">View on GitHub</span>
-                    <svg class="proj-arrow" viewBox="0 0 24 24" aria-hidden="true">
-                      <line x1="5" y1="12" x2="19" y2="12" />
-                      <polyline points="12 5 19 12 12 19" />
+  {
+    featuredProjects.length > 0 && (
+      <section class="featured-section" id="featured-section">
+        <div class="projects-inner">
+          <div class="proj-section-label">Featured</div>
+          <div class="featured-grid">
+            {featuredProjects.map((p, i) => {
+              const theme = cardThemes[i % cardThemes.length];
+              const year = p.meta.split("—")[1]?.trim() ?? "";
+              return (
+                <a
+                  href={p.href}
+                  class="proj-featured"
+                  target="_blank"
+                  rel="noopener"
+                  aria-label={p.title}
+                >
+                  <div
+                    class="proj-cover"
+                    style={`background: ${theme.gradient}`}
+                  >
+                    <svg
+                      class="cover-icon"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path d={p.iconPath} />
                     </svg>
                   </div>
-                </div>
-              </a>
-            );
-          })}
+                  <div class="proj-body">
+                    <div class="proj-meta">
+                      <span class="proj-badge">{p.tags[0]}</span>
+                      <span class="proj-year">{year}</span>
+                    </div>
+                    <h3 class="proj-title">{p.title}</h3>
+                    <p class="proj-desc">{p.desc}</p>
+                    <div class="proj-stack">
+                      {p.tags.map((t) => (
+                        <span class="proj-tech">{t}</span>
+                      ))}
+                    </div>
+                    <div class="proj-footer">
+                      <span class="proj-cta">View on GitHub</span>
+                      <svg
+                        class="proj-arrow"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                      </svg>
+                    </div>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
         </div>
-      </div>
-    </section>
-  )}
+      </section>
+    )
+  }
 
   <!-- ══ ALL PROJECTS GRID ══════════════════════════════════════════ -->
   <section class="projects-section">
@@ -135,7 +201,11 @@ const featuredProjects = projects.filter((p) => p.featured);
                 aria-label={p.title}
               >
                 <div class="card-cover" style={`background: ${theme.gradient}`}>
-                  <svg class="cover-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <svg
+                    class="cover-icon"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
                     <path d={p.iconPath} />
                   </svg>
                 </div>
@@ -147,11 +217,17 @@ const featuredProjects = projects.filter((p) => p.featured);
                   <h3 class="card-title">{p.title}</h3>
                   <p class="card-desc">{p.desc}</p>
                   <div class="card-stack">
-                    {p.tags.map((t) => <span class="card-tech">{t}</span>)}
+                    {p.tags.map((t) => (
+                      <span class="card-tech">{t}</span>
+                    ))}
                   </div>
                   <div class="card-footer">
                     <span class="card-link">View on GitHub</span>
-                    <svg class="card-gh-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <svg
+                      class="card-gh-icon"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
                       <path
                         stroke="currentColor"
                         fill="none"
@@ -171,7 +247,10 @@ const featuredProjects = projects.filter((p) => p.featured);
         <div class="projects-empty" id="projects-empty">
           <svg viewBox="0 0 24 24"
             ><circle cx="11" cy="11" r="8"></circle><line
-              x1="21" y1="21" x2="16.65" y2="16.65"></line></svg
+              x1="21"
+              y1="21"
+              x2="16.65"
+              y2="16.65"></line></svg
           >
           No projects match this filter.
         </div>
@@ -197,7 +276,8 @@ const featuredProjects = projects.filter((p) => p.featured);
       <div class="nudge-text">
         <div class="nudge-title">More on GitHub</div>
         <div class="nudge-sub">
-          Scripts, experiments, and work-in-progress projects live on my GitHub profile.
+          Scripts, experiments, and work-in-progress projects live on my GitHub
+          profile.
         </div>
       </div>
       <a
@@ -225,8 +305,11 @@ const featuredProjects = projects.filter((p) => p.featured);
     background: var(--bg);
     border-bottom: 1px solid var(--border);
     padding: 0.75rem 2rem;
-    transition: background 0.3s, border-color 0.3s;
+    transition:
+      background 0.3s,
+      border-color 0.3s;
   }
+
   .filter-bar-inner {
     max-width: 1100px;
     margin: 0 auto;
@@ -235,6 +318,7 @@ const featuredProjects = projects.filter((p) => p.featured);
     gap: 0.75rem;
     flex-wrap: wrap;
   }
+
   .filter-label {
     font-size: 0.68rem;
     font-weight: 700;
@@ -243,11 +327,13 @@ const featuredProjects = projects.filter((p) => p.featured);
     color: var(--muted);
     flex-shrink: 0;
   }
+
   .filter-btns {
     display: flex;
     flex-wrap: wrap;
     gap: 0.35rem;
   }
+
   .filter-btn {
     padding: 0.28rem 0.75rem;
     border-radius: 4px;
@@ -262,10 +348,12 @@ const featuredProjects = projects.filter((p) => p.featured);
     font-family: var(--font);
     transition: all 0.15s;
   }
+
   .filter-btn:hover {
     border-color: var(--accent);
     color: var(--accent);
   }
+
   .filter-btn.active {
     background: var(--accent);
     border-color: var(--accent);
@@ -290,8 +378,9 @@ const featuredProjects = projects.filter((p) => p.featured);
     align-items: center;
     gap: 0.8rem;
   }
+
   .proj-section-label::after {
-    content: '';
+    content: "";
     flex: 1;
     height: 1px;
     background: var(--border);
@@ -301,6 +390,7 @@ const featuredProjects = projects.filter((p) => p.featured);
   .featured-section {
     padding: 2.5rem 2rem 0;
   }
+
   .featured-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
@@ -318,14 +408,20 @@ const featuredProjects = projects.filter((p) => p.featured);
     color: inherit;
     display: flex;
     flex-direction: column;
-    transition: border-color 0.3s, transform 0.25s, box-shadow 0.3s;
+    transition:
+      border-color 0.3s,
+      transform 0.25s,
+      box-shadow 0.3s;
     position: relative;
     cursor: pointer;
   }
+
   .proj-featured::before {
-    content: '';
+    content: "";
     position: absolute;
-    top: 0; left: 0; right: 0;
+    top: 0;
+    left: 0;
+    right: 0;
     height: 2px;
     background: linear-gradient(90deg, transparent, var(--accent), transparent);
     transform: scaleX(0);
@@ -333,15 +429,18 @@ const featuredProjects = projects.filter((p) => p.featured);
     transition: transform 0.4s;
     z-index: 1;
   }
+
   .proj-featured:hover {
     border-color: rgba(37, 99, 235, 0.3);
     transform: translateY(-4px);
     box-shadow: 0 20px 50px rgba(37, 99, 235, 0.09);
   }
+
   [data-theme="dark"] .proj-featured:hover {
     border-color: rgba(96, 165, 250, 0.25);
     box-shadow: 0 20px 50px rgba(96, 165, 250, 0.07);
   }
+
   .proj-featured:hover::before {
     transform: scaleX(1);
   }
@@ -355,13 +454,17 @@ const featuredProjects = projects.filter((p) => p.featured);
     align-items: center;
     justify-content: center;
   }
+
   .proj-cover::after {
-    content: '';
+    content: "";
     position: absolute;
-    bottom: 0; left: 0; right: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     height: 48px;
     background: linear-gradient(to bottom, transparent, var(--surface));
   }
+
   .proj-cover .cover-icon {
     width: 52px;
     height: 52px;
@@ -382,12 +485,14 @@ const featuredProjects = projects.filter((p) => p.featured);
     display: flex;
     flex-direction: column;
   }
+
   .proj-meta {
     display: flex;
     align-items: center;
     gap: 0.6rem;
     margin-bottom: 0.75rem;
   }
+
   .proj-badge {
     font-size: 0.6rem;
     font-weight: 600;
@@ -399,15 +504,18 @@ const featuredProjects = projects.filter((p) => p.featured);
     padding: 0.18rem 0.55rem;
     border-radius: 3px;
   }
+
   [data-theme="dark"] .proj-badge {
     border-color: rgba(96, 165, 250, 0.25);
   }
+
   .proj-year {
     font-size: 0.6rem;
     font-weight: 500;
     color: var(--muted);
     font-family: var(--font-mono);
   }
+
   .proj-title {
     font-family: var(--serif);
     font-size: 1.3rem;
@@ -417,6 +525,7 @@ const featuredProjects = projects.filter((p) => p.featured);
     letter-spacing: -0.02em;
     margin-bottom: 0.6rem;
   }
+
   .proj-desc {
     font-size: 0.875rem;
     line-height: 1.75;
@@ -424,12 +533,14 @@ const featuredProjects = projects.filter((p) => p.featured);
     flex: 1;
     font-weight: 400;
   }
+
   .proj-stack {
     display: flex;
     flex-wrap: wrap;
     gap: 0.35rem;
     margin-top: 1rem;
   }
+
   .proj-tech {
     font-family: var(--font-mono);
     font-size: 0.62rem;
@@ -439,6 +550,7 @@ const featuredProjects = projects.filter((p) => p.featured);
     border-radius: 3px;
     background: var(--tag-bg);
   }
+
   .proj-footer {
     margin-top: 1.25rem;
     padding-top: 1rem;
@@ -447,6 +559,7 @@ const featuredProjects = projects.filter((p) => p.featured);
     align-items: center;
     justify-content: space-between;
   }
+
   .proj-cta {
     font-size: 0.65rem;
     font-weight: 600;
@@ -458,8 +571,15 @@ const featuredProjects = projects.filter((p) => p.featured);
     gap: 0.4rem;
     transition: gap 0.2s;
   }
-  .proj-featured:hover .proj-cta { gap: 0.75rem; }
-  .proj-cta::after { content: '→'; }
+
+  .proj-featured:hover .proj-cta {
+    gap: 0.75rem;
+  }
+
+  .proj-cta::after {
+    content: "→";
+  }
+
   .proj-arrow {
     width: 13px;
     height: 13px;
@@ -468,8 +588,11 @@ const featuredProjects = projects.filter((p) => p.featured);
     stroke-width: 2.2;
     stroke-linecap: round;
     stroke-linejoin: round;
-    transition: stroke 0.15s, transform 0.15s;
+    transition:
+      stroke 0.15s,
+      transform 0.15s;
   }
+
   .proj-featured:hover .proj-arrow {
     stroke: var(--accent);
     transform: translateX(3px);
@@ -479,6 +602,7 @@ const featuredProjects = projects.filter((p) => p.featured);
   .projects-section {
     padding: 2.5rem 2rem 5rem;
   }
+
   .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -495,14 +619,20 @@ const featuredProjects = projects.filter((p) => p.featured);
     color: inherit;
     display: flex;
     flex-direction: column;
-    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    transition:
+      border-color 0.25s,
+      transform 0.25s,
+      box-shadow 0.25s;
     position: relative;
     cursor: pointer;
   }
+
   .proj-card::before {
-    content: '';
+    content: "";
     position: absolute;
-    top: 0; left: 0; right: 0;
+    top: 0;
+    left: 0;
+    right: 0;
     height: 2px;
     background: linear-gradient(90deg, transparent, var(--accent), transparent);
     transform: scaleX(0);
@@ -510,18 +640,22 @@ const featuredProjects = projects.filter((p) => p.featured);
     transition: transform 0.4s;
     z-index: 1;
   }
+
   .proj-card:hover {
     border-color: rgba(37, 99, 235, 0.25);
     transform: translateY(-4px);
     box-shadow: 0 16px 40px rgba(37, 99, 235, 0.08);
   }
+
   [data-theme="dark"] .proj-card:hover {
     border-color: rgba(96, 165, 250, 0.2);
     box-shadow: 0 16px 40px rgba(96, 165, 250, 0.06);
   }
+
   .proj-card:hover::before {
     transform: scaleX(1);
   }
+
   .proj-card.hidden {
     display: none;
   }
@@ -535,13 +669,17 @@ const featuredProjects = projects.filter((p) => p.featured);
     align-items: center;
     justify-content: center;
   }
+
   .card-cover::after {
-    content: '';
+    content: "";
     position: absolute;
-    bottom: 0; left: 0; right: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     height: 36px;
     background: linear-gradient(to bottom, transparent, var(--surface));
   }
+
   .card-cover .cover-icon {
     width: 36px;
     height: 36px;
@@ -562,12 +700,14 @@ const featuredProjects = projects.filter((p) => p.featured);
     display: flex;
     flex-direction: column;
   }
+
   .card-meta {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 0.65rem;
   }
+
   .card-badge {
     font-size: 0.58rem;
     font-weight: 600;
@@ -579,14 +719,17 @@ const featuredProjects = projects.filter((p) => p.featured);
     padding: 0.15rem 0.45rem;
     border-radius: 3px;
   }
+
   [data-theme="dark"] .card-badge {
     border-color: rgba(96, 165, 250, 0.25);
   }
+
   .card-year {
     font-size: 0.58rem;
     color: var(--muted);
     font-family: var(--font-mono);
   }
+
   .card-title {
     font-family: var(--serif);
     font-size: 1.05rem;
@@ -597,21 +740,25 @@ const featuredProjects = projects.filter((p) => p.featured);
     margin-bottom: 0.45rem;
     transition: color 0.15s;
   }
+
   .proj-card:hover .card-title {
     color: var(--accent);
   }
+
   .card-desc {
     font-size: 0.8rem;
     line-height: 1.65;
     color: var(--muted);
     flex: 1;
   }
+
   .card-stack {
     display: flex;
     flex-wrap: wrap;
     gap: 0.3rem;
     margin-top: 0.85rem;
   }
+
   .card-tech {
     font-family: var(--font-mono);
     font-size: 0.6rem;
@@ -621,6 +768,7 @@ const featuredProjects = projects.filter((p) => p.featured);
     border-radius: 3px;
     background: var(--tag-bg);
   }
+
   .card-footer {
     margin-top: 0.9rem;
     padding-top: 0.8rem;
@@ -629,6 +777,7 @@ const featuredProjects = projects.filter((p) => p.featured);
     align-items: center;
     justify-content: space-between;
   }
+
   .card-link {
     font-size: 0.62rem;
     font-weight: 600;
@@ -640,8 +789,15 @@ const featuredProjects = projects.filter((p) => p.featured);
     gap: 0.35rem;
     transition: gap 0.2s;
   }
-  .proj-card:hover .card-link { gap: 0.65rem; }
-  .card-link::after { content: '→'; }
+
+  .proj-card:hover .card-link {
+    gap: 0.65rem;
+  }
+
+  .card-link::after {
+    content: "→";
+  }
+
   .card-gh-icon {
     width: 14px;
     height: 14px;
@@ -649,6 +805,7 @@ const featuredProjects = projects.filter((p) => p.featured);
     transition: color 0.15s;
     flex-shrink: 0;
   }
+
   .proj-card:hover .card-gh-icon {
     color: var(--accent);
   }
@@ -662,9 +819,11 @@ const featuredProjects = projects.filter((p) => p.featured);
     font-size: 0.9rem;
     grid-column: 1 / -1;
   }
+
   .projects-empty.visible {
     display: block;
   }
+
   .projects-empty svg {
     width: 28px;
     height: 28px;
@@ -681,6 +840,7 @@ const featuredProjects = projects.filter((p) => p.featured);
     border-top: 1px solid var(--border);
     padding: 2.5rem 2rem;
   }
+
   .nudge-inner {
     max-width: 1100px;
     margin: 0 auto;
@@ -689,6 +849,7 @@ const featuredProjects = projects.filter((p) => p.featured);
     gap: 1.25rem;
     flex-wrap: wrap;
   }
+
   .nudge-icon {
     width: 44px;
     height: 44px;
@@ -700,26 +861,31 @@ const featuredProjects = projects.filter((p) => p.featured);
     align-items: center;
     justify-content: center;
   }
+
   .nudge-icon svg {
     width: 20px;
     height: 20px;
     color: var(--accent);
   }
+
   .nudge-text {
     flex: 1;
     min-width: 200px;
   }
+
   .nudge-title {
     font-size: 0.9rem;
     font-weight: 700;
     color: var(--text);
     margin-bottom: 0.15rem;
   }
+
   .nudge-sub {
     font-size: 0.82rem;
     color: var(--muted);
     line-height: 1.6;
   }
+
   .nudge-btn {
     display: inline-flex;
     align-items: center;
@@ -735,7 +901,11 @@ const featuredProjects = projects.filter((p) => p.featured);
     white-space: nowrap;
     flex-shrink: 0;
   }
-  .nudge-btn:hover { background: var(--accent2); }
+
+  .nudge-btn:hover {
+    background: var(--accent2);
+  }
+
   .nudge-btn svg {
     width: 13px;
     height: 13px;
@@ -752,14 +922,17 @@ const featuredProjects = projects.filter((p) => p.featured);
       top: 0;
       position: static;
     }
+
     .featured-section,
     .projects-section {
       padding-left: 1.25rem;
       padding-right: 1.25rem;
     }
+
     .featured-grid {
       grid-template-columns: 1fr;
     }
+
     .projects-grid {
       grid-template-columns: 1fr;
     }
@@ -779,11 +952,23 @@ const featuredProjects = projects.filter((p) => p.featured);
     appearance: none;
     cursor: pointer;
   }
+
   @media (max-width: 580px) {
-    .filter-btns { display: none; }
-    .filter-select { display: block; }
-    .featured-section { padding: 1.5rem 1.25rem 0; }
-    .projects-section { padding: 1.5rem 1.25rem 4rem; }
+    .filter-btns {
+      display: none;
+    }
+
+    .filter-select {
+      display: block;
+    }
+
+    .featured-section {
+      padding: 1.5rem 1.25rem 0;
+    }
+
+    .projects-section {
+      padding: 1.5rem 1.25rem 4rem;
+    }
   }
 </style>
 
@@ -808,7 +993,9 @@ const featuredProjects = projects.filter((p) => p.featured);
   }
 
   document.getElementById("project-filters")?.addEventListener("click", (e) => {
-    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(".filter-btn");
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(
+      ".filter-btn",
+    );
     if (!btn) return;
     document
       .querySelectorAll("#project-filters .filter-btn")

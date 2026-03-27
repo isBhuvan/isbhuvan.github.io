@@ -124,6 +124,7 @@ import Footer from "../components/Footer.astro";
   html {
     height: 100%;
   }
+
   body {
     display: flex;
     flex-direction: column;
@@ -148,6 +149,7 @@ import Footer from "../components/Footer.astro";
     position: relative;
     overflow: visible;
   }
+
   .four-main::before {
     content: "";
     position: fixed;
@@ -176,6 +178,7 @@ import Footer from "../components/Footer.astro";
     box-shadow: 0 24px 80px rgba(0, 0, 0, 0.07);
     animation: slideUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
+
   [data-theme="dark"] .card {
     box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
   }
@@ -185,6 +188,7 @@ import Footer from "../components/Footer.astro";
       opacity: 0;
       transform: translateY(28px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -200,20 +204,25 @@ import Footer from "../components/Footer.astro";
     align-items: center;
     gap: 0.5rem;
   }
+
   .dot {
     width: 11px;
     height: 11px;
     border-radius: 50%;
   }
+
   .dot-red {
     background: #ff5f57;
   }
+
   .dot-yellow {
     background: #febc2e;
   }
+
   .dot-green {
     background: #28c840;
   }
+
   .terminal-title {
     flex: 1;
     text-align: center;
@@ -235,6 +244,7 @@ import Footer from "../components/Footer.astro";
     display: inline-block;
     margin-bottom: 0.5rem;
   }
+
   .glitch {
     font-size: clamp(5rem, 18vw, 9rem);
     font-weight: 800;
@@ -245,6 +255,7 @@ import Footer from "../components/Footer.astro";
     display: inline-block;
     animation: glitch-main 4s infinite;
   }
+
   .glitch::before,
   .glitch::after {
     content: "404";
@@ -256,32 +267,39 @@ import Footer from "../components/Footer.astro";
     letter-spacing: -0.04em;
     overflow: hidden;
   }
+
   .glitch::before {
     color: #ef4444;
     animation: glitch-top 4s infinite;
     clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%);
   }
+
   .glitch::after {
     color: #22d3ee;
     animation: glitch-bottom 4s infinite;
     clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
   }
+
   @keyframes glitch-main {
     0%,
     90%,
     100% {
       transform: none;
     }
+
     92% {
       transform: translateX(-2px);
     }
+
     94% {
       transform: translateX(2px);
     }
+
     96% {
       transform: translateX(-1px);
     }
   }
+
   @keyframes glitch-top {
     0%,
     90%,
@@ -289,19 +307,23 @@ import Footer from "../components/Footer.astro";
       transform: translateX(0);
       opacity: 0;
     }
+
     92% {
       transform: translateX(-4px);
       opacity: 0.8;
     }
+
     94% {
       transform: translateX(4px);
       opacity: 0.8;
     }
+
     96% {
       transform: translateX(0);
       opacity: 0;
     }
   }
+
   @keyframes glitch-bottom {
     0%,
     90%,
@@ -309,14 +331,17 @@ import Footer from "../components/Footer.astro";
       transform: translateX(0);
       opacity: 0;
     }
+
     92% {
       transform: translateX(4px);
       opacity: 0.8;
     }
+
     94% {
       transform: translateX(-4px);
       opacity: 0.8;
     }
+
     96% {
       transform: translateX(0);
       opacity: 0;
@@ -333,27 +358,34 @@ import Footer from "../components/Footer.astro";
     margin: 1.5rem 0 2rem;
     font-family: "Courier New", monospace;
   }
+
   .t-line {
     font-size: 0.78rem;
     line-height: 1.9;
     display: block;
   }
+
   .t-prompt {
     color: var(--accent);
     font-weight: 700;
   }
+
   .t-cmd {
     color: var(--text);
   }
+
   .t-err {
     color: #ef4444;
   }
+
   .t-muted {
     color: var(--muted);
   }
+
   .t-ok {
     color: #16a34a;
   }
+
   [data-theme="dark"] .t-ok {
     color: #4ade80;
   }
@@ -368,11 +400,13 @@ import Footer from "../components/Footer.astro";
     border-radius: 1px;
     margin-left: 2px;
   }
+
   @keyframes blink {
     0%,
     100% {
       opacity: 1;
     }
+
     50% {
       opacity: 0;
     }
@@ -386,6 +420,7 @@ import Footer from "../components/Footer.astro";
     letter-spacing: -0.02em;
     margin-bottom: 0.5rem;
   }
+
   .err-sub {
     font-size: 0.88rem;
     font-weight: 300;
@@ -401,6 +436,7 @@ import Footer from "../components/Footer.astro";
     justify-content: center;
     flex-wrap: wrap;
   }
+
   .btn-primary {
     display: inline-flex;
     align-items: center;
@@ -418,10 +454,12 @@ import Footer from "../components/Footer.astro";
       background 0.2s,
       transform 0.15s;
   }
+
   .btn-primary:hover {
     background: var(--accent2);
     transform: translateY(-2px);
   }
+
   .btn-secondary {
     display: inline-flex;
     align-items: center;
@@ -440,11 +478,13 @@ import Footer from "../components/Footer.astro";
       color 0.2s,
       transform 0.15s;
   }
+
   .btn-secondary:hover {
     border-color: var(--accent);
     color: var(--accent);
     transform: translateY(-2px);
   }
+
   .btn-primary svg,
   .btn-secondary svg {
     width: 14px;
@@ -466,6 +506,7 @@ import Footer from "../components/Footer.astro";
     justify-content: center;
     flex-wrap: wrap;
   }
+
   .quick-link {
     font-size: 0.75rem;
     font-weight: 600;
@@ -479,6 +520,7 @@ import Footer from "../components/Footer.astro";
       color 0.18s,
       border-color 0.18s;
   }
+
   .quick-link:hover {
     color: var(--accent);
     border-color: var(--accent);
@@ -492,28 +534,35 @@ import Footer from "../components/Footer.astro";
       padding: 1.5rem 1rem 3rem;
       align-items: flex-start;
     }
+
     .card {
       border-radius: 14px;
     }
+
     .card-body {
       padding: 1.75rem 1.25rem 1.5rem;
     }
+
     .terminal-output {
       padding: 0.75rem 0.9rem;
       margin: 1rem 0 1.5rem;
     }
+
     .t-line {
       font-size: 0.7rem;
       line-height: 1.8;
     }
+
     .actions {
       flex-direction: column;
       align-items: stretch;
     }
+
     .btn-primary,
     .btn-secondary {
       justify-content: center;
     }
+
     .glitch {
       font-size: clamp(3.5rem, 20vw, 5rem);
     }

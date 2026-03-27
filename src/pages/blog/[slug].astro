@@ -73,8 +73,15 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
 
   <!-- Scroll to top -->
   <button id="scroll-top-btn" aria-label="Scroll to top">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="18 15 12 9 6 15"/>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <polyline points="18 15 12 9 6 15"></polyline>
     </svg>
   </button>
 
@@ -482,7 +489,6 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
       </div>
     )
   }
-
 </BlogLayout>
 
 <style>
@@ -507,6 +513,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     position: relative;
     overflow: hidden;
   }
+
   .post-hero::before {
     content: "";
     position: absolute;
@@ -518,6 +525,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     opacity: 0.3;
     pointer-events: none;
   }
+
   .post-hero-inner {
     max-width: 760px;
     margin: 0 auto;
@@ -525,6 +533,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     position: relative;
     z-index: 1;
   }
+
   .post-eyebrow {
     display: flex;
     align-items: center;
@@ -536,6 +545,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     color: var(--accent);
     margin-bottom: 1.25rem;
   }
+
   .post-eyebrow::before {
     content: "";
     width: 24px;
@@ -543,6 +553,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     background: var(--accent);
     border-radius: 2px;
   }
+
   .post-title {
     font-size: clamp(1.8rem, 4.5vw, 2.8rem);
     font-weight: 800;
@@ -551,6 +562,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     letter-spacing: -0.03em;
     margin-bottom: 1.25rem;
   }
+
   .post-subtitle {
     font-size: 1.05rem;
     font-weight: 300;
@@ -558,6 +570,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     line-height: 1.75;
     margin-bottom: 2rem;
   }
+
   .post-meta {
     display: flex;
     align-items: center;
@@ -566,6 +579,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     padding-top: 1.5rem;
     border-top: 1px solid var(--border);
   }
+
   .meta-item {
     display: flex;
     align-items: center;
@@ -574,6 +588,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     font-weight: 500;
     color: var(--muted);
   }
+
   .meta-item svg {
     width: 14px;
     height: 14px;
@@ -582,18 +597,21 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     stroke-width: 2;
     stroke-linecap: round;
   }
+
   .meta-divider {
     width: 3px;
     height: 3px;
     border-radius: 50%;
     background: var(--border);
   }
+
   .post-tags {
     display: flex;
     gap: 0.4rem;
     flex-wrap: wrap;
     margin-top: 1.25rem;
   }
+
   .post-tag {
     font-size: 0.68rem;
     font-weight: 600;
@@ -607,15 +625,18 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
       border-color 0.18s,
       color 0.18s;
   }
+
   .post-tag:hover {
     color: var(--accent);
     border-color: var(--accent);
   }
+
   .post-tag--primary {
     background: var(--accent);
     color: #fff;
     border-color: var(--accent);
   }
+
   .post-tag--primary:hover {
     color: #fff;
     opacity: 0.9;
@@ -627,6 +648,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     margin: 0 auto;
     padding: 0 2rem;
   }
+
   .cover-img {
     width: 100%;
     aspect-ratio: 16/7;
@@ -640,12 +662,14 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     border: 1px solid var(--border);
     border-top: none;
   }
+
   .cover-pattern {
     position: absolute;
     inset: 0;
     opacity: 0.12;
     color: #ffffff;
   }
+
   .cover-icon {
     width: 52px;
     height: 52px;
@@ -655,9 +679,11 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     position: relative;
     z-index: 1;
   }
+
   .cover-img.has-photo {
     background: none;
   }
+
   .cover-photo {
     width: 100%;
     height: 100%;
@@ -675,9 +701,11 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     gap: 4rem;
     align-items: start;
   }
+
   .article {
     min-width: 0;
   }
+
   /* :global() is required for all child selectors — markdown rendered by
      <Content /> does not receive Astro's scoped CID attribute */
   .article :global(h2) {
@@ -690,11 +718,13 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     padding-top: 0.5rem;
     border-top: 2px solid var(--border);
   }
+
   .article :global(h2:first-child) {
     margin-top: 0;
     border-top: none;
     padding-top: 0;
   }
+
   .article :global(h3) {
     font-size: 1.1rem;
     font-weight: 700;
@@ -703,25 +733,30 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     line-height: 1.4;
     margin: 2rem 0 0.75rem;
   }
+
   .article :global(h2[id]),
   .article :global(h3[id]) {
     scroll-margin-top: 84px;
   }
+
   .article :global(p) {
     font-size: 0.975rem;
     color: var(--muted);
     line-height: 1.85;
     margin-bottom: 1.2rem;
   }
+
   .article :global(strong) {
     color: var(--text);
     font-weight: 700;
   }
+
   .article :global(a) {
     color: var(--accent);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
+
   .article :global(code) {
     font-size: 0.85em;
     font-family: "Courier New", monospace;
@@ -731,6 +766,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     border-radius: 4px;
     border: 1px solid var(--border);
   }
+
   .article :global(pre) {
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -738,6 +774,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     margin: 1.5rem 0;
     /* background comes from Shiki via .astro-code */
   }
+
   .article :global(pre) :global(code) {
     background: none !important;
     border: none;
@@ -747,46 +784,55 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     padding: 1.2rem 1.25rem;
     /* color comes from Shiki token spans — do not override */
   }
+
   .article :global(ul),
   .article :global(ol) {
     padding-left: 1.6rem;
     margin-bottom: 1.2rem;
     list-style: revert;
   }
+
   .article :global(li) {
     font-size: 0.975rem;
     color: var(--muted);
     line-height: 1.8;
     margin-bottom: 0.3rem;
   }
+
   .article :global(li) :global(strong) {
     color: var(--text);
   }
+
   .article :global(hr) {
     border: none;
     border-top: 1px solid var(--border);
     margin: 2.5rem 0;
   }
+
   .article :global(table) {
     width: 100%;
     border-collapse: collapse;
     margin: 1.5rem 0;
     font-size: 0.875rem;
   }
+
   .article :global(th),
   .article :global(td) {
     padding: 0.6rem 0.9rem;
     border: 1px solid var(--border);
     text-align: left;
   }
+
   .article :global(th) {
     background: var(--bg);
     font-weight: 700;
     color: var(--text);
   }
+
   .article :global(td) {
     color: var(--muted);
   }
+
   .article :global(img) {
     max-width: 100%;
     height: auto;
@@ -794,13 +840,16 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     border-radius: 10px;
     margin: 1.5rem auto;
   }
+
   .article :global(figure) {
     max-width: 100%;
     margin: 1.5rem 0;
   }
+
   .article :global(figure img) {
     margin: 0 auto;
   }
+
   .article :global(figure figcaption) {
     margin-top: 0.55rem;
     text-align: center;
@@ -814,6 +863,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     top: 82px;
     font-size: 0.78rem;
   }
+
   .toc-label {
     font-size: 0.65rem;
     font-weight: 700;
@@ -825,18 +875,21 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     align-items: center;
     gap: 0.5rem;
   }
+
   .toc-label::after {
     content: "";
     flex: 1;
     height: 1px;
     background: var(--border);
   }
+
   .toc-list {
     list-style: none;
     display: flex;
     flex-direction: column;
     gap: 0.1rem;
   }
+
   /* li and a are created by JS — :global() required so Astro's CID scoping doesn't block them */
   .toc-list :global(li) :global(a) {
     display: block;
@@ -852,25 +905,30 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
       background 0.18s;
     line-height: 1.4;
   }
+
   .toc-list :global(li) :global(a:hover) {
     color: var(--text);
     background: var(--tag-bg);
   }
+
   .toc-list :global(li) :global(a.active) {
     color: var(--accent);
     border-left-color: var(--accent);
     background: rgba(37, 99, 235, 0.05);
     font-weight: 600;
   }
+
   .toc-list :global(li.h3) :global(a) {
     padding-left: 1.25rem;
     font-size: 0.73rem;
   }
+
   .toc-share {
     margin-top: 2rem;
     padding-top: 1rem;
     border-top: 1px solid var(--border);
   }
+
   .toc-share-label {
     font-size: 0.65rem;
     font-weight: 700;
@@ -879,10 +937,12 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     color: var(--muted);
     margin-bottom: 0.75rem;
   }
+
   .share-btns {
     display: flex;
     gap: 0.5rem;
   }
+
   .share-btn {
     width: 32px;
     height: 32px;
@@ -899,10 +959,12 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
       border-color 0.18s,
       color 0.18s;
   }
+
   .share-btn:hover {
     border-color: var(--accent);
     color: var(--accent);
   }
+
   .share-btn svg {
     width: 14px;
     height: 14px;
@@ -918,12 +980,14 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     padding-top: 1.25rem;
     border-top: 1px solid var(--border);
   }
+
   .toc-cross-links {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
     margin-top: 0.6rem;
   }
+
   .toc-cross-link {
     display: inline-flex;
     align-items: center;
@@ -934,9 +998,11 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     text-decoration: none;
     transition: color 0.18s;
   }
+
   .toc-cross-link:hover {
     color: var(--accent);
   }
+
   .toc-cross-link svg {
     width: 13px;
     height: 13px;
@@ -950,6 +1016,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     margin: 0 auto;
     padding: 0 2rem 5rem;
   }
+
   .author-inner {
     display: flex;
     gap: 1.5rem;
@@ -959,6 +1026,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     border-radius: 14px;
     padding: 1.75rem;
   }
+
   .author-avatar {
     width: 56px;
     height: 56px;
@@ -974,6 +1042,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     align-items: center;
     justify-content: center;
   }
+
   .author-avatar svg {
     width: 26px;
     height: 26px;
@@ -982,18 +1051,21 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     stroke-width: 1.6;
     stroke-linecap: round;
   }
+
   .author-name {
     font-size: 0.95rem;
     font-weight: 700;
     color: var(--text);
     margin-bottom: 0.15rem;
   }
+
   .author-role {
     font-size: 0.78rem;
     color: var(--accent);
     font-weight: 600;
     margin-bottom: 0.5rem;
   }
+
   .author-bio {
     font-size: 0.83rem;
     color: var(--muted);
@@ -1006,6 +1078,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     padding: 2rem 0;
     background: var(--bg);
   }
+
   .post-nav-inner {
     max-width: 760px;
     margin: 0 auto;
@@ -1014,11 +1087,13 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     flex-direction: column;
     gap: 1.25rem;
   }
+
   .series-nav-heading {
     display: flex;
     align-items: flex-start;
     gap: 0.75rem;
   }
+
   .series-nav-icon {
     width: 20px;
     height: 20px;
@@ -1030,6 +1105,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     flex-shrink: 0;
     margin-top: 2px;
   }
+
   .series-nav-eyebrow {
     font-size: 0.65rem;
     font-weight: 700;
@@ -1038,6 +1114,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     color: var(--muted);
     margin-bottom: 0.25rem;
   }
+
   .series-nav-title {
     display: inline-flex;
     align-items: center;
@@ -1048,9 +1125,11 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     text-decoration: none;
     transition: color 0.18s;
   }
+
   .series-nav-title:hover {
     color: var(--accent);
   }
+
   .series-nav-arrow {
     width: 14px;
     height: 14px;
@@ -1061,11 +1140,13 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     stroke-linejoin: round;
     flex-shrink: 0;
   }
+
   .post-nav-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
   }
+
   .post-nav-card {
     padding: 1rem 1.25rem;
     background: var(--surface);
@@ -1080,13 +1161,16 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
       border-color 0.18s,
       box-shadow 0.18s;
   }
+
   .post-nav-card:hover {
     border-color: rgba(37, 99, 235, 0.4);
     box-shadow: 0 4px 16px rgba(37, 99, 235, 0.08);
   }
+
   .post-nav-card.next {
     text-align: right;
   }
+
   .post-nav-label {
     font-size: 0.65rem;
     font-weight: 700;
@@ -1094,6 +1178,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     text-transform: uppercase;
     color: var(--accent);
   }
+
   .post-nav-title {
     font-size: 0.88rem;
     font-weight: 600;
@@ -1107,6 +1192,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     background: var(--bg);
     padding: 4rem 0 5rem;
   }
+
   .related-inner {
     max-width: 1100px;
     margin: 0 auto;
@@ -1123,6 +1209,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     padding-bottom: 1.25rem;
     border-bottom: 1px solid var(--border);
   }
+
   .related-eyebrow {
     display: block;
     font-size: 0.65rem;
@@ -1132,6 +1219,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     color: var(--accent);
     margin-bottom: 0.25rem;
   }
+
   .related-title {
     font-size: 1.4rem;
     font-weight: 800;
@@ -1140,6 +1228,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     line-height: 1.15;
     margin: 0;
   }
+
   .related-all-link {
     display: inline-flex;
     align-items: center;
@@ -1154,9 +1243,11 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     flex-shrink: 0;
     transition: gap 0.2s;
   }
+
   .related-all-link:hover {
     gap: 0.65rem;
   }
+
   .related-all-link svg {
     width: 14px;
     height: 14px;
@@ -1189,6 +1280,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
       box-shadow 0.2s,
       border-color 0.2s;
   }
+
   .related-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 16px 40px rgba(37, 99, 235, 0.09);
@@ -1207,9 +1299,11 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     overflow: hidden;
     flex-shrink: 0;
   }
+
   .related-thumb.has-photo {
     background: none;
   }
+
   .related-thumb-pattern {
     position: absolute;
     inset: 0;
@@ -1218,6 +1312,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     opacity: 0.12;
     color: #fff;
   }
+
   .related-thumb-icon {
     width: 28px;
     height: 28px;
@@ -1227,12 +1322,14 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     position: relative;
     z-index: 1;
   }
+
   .related-thumb-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
   }
+
   .related-thumb-badge {
     position: absolute;
     top: 0.65rem;
@@ -1258,11 +1355,13 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     flex: 1;
     gap: 0.5rem;
   }
+
   .related-meta {
     display: flex;
     align-items: center;
     gap: 0.45rem;
   }
+
   .related-date {
     font-size: 0.65rem;
     font-weight: 700;
@@ -1270,6 +1369,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     text-transform: uppercase;
     color: var(--accent);
   }
+
   .related-dot {
     width: 3px;
     height: 3px;
@@ -1277,11 +1377,13 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     background: var(--border);
     flex-shrink: 0;
   }
+
   .related-read {
     font-size: 0.65rem;
     font-weight: 600;
     color: var(--muted);
   }
+
   .related-card-title {
     font-size: 0.92rem;
     font-weight: 700;
@@ -1289,6 +1391,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     line-height: 1.35;
     transition: color 0.18s;
   }
+
   .related-card:hover .related-card-title {
     color: var(--accent);
   }
@@ -1315,11 +1418,13 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     border-top: 1px solid var(--border);
     margin-top: auto;
   }
+
   .related-tags {
     display: flex;
     gap: 0.3rem;
     flex-wrap: wrap;
   }
+
   .related-tag {
     font-size: 0.62rem;
     font-weight: 600;
@@ -1329,11 +1434,13 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     color: var(--muted);
     border: 1px solid var(--border);
   }
+
   .related-tag--primary {
     background: var(--accent);
     color: #fff;
     border-color: var(--accent);
   }
+
   .related-arrow {
     width: 28px;
     height: 28px;
@@ -1348,10 +1455,12 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
       background 0.18s,
       border-color 0.18s;
   }
+
   .related-card:hover .related-arrow {
     background: var(--accent);
     border-color: var(--accent);
   }
+
   .related-arrow svg {
     width: 12px;
     height: 12px;
@@ -1362,6 +1471,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     stroke-linejoin: round;
     transition: stroke 0.18s;
   }
+
   .related-card:hover .related-arrow svg {
     stroke: #fff;
   }
@@ -1373,6 +1483,7 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
       gap: 1.5rem;
       padding-top: 2rem;
     }
+
     .toc {
       position: static;
       background: var(--bg);
@@ -1381,37 +1492,46 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
       padding: 1.1rem 1.25rem;
       order: -1;
     }
+
     .toc-share {
       display: none;
     }
+
     .related-grid {
       grid-template-columns: repeat(2, 1fr);
     }
+
     .related-header {
       flex-direction: column;
       align-items: flex-start;
       gap: 0.75rem;
     }
   }
+
   @media (max-width: 768px) {
     .article :global(h2[id]),
     .article :global(h3[id]) {
       scroll-margin-top: 16px;
     }
   }
+
   @media (max-width: 580px) {
     .post-title {
       font-size: 1.7rem;
     }
+
     .related-grid {
       grid-template-columns: 1fr;
     }
+
     .related-title {
       font-size: 1.15rem;
     }
+
     .author-inner {
       flex-direction: column;
     }
+
     .post-nav-row {
       grid-template-columns: 1fr;
     }
@@ -1435,23 +1555,32 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
     opacity: 0;
     pointer-events: none;
     transform: translateY(8px);
-    transition: opacity 0.2s, transform 0.2s, background 0.18s, color 0.18s, border-color 0.18s;
+    transition:
+      opacity 0.2s,
+      transform 0.2s,
+      background 0.18s,
+      color 0.18s,
+      border-color 0.18s;
     z-index: 50;
   }
+
   #scroll-top-btn.visible {
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);
   }
+
   #scroll-top-btn:hover {
     background: var(--accent);
     border-color: var(--accent);
     color: #fff;
   }
+
   #scroll-top-btn svg {
     width: 16px;
     height: 16px;
   }
+
   @media (max-width: 768px) {
     #scroll-top-btn {
       bottom: 5rem;
@@ -1510,9 +1639,13 @@ const seriesNextPost = seriesNextSlug ? (bySlug[seriesNextSlug] ?? null) : null;
 
   // Scroll to top
   const scrollBtn = document.getElementById("scroll-top-btn")!;
-  window.addEventListener("scroll", () => {
-    scrollBtn.classList.toggle("visible", window.scrollY > 400);
-  }, { passive: true });
+  window.addEventListener(
+    "scroll",
+    () => {
+      scrollBtn.classList.toggle("visible", window.scrollY > 400);
+    },
+    { passive: true },
+  );
   scrollBtn.addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   });

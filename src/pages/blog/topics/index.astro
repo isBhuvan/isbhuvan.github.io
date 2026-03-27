@@ -6,22 +6,28 @@ import { fmtDate } from "../../../lib/utils";
 
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 const sorted = allPosts.sort(
-  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
 );
 
-const topicsMeta: Record<string, { description: string; iconPath: string; hue: string }> = {
+const topicsMeta: Record<
+  string,
+  { description: string; iconPath: string; hue: string }
+> = {
   Terraform: {
-    description: "Infrastructure as Code — provisioning, state management, modules, and real-world Terraform patterns for cloud platforms.",
+    description:
+      "Infrastructure as Code — provisioning, state management, modules, and real-world Terraform patterns for cloud platforms.",
     iconPath: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5",
     hue: "220",
   },
   SRE: {
-    description: "Site Reliability Engineering — observability, incident response, on-call practices, and the reality of keeping production systems running.",
+    description:
+      "Site Reliability Engineering — observability, incident response, on-call practices, and the reality of keeping production systems running.",
     iconPath: "M22 12h-4l-3 9L9 3l-3 9H2",
     hue: "160",
   },
   AI: {
-    description: "Artificial Intelligence — language models, practical AI tooling, and what it actually means to build with AI in production.",
+    description:
+      "Artificial Intelligence — language models, practical AI tooling, and what it actually means to build with AI in production.",
     iconPath: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01",
     hue: "280",
   },
@@ -50,7 +56,6 @@ const topics = [...topicMap.entries()]
     },
   }))
   .sort((a, b) => b.count - a.count);
-
 ---
 
 <BlogLayout
@@ -65,7 +70,8 @@ const topics = [...topicMap.entries()]
       <div class="hero-eyebrow">Topics</div>
       <h1 class="hero-title">Browse by <span>topic.</span></h1>
       <p class="hero-sub">
-        Every post, organised by subject. Pick a topic to see all writing in that area.
+        Every post, organised by subject. Pick a topic to see all writing in
+        that area.
       </p>
       <div class="hero-meta">
         <div class="hero-stat">
@@ -85,45 +91,57 @@ const topics = [...topicMap.entries()]
   <main class="main">
     <div class="wrap">
       <div class="topics-grid">
-        {topics.map((topic) => (
-          <article class="topic-card reveal" style={`--hue: ${topic.meta.hue}`}>
-            <div class="tc-accent-bar"></div>
-            <div class="tc-body">
-
-              <div class="tc-header">
-                <div class="tc-icon">
-                  <svg viewBox="0 0 24 24"><path d={topic.meta.iconPath} /></svg>
+        {
+          topics.map((topic) => (
+            <article
+              class="topic-card reveal"
+              style={`--hue: ${topic.meta.hue}`}
+            >
+              <div class="tc-accent-bar" />
+              <div class="tc-body">
+                <div class="tc-header">
+                  <div class="tc-icon">
+                    <svg viewBox="0 0 24 24">
+                      <path d={topic.meta.iconPath} />
+                    </svg>
+                  </div>
+                  <div class="tc-meta">
+                    <div class="tc-count">
+                      {topic.count} {topic.count === 1 ? "post" : "posts"}
+                    </div>
+                    <h2 class="tc-name">{topic.name}</h2>
+                  </div>
                 </div>
-                <div class="tc-meta">
-                  <div class="tc-count">{topic.count} {topic.count === 1 ? "post" : "posts"}</div>
-                  <h2 class="tc-name">{topic.name}</h2>
+
+                <p class="tc-desc">{topic.meta.description}</p>
+
+                <div class="tc-recent">
+                  {topic.posts.slice(0, 3).map((post) => (
+                    <a
+                      href={`/blog/${post.id.split("/").at(-1)}`}
+                      class="tc-post-row"
+                    >
+                      <span class="tc-post-title">{post.data.title}</span>
+                      <span class="tc-post-date">
+                        {fmtDate(post.data.date, "short")}
+                      </span>
+                    </a>
+                  ))}
                 </div>
-              </div>
 
-              <p class="tc-desc">{topic.meta.description}</p>
-
-              <div class="tc-recent">
-                {topic.posts.slice(0, 3).map((post) => (
-                  <a href={`/blog/${post.id.split("/").at(-1)}`} class="tc-post-row">
-                    <span class="tc-post-title">{post.data.title}</span>
-                    <span class="tc-post-date">{fmtDate(post.data.date, 'short')}</span>
+                <div class="tc-footer">
+                  <a href={`/blog/topics/${topic.slug}`} class="tc-cta">
+                    Browse all {topic.name} posts
+                    <svg viewBox="0 0 24 24">
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                      <polyline points="12 5 19 12 12 19" />
+                    </svg>
                   </a>
-                ))}
+                </div>
               </div>
-
-              <div class="tc-footer">
-                <a href={`/blog/topics/${topic.slug}`} class="tc-cta">
-                  Browse all {topic.name} posts
-                  <svg viewBox="0 0 24 24">
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                    <polyline points="12 5 19 12 12 19" />
-                  </svg>
-                </a>
-              </div>
-
-            </div>
-          </article>
-        ))}
+            </article>
+          ))
+        }
       </div>
 
       <div class="bottom-nudge reveal">
@@ -131,8 +149,8 @@ const topics = [...topicMap.entries()]
         <a href="/blog/archive" class="bottom-link">
           View the full archive
           <svg viewBox="0 0 24 24">
-            <line x1="5" y1="12" x2="19" y2="12" />
-            <polyline points="12 5 19 12 12 19" />
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
           </svg>
         </a>
       </div>
@@ -141,8 +159,15 @@ const topics = [...topicMap.entries()]
 </BlogLayout>
 
 <style>
-  .wrap { max-width: var(--max-w); margin: 0 auto; padding: 0 2rem; }
-  .main { padding: 3.5rem 0 6rem; }
+  .wrap {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .main {
+    padding: 3.5rem 0 6rem;
+  }
 
   /* ════════════════════════
      HERO
@@ -154,43 +179,102 @@ const topics = [...topicMap.entries()]
     position: relative;
     overflow: hidden;
   }
+
   .hero-grid-bg {
-    position: absolute; inset: 0; pointer-events: none;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
     background-image:
       linear-gradient(var(--border) 1px, transparent 1px),
       linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 48px 48px; opacity: 0.3;
+    background-size: 48px 48px;
+    opacity: 0.3;
   }
+
   .hero-inner {
-    position: relative; z-index: 1;
-    max-width: var(--max-w); margin: 0 auto; padding: 0 2rem;
+    position: relative;
+    z-index: 1;
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 2rem;
   }
+
   .hero-eyebrow {
-    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 1rem;
-    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
   }
+
   .hero-eyebrow::before {
-    content: ''; display: inline-block; width: 28px; height: 2px;
-    background: var(--accent); border-radius: 2px;
+    content: "";
+    display: inline-block;
+    width: 28px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
   }
+
   .hero-title {
-    font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 800;
-    line-height: 1.05; color: var(--text); letter-spacing: -0.03em; margin-bottom: 1.25rem;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 800;
+    line-height: 1.05;
+    color: var(--text);
+    letter-spacing: -0.03em;
+    margin-bottom: 1.25rem;
   }
-  .hero-title span { color: var(--accent); }
+
+  .hero-title span {
+    color: var(--accent);
+  }
+
   .hero-sub {
-    font-size: 1rem; font-weight: 300; color: var(--muted);
-    max-width: 540px; line-height: 1.75;
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--muted);
+    max-width: 540px;
+    line-height: 1.75;
   }
-  .hero-meta { margin-top: 2.5rem; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
-  .hero-stat { display: flex; flex-direction: column; gap: 2px; }
-  .hero-stat-num { font-size: 1.5rem; font-weight: 800; color: var(--text); line-height: 1; }
+
+  .hero-meta {
+    margin-top: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .hero-stat-num {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+  }
+
   .hero-stat-label {
-    font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--muted);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
   }
-  .hero-divider { width: 1px; height: 36px; background: var(--border); }
+
+  .hero-divider {
+    width: 1px;
+    height: 36px;
+    background: var(--border);
+  }
 
   /* ════════════════════════
      TOPICS GRID
@@ -210,119 +294,264 @@ const topics = [...topicMap.entries()]
     border: 1px solid var(--border);
     border-radius: var(--radius);
     overflow: hidden;
-    transition: box-shadow 0.25s, border-color 0.25s;
+    transition:
+      box-shadow 0.25s,
+      border-color 0.25s;
   }
+
   .topic-card:hover {
     box-shadow: 0 20px 60px rgba(37, 99, 235, 0.08);
     border-color: rgba(37, 99, 235, 0.22);
   }
+
   .tc-accent-bar {
     height: 3px;
-    background: linear-gradient(90deg, hsl(var(--hue), 72%, 50%), hsl(var(--hue), 60%, 70%));
+    background: linear-gradient(
+      90deg,
+      hsl(var(--hue), 72%, 50%),
+      hsl(var(--hue), 60%, 70%)
+    );
   }
+
   .tc-body {
     padding: 1.75rem;
     display: flex;
     flex-direction: column;
     gap: 1.1rem;
   }
-  .tc-header { display: flex; align-items: flex-start; gap: 1rem; }
+
+  .tc-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
   .tc-icon {
-    width: 44px; height: 44px; border-radius: 11px; flex-shrink: 0;
-    background: rgba(37, 99, 235, 0.07); border: 1px solid rgba(37, 99, 235, 0.15);
-    display: flex; align-items: center; justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
+    flex-shrink: 0;
+    background: rgba(37, 99, 235, 0.07);
+    border: 1px solid rgba(37, 99, 235, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  [data-theme="dark"] .tc-icon { background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.2); }
+
+  [data-theme="dark"] .tc-icon {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.2);
+  }
+
   .tc-icon svg {
-    width: 19px; height: 19px; stroke: var(--accent); fill: none;
-    stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round;
+    width: 19px;
+    height: 19px;
+    stroke: var(--accent);
+    fill: none;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
-  .tc-meta { flex: 1; }
+
+  .tc-meta {
+    flex: 1;
+  }
+
   .tc-count {
-    font-size: 0.62rem; font-weight: 700; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--accent); margin-bottom: 0.2rem;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.2rem;
   }
+
   .tc-name {
-    font-size: 1.25rem; font-weight: 800; color: var(--text);
-    line-height: 1.2; letter-spacing: -0.02em;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
   }
-  .tc-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.75; }
+
+  .tc-desc {
+    font-size: 0.875rem;
+    color: var(--muted);
+    line-height: 1.75;
+  }
 
   /* Recent posts list */
   .tc-recent {
-    display: flex; flex-direction: column;
-    border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
   }
+
   .tc-post-row {
-    display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem;
-    padding: 0.6rem 0.9rem; border-bottom: 1px solid var(--border);
-    text-decoration: none; color: inherit; transition: background 0.15s;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.6rem 0.9rem;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.15s;
   }
-  .tc-post-row:last-child { border-bottom: none; }
-  .tc-post-row:hover { background: var(--bg); }
+
+  .tc-post-row:last-child {
+    border-bottom: none;
+  }
+
+  .tc-post-row:hover {
+    background: var(--bg);
+  }
+
   .tc-post-title {
-    font-size: 0.82rem; font-weight: 600; color: var(--text);
-    line-height: 1.35; flex: 1; min-width: 0;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.35;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     transition: color 0.15s;
   }
-  .tc-post-row:hover .tc-post-title { color: var(--accent); }
+
+  .tc-post-row:hover .tc-post-title {
+    color: var(--accent);
+  }
+
   .tc-post-date {
-    font-size: 0.68rem; font-weight: 500; color: var(--muted);
-    white-space: nowrap; flex-shrink: 0;
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: var(--muted);
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   /* CTA */
-  .tc-footer { padding-top: 0.25rem; }
-  .tc-cta {
-    display: inline-flex; align-items: center; gap: 0.45rem;
-    font-size: 0.82rem; font-weight: 700; color: var(--accent);
-    text-decoration: none; transition: gap 0.2s;
+  .tc-footer {
+    padding-top: 0.25rem;
   }
-  .tc-cta:hover { gap: 0.7rem; }
+
+  .tc-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-decoration: none;
+    transition: gap 0.2s;
+  }
+
+  .tc-cta:hover {
+    gap: 0.7rem;
+  }
+
   .tc-cta svg {
-    width: 13px; height: 13px; stroke: currentColor; fill: none;
-    stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round;
+    width: 13px;
+    height: 13px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
   /* ════════════════════════
      BOTTOM NUDGE
   ════════════════════════ */
   .bottom-nudge {
-    margin-top: 4rem; text-align: center;
-    display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
+    margin-top: 4rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
   }
-  .bottom-nudge p { font-size: 0.9rem; color: var(--muted); }
+
+  .bottom-nudge p {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
   .bottom-link {
-    display: inline-flex; align-items: center; gap: 0.45rem;
-    font-size: 0.88rem; font-weight: 700; color: var(--accent);
-    text-decoration: none; transition: gap 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-decoration: none;
+    transition: gap 0.2s;
   }
-  .bottom-link:hover { gap: 0.7rem; }
+
+  .bottom-link:hover {
+    gap: 0.7rem;
+  }
+
   .bottom-link svg {
-    width: 14px; height: 14px; stroke: currentColor; fill: none;
-    stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round;
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
   /* ════════════════════════
      REVEAL
   ════════════════════════ */
-  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
-  .reveal.visible { opacity: 1; transform: none; }
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 0.5s ease,
+      transform 0.5s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
 
   @media (max-width: 640px) {
-    .hero { padding: 3rem 0 2.5rem; }
-    .hero-title { font-size: 2.2rem; }
-    .topics-grid { grid-template-columns: 1fr; }
-    .wrap { padding: 0 1rem; }
+    .hero {
+      padding: 3rem 0 2.5rem;
+    }
+
+    .hero-title {
+      font-size: 2.2rem;
+    }
+
+    .topics-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .wrap {
+      padding: 0 1rem;
+    }
   }
 </style>
 
 <script>
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
-    });
-  }, { threshold: 0.05 });
-  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("visible");
+          obs.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.05 },
+  );
+  document.querySelectorAll(".reveal").forEach((el) => obs.observe(el));
 </script>

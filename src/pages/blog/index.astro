@@ -17,10 +17,14 @@ const rest = posts;
 
 const totalPosts = posts.length;
 const totalTopics = [...new Set(posts.flatMap((p) => p.data.tags))].length;
-const latestYear = latestPost ? new Date(latestPost.data.date).getFullYear() : 2025;
+const latestYear = latestPost
+  ? new Date(latestPost.data.date).getFullYear()
+  : 2025;
 
 const allSeries = await getCollection("series");
-const publishedSlugs = new Set(posts.map((p) => p.id.split("/").at(-1) ?? p.id));
+const publishedSlugs = new Set(
+  posts.map((p) => p.id.split("/").at(-1) ?? p.id),
+);
 
 const seriesCards = allSeries
   .sort((a, b) => {
@@ -38,7 +42,9 @@ const seriesCards = allSeries
     });
     return {
       href: `/blog/series/${s.slug}`,
-      icon: s.data.iconPath ?? "M4 19.5A2.5 2.5 0 0 1 6.5 17H20 M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z",
+      icon:
+        s.data.iconPath ??
+        "M4 19.5A2.5 2.5 0 0 1 6.5 17H20 M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z",
       label: `Series · ${allPosts.length} parts`,
       name: s.data.title,
       desc: s.data.description,
@@ -49,8 +55,9 @@ const seriesCards = allSeries
     };
   });
 
-const filterTags = [...new Set(posts.map((p) => p.data.primaryTag).filter(Boolean))].sort() as string[];
-
+const filterTags = [
+  ...new Set(posts.map((p) => p.data.primaryTag).filter(Boolean)),
+].sort() as string[];
 ---
 
 <BlogLayout title="isBhuvan / Blog" showTopicBar={true}>
@@ -67,12 +74,38 @@ const filterTags = [...new Set(posts.map((p) => p.data.primaryTag).filter(Boolea
     maxWidth="var(--max-w)"
   >
     <!-- Quill pen — Blog/Writing -->
-    <svg slot="icon" class="page-header-icon" viewBox="0 0 200 200" fill="none" aria-hidden="true">
-      <path d="M155 30 C155 30 125 58 76 107 C55 128 44 158 44 158 L76 147 C76 147 98 136 118 116 C158 76 172 38 155 30Z" stroke="currentColor" stroke-width="5.5" stroke-linejoin="round" opacity=".75"/>
-      <path d="M44 158 L32 176 L55 164Z" fill="currentColor" opacity=".5"/>
-      <path d="M76 107 Q98 85 116 74" stroke="currentColor" stroke-width="2.5" stroke-dasharray="5 4" stroke-linecap="round" opacity=".45"/>
-      <line x1="34" y1="172" x2="78" y2="158" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".5"/>
-      <circle cx="157" cy="32" r="8" fill="currentColor" opacity=".1"/>
+    <svg
+      slot="icon"
+      class="page-header-icon"
+      viewBox="0 0 200 200"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M155 30 C155 30 125 58 76 107 C55 128 44 158 44 158 L76 147 C76 147 98 136 118 116 C158 76 172 38 155 30Z"
+        stroke="currentColor"
+        stroke-width="5.5"
+        stroke-linejoin="round"
+        opacity=".75"></path>
+      <path d="M44 158 L32 176 L55 164Z" fill="currentColor" opacity=".5"
+      ></path>
+      <path
+        d="M76 107 Q98 85 116 74"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-dasharray="5 4"
+        stroke-linecap="round"
+        opacity=".45"></path>
+      <line
+        x1="34"
+        y1="172"
+        x2="78"
+        y2="158"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        opacity=".5"></line>
+      <circle cx="157" cy="32" r="8" fill="currentColor" opacity=".1"></circle>
     </svg>
   </PageHero>
 
@@ -80,7 +113,7 @@ const filterTags = [...new Set(posts.map((p) => p.data.primaryTag).filter(Boolea
   <div class="section-nav-wrap">
     <nav class="section-nav-inner" aria-label="Blog sections">
       <a href="#series" class="section-link active">Series</a>
-      <a href="#blogs"  class="section-link">Blogs</a>
+      <a href="#blogs" class="section-link">Blogs</a>
     </nav>
   </div>
 
@@ -89,163 +122,185 @@ const filterTags = [...new Set(posts.map((p) => p.data.primaryTag).filter(Boolea
     <div class="wrap">
       <!-- Series -->
       <section id="series">
-      <div class="section-label reveal">Series</div>
-      <div class="series-grid">
-        {
-          seriesCards.map((s) => (
-            <a href={s.href} class="series-card reveal">
-              <div class="series-card-top">
-                <div class="series-card-icon">
-                  <svg viewBox="0 0 24 24">
-                    <path d={s.icon} />
-                  </svg>
-                </div>
-                <div class="series-card-meta">
-                  <div class="series-card-label">{s.label}</div>
-                  <div class="series-card-name">{s.name}</div>
-                </div>
-              </div>
-              <p class="series-card-desc">{s.desc}</p>
-              <div class="series-card-footer">
-                <div>
-                  <div class="series-card-posts">
-                    {s.dots.map((d) => (
-                      <span class={`series-dot ${d}`} />
-                    ))}
+        <div class="section-label reveal">Series</div>
+        <div class="series-grid">
+          {
+            seriesCards.map((s) => (
+              <a href={s.href} class="series-card reveal">
+                <div class="series-card-top">
+                  <div class="series-card-icon">
+                    <svg viewBox="0 0 24 24">
+                      <path d={s.icon} />
+                    </svg>
                   </div>
-                  <span
-                    class="series-count"
-                    style="margin-top:0.3rem;display:block"
-                  >
-                    {s.count}
+                  <div class="series-card-meta">
+                    <div class="series-card-label">{s.label}</div>
+                    <div class="series-card-name">{s.name}</div>
+                  </div>
+                </div>
+                <p class="series-card-desc">{s.desc}</p>
+                <div class="series-card-footer">
+                  <div>
+                    <div class="series-card-posts">
+                      {s.dots.map((d) => (
+                        <span class={`series-dot ${d}`} />
+                      ))}
+                    </div>
+                    <span
+                      class="series-count"
+                      style="margin-top:0.3rem;display:block"
+                    >
+                      {s.count}
+                    </span>
+                  </div>
+                  <span class={`series-status ${s.status}`}>
+                    {s.statusLabel}
                   </span>
                 </div>
-                <span class={`series-status ${s.status}`}>{s.statusLabel}</span>
-              </div>
-            </a>
-          ))
-        }
-      </div>
+              </a>
+            ))
+          }
+        </div>
 
-      <!-- View all series -->
-      <div class="series-footer reveal">
-        <a href="/blog/series" class="series-all-link">
-          Browse all learning series
-          <svg viewBox="0 0 24 24">
-            <line x1="5" y1="12" x2="19" y2="12" />
-            <polyline points="12 5 19 12 12 19" />
-          </svg>
-        </a>
-      </div>
+        <!-- View all series -->
+        <div class="series-footer reveal">
+          <a href="/blog/series" class="series-all-link">
+            Browse all learning series
+            <svg viewBox="0 0 24 24">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
       </section>
 
       <!-- Topics / Posts -->
       <section id="topics">
-      <div class="posts-header reveal">
-        <div class="section-label">Latest Posts</div>
-        <div class="post-filter-row">
-          <button class="post-filter-btn active" data-filter="all">All</button>
-          {filterTags.map((t) => (
-            <button class="post-filter-btn" data-filter={t}>{t}</button>
-          ))}
+        <div class="posts-header reveal">
+          <div class="section-label">Latest Posts</div>
+          <div class="post-filter-row">
+            <button class="post-filter-btn active" data-filter="all">All</button
+            >
+            {
+              filterTags.map((t) => (
+                <button class="post-filter-btn" data-filter={t}>
+                  {t}
+                </button>
+              ))
+            }
+          </div>
+          <select
+            class="post-filter-select"
+            id="post-filter-select"
+            aria-label="Filter posts by tag"
+          >
+            <option value="all">All Posts</option>
+            {filterTags.map((t) => <option value={t}>{t}</option>)}
+          </select>
         </div>
-        <select class="post-filter-select" id="post-filter-select" aria-label="Filter posts by tag">
-          <option value="all">All Posts</option>
-          {filterTags.map((t) => <option value={t}>{t}</option>)}
-        </select>
-      </div>
       </section>
       <section id="blogs">
-      <div class="post-grid" id="post-grid">
-        {
-          rest.map((post, i) => (
-            <a
-              href={`/blog/${flatSlug(post.id)}`}
-              class="post-card reveal"
-              data-tags={post.data.tags.join(",")}
-            >
-              <div class={`post-thumb${resolveCover(post.data.cover) ? " has-photo" : ""}`}>
-                {resolveCover(post.data.cover) ? (
-                  <Image src={resolveCover(post.data.cover)!} alt={post.data.title} class="post-thumb-img" width={600} />
-                ) : (
-                  <>
-                    <svg
-                      class="post-thumb-pattern"
-                      viewBox="0 0 200 80"
-                      preserveAspectRatio="xMidYMid slice"
-                    >
-                      <defs>
-                        <pattern
-                          id={`pp${i}`}
-                          x="0"
-                          y="0"
-                          width="20"
-                          height="20"
-                          patternUnits="userSpaceOnUse"
+        <div class="post-grid" id="post-grid">
+          {
+            rest.map((post, i) => (
+              <a
+                href={`/blog/${flatSlug(post.id)}`}
+                class="post-card reveal"
+                data-tags={post.data.tags.join(",")}
+              >
+                <div
+                  class={`post-thumb${resolveCover(post.data.cover) ? " has-photo" : ""}`}
+                >
+                  {resolveCover(post.data.cover) ? (
+                    <Image
+                      src={resolveCover(post.data.cover)!}
+                      alt={post.data.title}
+                      class="post-thumb-img"
+                      width={600}
+                    />
+                  ) : (
+                    <>
+                      <svg
+                        class="post-thumb-pattern"
+                        viewBox="0 0 200 80"
+                        preserveAspectRatio="xMidYMid slice"
+                      >
+                        <defs>
+                          <pattern
+                            id={`pp${i}`}
+                            x="0"
+                            y="0"
+                            width="20"
+                            height="20"
+                            patternUnits="userSpaceOnUse"
+                          >
+                            <circle
+                              cx="10"
+                              cy="10"
+                              r="1"
+                              fill="currentColor"
+                              opacity="0.35"
+                            />
+                          </pattern>
+                        </defs>
+                        <rect width="200" height="80" fill={`url(#pp${i})`} />
+                      </svg>
+                      <svg class="post-thumb-icon" viewBox="0 0 24 24">
+                        <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
+                      </svg>
+                    </>
+                  )}
+                </div>
+                <div class="post-body">
+                  <div class="post-date">{fmtDate(post.data.date)}</div>
+                  <h3 class="post-title">{post.data.title}</h3>
+                  <p class="post-excerpt">{post.data.description}</p>
+                  <div class="post-footer">
+                    <div class="post-tags">
+                      {post.data.tags.map((t) => (
+                        <span
+                          class={`post-tag${t === post.data.primaryTag ? " post-tag--primary" : ""}`}
                         >
-                          <circle
-                            cx="10"
-                            cy="10"
-                            r="1"
-                            fill="currentColor"
-                            opacity="0.35"
-                          />
-                        </pattern>
-                      </defs>
-                      <rect width="200" height="80" fill={`url(#pp${i})`} />
-                    </svg>
-                    <svg class="post-thumb-icon" viewBox="0 0 24 24">
-                      <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
-                    </svg>
-                  </>
-                )}
-              </div>
-              <div class="post-body">
-                <div class="post-date">{fmtDate(post.data.date)}</div>
-                <h3 class="post-title">{post.data.title}</h3>
-                <p class="post-excerpt">{post.data.description}</p>
-                <div class="post-footer">
-                  <div class="post-tags">
-                    {post.data.tags.map((t) => (
-                      <span class={`post-tag${t === post.data.primaryTag ? ' post-tag--primary' : ''}`}>{t}</span>
-                    ))}
-                  </div>
-                  <div class="post-arrow">
-                    <svg viewBox="0 0 24 24">
-                      <>
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                        <polyline points="12 5 19 12 12 19" />
-                      </>
-                    </svg>
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    <div class="post-arrow">
+                      <svg viewBox="0 0 24 24">
+                        <>
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                          <polyline points="12 5 19 12 12 19" />
+                        </>
+                      </svg>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </a>
-          ))
-        }
+              </a>
+            ))
+          }
 
-        <div class="filter-empty" id="filter-empty">
-          <svg viewBox="0 0 24 24"
-            ><circle cx="11" cy="11" r="8"></circle><line
-              x1="21"
-              y1="21"
-              x2="16.65"
-              y2="16.65"></line></svg
-          >
-          No posts match this filter.
+          <div class="filter-empty" id="filter-empty">
+            <svg viewBox="0 0 24 24"
+              ><circle cx="11" cy="11" r="8"></circle><line
+                x1="21"
+                y1="21"
+                x2="16.65"
+                y2="16.65"></line></svg
+            >
+            No posts match this filter.
+          </div>
         </div>
-      </div>
 
-      <!-- View all posts -->
-      <div class="series-footer reveal">
-        <a href="/blog/archive" class="series-all-link">
-          View all posts in archive
-          <svg viewBox="0 0 24 24">
-            <line x1="5" y1="12" x2="19" y2="12" />
-            <polyline points="12 5 19 12 12 19" />
-          </svg>
-        </a>
-      </div>
+        <!-- View all posts -->
+        <div class="series-footer reveal">
+          <a href="/blog/archive" class="series-all-link">
+            View all posts in archive
+            <svg viewBox="0 0 24 24">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
       </section>
     </div>
   </main>
@@ -260,14 +315,18 @@ const filterTags = [...new Set(posts.map((p) => p.data.primaryTag).filter(Boolea
     background: var(--bg);
     border-bottom: 1px solid var(--border);
     padding: 0 2rem;
-    transition: background 0.3s, border-color 0.3s;
+    transition:
+      background 0.3s,
+      border-color 0.3s;
   }
+
   .section-nav-inner {
     max-width: var(--max-w);
     margin: 0 auto;
     display: flex;
     align-items: center;
   }
+
   .section-link {
     padding: 0.7rem 1rem;
     font-size: 0.68rem;
@@ -279,16 +338,30 @@ const filterTags = [...new Set(posts.map((p) => p.data.primaryTag).filter(Boolea
     border-bottom: 2px solid transparent;
     margin-bottom: -1px;
     white-space: nowrap;
-    transition: color 0.15s, border-color 0.15s;
+    transition:
+      color 0.15s,
+      border-color 0.15s;
   }
-  .section-link:hover { color: var(--text); }
+
+  .section-link:hover {
+    color: var(--text);
+  }
+
   .section-link.active {
     color: var(--accent);
     border-bottom-color: var(--accent);
   }
+
   @media (max-width: 768px) {
-    .section-nav-wrap { top: 0; overflow-x: auto; scrollbar-width: none; }
-    .section-nav-wrap::-webkit-scrollbar { display: none; }
+    .section-nav-wrap {
+      top: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .section-nav-wrap::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   .wrap {
@@ -296,15 +369,17 @@ const filterTags = [...new Set(posts.map((p) => p.data.primaryTag).filter(Boolea
     margin: 0 auto;
     padding: 0 2rem;
   }
+
   .main {
     padding: 3.5rem 0 6rem;
   }
 
-.series-footer {
+  .series-footer {
     margin-top: 1.25rem;
     display: flex;
     justify-content: center;
   }
+
   .series-all-link {
     display: inline-flex;
     align-items: center;
@@ -317,12 +392,16 @@ const filterTags = [...new Set(posts.map((p) => p.data.primaryTag).filter(Boolea
     text-decoration: none;
     font-size: 0.82rem;
     font-weight: 600;
-    transition: color 0.18s, border-color 0.18s;
+    transition:
+      color 0.18s,
+      border-color 0.18s;
   }
+
   .series-all-link:hover {
     color: var(--accent);
     border-color: var(--accent);
   }
+
   .series-all-link svg {
     width: 13px;
     height: 13px;
@@ -337,6 +416,7 @@ const filterTags = [...new Set(posts.map((p) => p.data.primaryTag).filter(Boolea
     margin-top: 3rem;
     margin-bottom: 1.5rem;
   }
+
   .post-filter-row {
     display: flex;
     align-items: center;
@@ -345,6 +425,7 @@ const filterTags = [...new Set(posts.map((p) => p.data.primaryTag).filter(Boolea
     flex-wrap: wrap;
     margin-top: 1rem;
   }
+
   .post-filter-btn {
     font-size: 0.7rem;
     font-weight: 600;
@@ -355,18 +436,24 @@ const filterTags = [...new Set(posts.map((p) => p.data.primaryTag).filter(Boolea
     background: var(--surface);
     color: var(--muted);
     cursor: pointer;
-    transition: color 0.18s, border-color 0.18s, background 0.18s;
+    transition:
+      color 0.18s,
+      border-color 0.18s,
+      background 0.18s;
     font-family: var(--font);
   }
+
   .post-filter-btn:hover {
     color: var(--accent);
     border-color: var(--accent);
   }
+
   .post-filter-btn.active {
     background: var(--accent);
     border-color: var(--accent);
     color: #fff;
   }
+
   .post-filter-select {
     display: none;
     width: 100%;
@@ -381,15 +468,16 @@ const filterTags = [...new Set(posts.map((p) => p.data.primaryTag).filter(Boolea
     appearance: none;
     cursor: pointer;
   }
+
   @media (max-width: 580px) {
     .post-filter-row {
       display: none;
     }
+
     .post-filter-select {
       display: block;
     }
   }
-
 </style>
 
 <script>
@@ -418,19 +506,22 @@ const filterTags = [...new Set(posts.map((p) => p.data.primaryTag).filter(Boolea
     }),
   );
 
-  document.getElementById("post-filter-select")?.addEventListener("change", (e) =>
-    applyFilter((e.target as HTMLSelectElement).value),
-  );
+  document
+    .getElementById("post-filter-select")
+    ?.addEventListener("change", (e) =>
+      applyFilter((e.target as HTMLSelectElement).value),
+    );
 
   // ── Section nav active state ──────────────────────────────────
-  const navLinks = document.querySelectorAll<HTMLAnchorElement>('.section-link');
-  const sections = ['series', 'blogs']
+  const navLinks =
+    document.querySelectorAll<HTMLAnchorElement>(".section-link");
+  const sections = ["series", "blogs"]
     .map((id) => document.getElementById(id))
     .filter(Boolean) as HTMLElement[];
 
   const setActive = (id: string) => {
     navLinks.forEach((l) => {
-      l.classList.toggle('active', l.getAttribute('href') === `#${id}`);
+      l.classList.toggle("active", l.getAttribute("href") === `#${id}`);
     });
   };
 
@@ -440,7 +531,7 @@ const filterTags = [...new Set(posts.map((p) => p.data.primaryTag).filter(Boolea
         if (entry.isIntersecting) setActive(entry.target.id);
       });
     },
-    { rootMargin: '-15% 0px -70% 0px', threshold: 0 }
+    { rootMargin: "-15% 0px -70% 0px", threshold: 0 },
   );
 
   sections.forEach((s) => sectionObserver.observe(s));
