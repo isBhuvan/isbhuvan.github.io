@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.10](https://github.com/isBhuvan/isbhuvan.github.io/compare/v0.0.9...v0.0.10) (2026-03-27)
+
+
+### Features
+
+* updated styles for astro ([6577ece](https://github.com/isBhuvan/isbhuvan.github.io/commit/6577ece6df12cb1cc25cc4311b8acfd84c578bc1))
+
 ### [0.0.9](https://github.com/isBhuvan/isbhuvan.github.io/compare/v0.0.8...v0.0.9) (2026-03-26)
 
 ### [0.0.8](https://github.com/isBhuvan/isbhuvan.github.io/compare/v0.0.7...v0.0.8) (2026-03-26)

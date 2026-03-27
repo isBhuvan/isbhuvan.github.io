@@ -1,7 +1,7 @@
 {
   "name": "isbhuvan-github-io",
   "type": "module",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "scripts": {
     "dev": "astro dev --force",
     "build": "astro build && pagefind --site dist",
