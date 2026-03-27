@@ -13,8 +13,6 @@ interface Props {
   tags?: string[];
   /** Pre-built JSON-LD schema objects to inject */
   jsonLd?: object[];
-  /** Set true on pages that use devicons (e.g. portfolio) */
-  devicons?: boolean;
 }
 
 const {
@@ -28,7 +26,6 @@ const {
   author,
   tags,
   jsonLd,
-  devicons = false,
 } = Astro.props;
 
 const gaId = import.meta.env.PUBLIC_GA_ID;
@@ -88,14 +85,6 @@ const isArticle = ogType === "article";
       gtag('config', gaId);
     </script>
   </>
-)}
-
-<!-- Devicons (portfolio page only) -->
-{devicons && (
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
-  />
 )}
 
 <!-- Fonts: preconnect then async load to avoid render-blocking -->
