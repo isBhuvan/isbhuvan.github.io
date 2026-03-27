@@ -35,9 +35,9 @@ const path = Astro.url.pathname;
           class="nav-icon-btn search-btn"
           id="search-open-btn"
           aria-label="Search"
-          title="Search (⌘K)"
+          title="Search"
         >
-          <kbd class="search-kbd-hint">⌘K</kbd>
+          <kbd class="search-kbd-hint" id="search-kbd-hint">⌘K</kbd>
           <svg viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -981,6 +981,18 @@ const path = Astro.url.pathname;
   overlay.addEventListener("click", (e) => {
     if (e.target === overlay) closeSearch();
   });
+
+  // Update ⌘K / Ctrl+K hint based on platform
+  const kbdHint = document.getElementById("search-kbd-hint");
+  const searchBtn = document.getElementById("search-open-btn");
+  if (kbdHint && searchBtn) {
+    const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform) ||
+      (navigator.userAgent.includes("Mac") && navigator.maxTouchPoints > 0);
+    const label = isMac ? "⌘K" : "Ctrl+K";
+    kbdHint.textContent = label;
+    searchBtn.setAttribute("title", `Search (${label})`);
+    searchBtn.setAttribute("aria-label", `Search (${label})`);
+  }
 
   // Keyboard shortcuts
   document.addEventListener("keydown", (e) => {
