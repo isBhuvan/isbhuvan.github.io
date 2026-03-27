@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.12](https://github.com/isBhuvan/isbhuvan.github.io/compare/v0.0.11...v0.0.12) (2026-03-27)
+
+
+### Features
+
+* removed devicons ([25806bf](https://github.com/isBhuvan/isbhuvan.github.io/commit/25806bf600e974654eb2eb139a4b5bd8bc7ad146))
+
 ### [0.0.11](https://github.com/isBhuvan/isbhuvan.github.io/compare/v0.0.10...v0.0.11) (2026-03-27)
 
 
