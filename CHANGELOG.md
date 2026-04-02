@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.14](https://github.com/isBhuvan/isbhuvan.github.io/compare/v0.0.13...v0.0.14) (2026-04-02)
+
+
+### Bug Fixes
+
+* ensure proper width handling for series cards in blog ([4c2478b](https://github.com/isBhuvan/isbhuvan.github.io/commit/4c2478b3763f303a0a2963a59e4b307dcec89a90))
+
 ### [0.0.13](https://github.com/isBhuvan/isbhuvan.github.io/compare/v0.0.12...v0.0.13) (2026-03-27)
 
 
