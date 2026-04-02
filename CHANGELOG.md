@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.16](https://github.com/isBhuvan/isbhuvan.github.io/compare/v0.0.15...v0.0.16) (2026-04-02)
+
+
+### Bug Fixes
+
+* hide post dot indicator in series list for cleaner layout ([f76d82a](https://github.com/isBhuvan/isbhuvan.github.io/commit/f76d82a516fce15ad4e36aa3ecff92c687679473))
+
 ### [0.0.15](https://github.com/isBhuvan/isbhuvan.github.io/compare/v0.0.14...v0.0.15) (2026-04-02)
 
 
