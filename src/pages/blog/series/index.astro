@@ -590,6 +590,8 @@ const publishedSlugs = new Set(blogPosts.map(p => p.id.split('/').at(-1) ?? p.id
    overflow: hidden;
    transition: box-shadow 0.25s, border-color 0.25s;
    position: relative;
+   min-width: 0;
+   width: 100%;
  }
 
  .series-card:hover {
