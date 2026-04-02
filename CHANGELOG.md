@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.15](https://github.com/isBhuvan/isbhuvan.github.io/compare/v0.0.14...v0.0.15) (2026-04-02)
+
+
+### Bug Fixes
+
+* update code block styling for better readability in blog and series pages ([61e6c31](https://github.com/isBhuvan/isbhuvan.github.io/commit/61e6c3127618a8310de5d78d4b5d008b42fdf5b0))
+
 ### [0.0.14](https://github.com/isBhuvan/isbhuvan.github.io/compare/v0.0.13...v0.0.14) (2026-04-02)
 
 
