@@ -1,5 +1,6 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
 // ─── Blog Post Schema ──────────────────────────────────────────────────────
 //
@@ -35,8 +36,8 @@ const blog = defineCollection({
     readTime:    z.string().optional(),   // e.g. "12 min" — overrides auto-calc
     cover:       z.string().optional(),   // relative path to cover image
     crossPost:   z.object({
-      medium: z.string().url().optional(),
-      dev:    z.string().url().optional(),
+      medium: z.url().optional(),
+      dev:    z.url().optional(),
     }).optional(),
   }),
 });
@@ -81,7 +82,7 @@ const seriesModule = z.object({
 });
 
 const series = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.md', base: './src/content/series' }),
   schema: z.object({
     title:         z.string(),
     description:   z.string(),

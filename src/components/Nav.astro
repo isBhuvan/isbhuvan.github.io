@@ -1051,8 +1051,9 @@ const path = Astro.url.pathname;
   async function loadPagefind() {
     if (pagefindLoaded) return;
     try {
-      // @ts-ignore
-      pagefind = await import(/* @vite-ignore */ "/pagefind/pagefind.js");
+      // Held in a variable so Vite doesn't try to resolve the build-time index in dev
+      const pagefindUrl = "/pagefind/pagefind.js";
+      pagefind = await import(/* @vite-ignore */ pagefindUrl);
       await pagefind.options({ baseUrl: "/" });
       pagefindLoaded = true;
     } catch {
